@@ -24,7 +24,7 @@ export default function Hero() {
 
   return (
     <section style={{
-      background: 'var(--ink)',
+      background: `linear-gradient(135deg, var(--ink) 0%, var(--ink-light) 50%, var(--ink-2) 100%)`,
       paddingTop: 120,
       paddingBottom: 0,
       position: 'relative',
@@ -77,8 +77,7 @@ export default function Hero() {
           maxWidth: 780,
           marginBottom: 24,
         }}>
-          Nunca más pierdas una obligación de{' '}
-          <span className="shimmer-text">Comercio Exterior</span>
+          Nunca más pierdas <span className="shimmer-gradient">una obligación</span> de Comercio Exterior
         </h1>
 
         {/* Subheadline */}

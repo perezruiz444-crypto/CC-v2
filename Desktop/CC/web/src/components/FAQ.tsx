@@ -17,12 +17,12 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
   return (
     <div className={`reveal delay-${Math.min(index + 1, 6)}`}
       style={{
-        border: `1px solid ${open ? 'var(--em)' : 'var(--border)'}`,
+        border: `1px solid ${open ? 'var(--em-light)' : 'var(--border)'}`,
         borderRadius: 'var(--r-lg)',
         background: 'var(--snow)',
         overflow: 'hidden',
         transition: 'border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out)',
-        boxShadow: open ? 'var(--sh-em)' : 'var(--sh-sm)',
+        boxShadow: open ? 'var(--sh-accent)' : 'var(--sh-sm)',
       }}
     >
       <button
@@ -36,12 +36,12 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
           fontFamily: 'var(--font-body)',
         }}
       >
-        <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.45 }}>{q}</span>
+        <span style={{ fontSize: 15, fontWeight: 600, color: '#0f172a', lineHeight: 1.45 }}>{q}</span>
         <div style={{
           width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
           background: open ? 'var(--em)' : 'var(--surface)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: open ? 'white' : 'var(--text-muted)',
+          color: open ? 'white' : '#475569',
           transition: 'background var(--dur-base) var(--ease-spring), transform var(--dur-base) var(--ease-spring)',
           transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
         }}>
@@ -56,7 +56,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
       }}>
         <p style={{
           padding: '0 22px 18px',
-          fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.7,
+          fontSize: 14, color: '#3f3f3f', lineHeight: 1.7,
           borderTop: '1px solid var(--surface-2)',
           paddingTop: 14,
         }}>{a}</p>
@@ -74,10 +74,10 @@ export default function FAQ() {
       <div className="container">
         <div style={{ textAlign: 'center', maxWidth: 520, marginInline: 'auto', marginBottom: 52 }}>
           <span className="badge reveal" style={{ marginBottom: 16 }}>FAQ</span>
-          <h2 className="reveal delay-1" style={{ fontSize: 'clamp(26px, 4vw, 38px)', marginBottom: 14 }}>Preguntas frecuentes</h2>
-          <p className="reveal delay-2" style={{ fontSize: 15, color: 'var(--text-muted)' }}>
+          <h2 className="reveal delay-1" style={{ fontSize: 'clamp(26px, 4vw, 38px)', marginBottom: 14, color: '#0f172a' }}>Preguntas frecuentes</h2>
+          <p className="reveal delay-2" style={{ fontSize: 15, color: '#666666' }}>
             ¿Algo más? Escríbenos a{' '}
-            <a href="mailto:hola@calendariocompliance.mx" style={{ color: 'var(--em)', textDecoration: 'none', fontWeight: 600 }}>
+            <a href="mailto:hola@calendariocompliance.mx" style={{ color: 'var(--em-light)', textDecoration: 'none', fontWeight: 600 }}>
               hola@calendariocompliance.mx
             </a>
           </p>

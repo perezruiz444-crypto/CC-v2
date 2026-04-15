@@ -1,5 +1,6 @@
-import { Check, ArrowRight, Sparkles } from 'lucide-react'
+import { Check, ArrowRight, Sparkles, Lock } from 'lucide-react'
 import { useReveal } from '../hooks/useReveal'
+import { useState } from 'react'
 
 const PLANS = [
   {
@@ -52,10 +53,11 @@ const PLANS = [
 
 export default function Pricing() {
   const ref = useReveal()
+  const [expandedPlans, setExpandedPlans] = useState<{ [key: string]: boolean }>({})
 
   return (
     <section ref={ref as React.RefObject<HTMLElement>} className="section" id="pricing"
-      style={{ background: 'var(--ink)', position: 'relative', overflow: 'hidden' }}>
+      style={{ background: 'linear-gradient(135deg, var(--ink) 0%, var(--ink-light) 100%)', position: 'relative', overflow: 'hidden' }}>
 
       {/* Background glow */}
       <div aria-hidden="true" style={{
@@ -84,20 +86,37 @@ export default function Pricing() {
           gap: 16,
           alignItems: 'start',
         }}>
-          {PLANS.map(({ name, price, period, desc, cta, href, featured, badge, features, disabled }, i) => (
+          {PLANS.map(({ name, price, period, desc, cta, href, featured, badge, features, disabled }) => {
+            const isExpanded = expandedPlans[name]
+            const visibleFeatures = isExpanded ? features : features.slice(0, 3)
+            const hasMore = features.length > 3
+
+            return (
             <div key={name}
-              className="reveal-scale"
+              className={featured ? 'reveal-scale glow-pulse' : 'reveal-scale'}
               style={{
-                background: featured ? 'var(--snow)' : 'var(--ink-2)',
-                border: featured ? '2px solid var(--em)' : '1px solid var(--ink-4)',
+                background: featured ? 'linear-gradient(135deg, var(--ink-2) 0%, var(--ink-3) 100%)' : 'var(--ink-2)',
+                border: featured ? '2px solid var(--em-light)' : '1px solid rgb(255 255 255 / 0.08)',
                 borderRadius: 'var(--r-2xl)',
-                padding: featured ? '32px 24px' : '28px 24px',
+                padding: featured ? '40px 32px' : '32px 28px',
                 position: 'relative',
-                boxShadow: featured ? 'var(--sh-em)' : 'none',
-                transition: 'box-shadow var(--dur-base) var(--ease-out)',
+                boxShadow: featured ? 'var(--sh-accent), 0 0 40px rgb(13 148 136 / 0.15)' : 'var(--sh-card)',
+                transition: 'all var(--dur-base) var(--ease-out)',
               }}
-              onMouseEnter={e => !featured && ((e.currentTarget as HTMLElement).style.boxShadow = '0 0 0 1px var(--ink-4), var(--sh-md)')}
-              onMouseLeave={e => !featured && ((e.currentTarget as HTMLElement).style.boxShadow = 'none')}
+              onMouseEnter={e => {
+                if (!featured) {
+                  (e.currentTarget as HTMLElement).style.boxShadow = 'var(--sh-md)'
+                  ;(e.currentTarget as HTMLElement).style.borderColor = 'rgb(13 148 136 / 0.3)'
+                  ;(e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'
+                }
+              }}
+              onMouseLeave={e => {
+                if (!featured) {
+                  (e.currentTarget as HTMLElement).style.boxShadow = 'var(--sh-card)'
+                  ;(e.currentTarget as HTMLElement).style.borderColor = 'rgb(255 255 255 / 0.08)'
+                  ;(e.currentTarget as HTMLElement).style.transform = ''
+                }
+              }}
             >
               {badge && (
                 <div style={{
@@ -138,7 +157,7 @@ export default function Pricing() {
               </a>
 
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 9 }}>
-                {features.map(f => (
+                {visibleFeatures.map(f => (
                   <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 9 }}>
                     <Check size={14} strokeWidth={2.5} style={{ color: 'var(--em)', flexShrink: 0, marginTop: 2 }} aria-hidden="true" />
                     <span style={{ fontSize: 13, color: featured ? 'var(--text-muted)' : 'rgb(255 255 255 / 0.6)', lineHeight: 1.5 }}>{f}</span>
@@ -151,13 +170,39 @@ export default function Pricing() {
                   </li>
                 ))}
               </ul>
+
+              {hasMore && (
+                <button
+                  onClick={() => setExpandedPlans({ ...expandedPlans, [name]: !isExpanded })}
+                  style={{
+                    marginTop: 16, fontSize: 13, fontWeight: 500,
+                    color: 'var(--em)', background: 'none', border: 'none',
+                    cursor: 'pointer', padding: 0,
+                  }}
+                >
+                  {isExpanded ? '− Ver menos' : '+ Ver todo'}
+                </button>
+              )}
+            </div>
+            )
+          })}
+        </div>
+
+        {/* Trust signals */}
+        <div className="reveal" style={{
+          textAlign: 'center', marginTop: 48, fontSize: 13,
+          color: 'rgb(255 255 255 / 0.35)', display: 'flex',
+          alignItems: 'center', justifyContent: 'center', gap: 16,
+          flexWrap: 'wrap',
+        }}>
+          {['14 días gratis en todos los planes', 'Sin tarjeta de crédito', 'Cancela cuando quieras', 'Soporte en español'].map((signal, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Lock size={12} style={{ color: 'rgb(16 185 129)', flexShrink: 0 }} aria-hidden="true" />
+              <span>{signal}</span>
+              {i < 3 && <span style={{ color: 'rgb(255 255 255 / 0.15)', margin: '0 2px' }}>·</span>}
             </div>
           ))}
         </div>
-
-        <p className="reveal" style={{ textAlign: 'center', marginTop: 36, fontSize: 13, color: 'rgb(255 255 255 / 0.3)' }}>
-          14 días de prueba gratis en todos los planes de pago. Sin tarjeta requerida.
-        </p>
       </div>
     </section>
   )

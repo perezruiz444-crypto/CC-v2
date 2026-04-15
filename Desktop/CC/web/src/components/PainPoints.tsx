@@ -2,10 +2,10 @@ import { X, ArrowRight } from 'lucide-react'
 import { useReveal } from '../hooks/useReveal'
 
 const PAINS = [
-  'Llevas el control en un Excel que solo tú entiendes',
-  'Te enteraste de un vencimiento cuando ya había multa',
-  'El área de Comex y el consultor mandan versiones diferentes del mismo reporte',
-  'Cada auditoría es una carrera contra el tiempo buscando evidencias',
+  'Vencimientos en Excel sin sincronización',
+  'Multas por plazos perdidos',
+  'Auditorías caóticas sin evidencia organizada',
+  'Equipos desincronizados en reportes',
 ]
 
 export default function PainPoints() {
@@ -16,16 +16,15 @@ export default function PainPoints() {
       style={{ background: 'var(--surface)', borderTop: '1px solid var(--surface-2)' }}>
       <div className="container">
         <div style={{ maxWidth: 600, marginInline: 'auto', textAlign: 'center' }}>
-          <h2 className="reveal" style={{ fontSize: 'clamp(26px, 4vw, 38px)', marginBottom: 14 }}>
+          <h2 className="reveal" style={{ fontSize: 'clamp(26px, 4vw, 38px)', marginBottom: 14, color: '#0f172a' }}>
             ¿Te suena familiar?
           </h2>
-          <p className="reveal delay-1" style={{ fontSize: 16, color: 'var(--text-muted)', marginBottom: 44 }}>
-            Las empresas con programas IMMEX y PROSEC enfrentan los mismos problemas.
-            Un olvido puede costar el programa completo.
+          <p className="reveal delay-1" style={{ fontSize: 15, color: '#666666', marginBottom: 44 }}>
+            Los problemas que todas las áreas de ComEx enfrentan.
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 44 }}>
-            {PAINS.map((pain, i) => (
+            {PAINS.map((pain) => (
               <div key={pain}
                 className="reveal-left"
                 style={{
@@ -54,7 +53,7 @@ export default function PainPoints() {
                 }}>
                   <X size={13} color="var(--danger)" strokeWidth={2.5} aria-hidden="true" />
                 </div>
-                <p style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.6 }}>{pain}</p>
+                <p style={{ fontSize: 15, color: '#3f3f3f', lineHeight: 1.6 }}>{pain}</p>
               </div>
             ))}
           </div>

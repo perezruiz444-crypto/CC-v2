@@ -5,37 +5,37 @@ const FEATURES = [
   {
     icon: <Calendar size={22} aria-hidden="true" />,
     title: 'Calendario automático',
-    desc: 'Activa tu programa y el sistema proyecta todas las fechas del año automáticamente. Sin configuración manual.',
+    desc: 'Proyecta todas las fechas del año sin configuración manual.',
     accent: 'var(--em)',
   },
   {
     icon: <Bell size={22} aria-hidden="true" />,
     title: 'Alertas progresivas',
-    desc: 'Recordatorios 30, 15, 7 y 1 día antes. Tu equipo llega preparado, no de sorpresa.',
+    desc: 'Recordatorios 30, 15, 7 y 1 día antes de cada vencimiento.',
     accent: 'var(--warn)',
   },
   {
     icon: <FileCheck size={22} aria-hidden="true" />,
     title: 'Evidencia documental',
-    desc: 'Adjunta acuses y constancias a cada obligación. Todo listo para auditoría en segundos.',
+    desc: 'Adjunta documentos a cada obligación, listos para auditoría.',
     accent: 'var(--em)',
   },
   {
     icon: <Users size={22} aria-hidden="true" />,
     title: 'Colaboración de equipo',
-    desc: 'Asigna cada obligación al responsable. El consultor, gerente y área de comex ven lo mismo.',
+    desc: 'Asigna responsables. Todo el equipo ve lo mismo en tiempo real.',
     accent: 'var(--info)',
   },
   {
     icon: <BarChart3 size={22} aria-hidden="true" />,
     title: 'Reportes para auditoría',
-    desc: 'Genera en un clic el reporte de cumplimiento con semáforo por empresa, programa y período.',
+    desc: 'Genera reportes de cumplimiento con semáforo por programa.',
     accent: 'var(--em)',
   },
   {
     icon: <ShieldCheck size={22} aria-hidden="true" />,
     title: 'Catálogo legal actualizado',
-    desc: 'Monitoreamos el DOF y actualizamos el catálogo cada vez que el SAT o SE publican cambios.',
+    desc: 'Monitoreamos el DOF para cambios regulatorios en tiempo real.',
     accent: '#a855f7',
   },
 ]
@@ -50,11 +50,11 @@ export default function Features() {
 
         <div style={{ textAlign: 'center', maxWidth: 600, marginInline: 'auto', marginBottom: 60 }}>
           <span className="badge reveal" style={{ marginBottom: 16 }}>Funciones</span>
-          <h2 className="reveal delay-1" style={{ fontSize: 'clamp(26px, 4vw, 42px)', marginBottom: 14 }}>
-            Todo lo que necesitas para no volver a perder una obligación
+          <h2 className="reveal delay-1" style={{ fontSize: 'clamp(26px, 4vw, 42px)', marginBottom: 14, color: '#0f172a' }}>
+            Todo para gestionar tu Comercio Exterior
           </h2>
-          <p className="reveal delay-2" style={{ fontSize: 16, color: 'var(--text-muted)', lineHeight: 1.7 }}>
-            Diseñado para empresas con programas de Comercio Exterior en México. No es un gestor de tareas genérico — conoce la ley.
+          <p className="reveal delay-2" style={{ fontSize: 15, color: '#666666', lineHeight: 1.7 }}>
+            Construido para IMMEX, PROSEC y Padrón Importador.
           </p>
         </div>
 
@@ -65,7 +65,7 @@ export default function Features() {
         }}>
           {FEATURES.map(({ icon, title, desc, accent }, i) => (
             <div key={title}
-              className={`card reveal-scale delay-${i + 1}`}
+              className={`card reveal-scale delay-${(i % 3) + 1}`}
               style={{ position: 'relative', overflow: 'hidden' }}
             >
               {/* accent line top */}
@@ -89,9 +89,9 @@ export default function Features() {
               </div>
               <h3 style={{
                 fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 700,
-                color: 'var(--text-primary)', marginBottom: 10,
+                color: '#0f172a', marginBottom: 10,
               }}>{title}</h3>
-              <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.65 }}>{desc}</p>
+              <p style={{ fontSize: 14, color: '#525252', lineHeight: 1.65 }}>{desc}</p>
             </div>
           ))}
         </div>

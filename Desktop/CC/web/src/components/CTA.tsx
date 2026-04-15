@@ -28,10 +28,10 @@ export default function CTA() {
           <ShieldCheck size={28} color="var(--em)" aria-hidden="true" />
         </div>
 
-        <h2 className="reveal delay-1" style={{ fontSize: 'clamp(26px, 4vw, 44px)', marginBottom: 18 }}>
+        <h2 className="reveal delay-1" style={{ fontSize: 'clamp(26px, 4vw, 44px)', marginBottom: 18, color: '#0f172a' }}>
           Tu siguiente auditoría puede ser<br />la más tranquila que hayas tenido
         </h2>
-        <p className="reveal delay-2" style={{ fontSize: 17, color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: 40 }}>
+        <p className="reveal delay-2" style={{ fontSize: 17, color: '#666666', lineHeight: 1.7, marginBottom: 40 }}>
           Únete a las empresas que ya dejaron el Excel atrás. Configura tu calendario de obligaciones en menos de 10 minutos.
         </p>
 

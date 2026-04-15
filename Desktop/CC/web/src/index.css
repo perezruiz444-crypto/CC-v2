@@ -6,26 +6,33 @@
 /* ── Design Tokens — identidad v2 ──────────────────────────── */
 /* Paleta: Slate oscuro (fondo) + Esmeralda (acento compliance) + Ámbar (warning) */
 :root {
-  /* Brand */
-  --em:           #10b981;   /* emerald-500  — acento principal */
-  --em-dark:      #059669;   /* emerald-600  — hover */
-  --em-glow:      rgb(16 185 129 / 0.18);
-  --em-subtle:    rgb(16 185 129 / 0.08);
+  /* Brand — Premium Teal (deeper, sophisticated) */
+  --em:           #0d9488;   /* emerald-700 — acento principal premium */
+  --em-light:     #14b8a6;   /* teal-500 para hover/interactive */
+  --em-dark:      #047857;   /* emerald-800 para pressed */
+  --em-glow:      rgb(13 148 136 / 0.20);
+  --em-subtle:    rgb(13 148 136 / 0.08);
 
-  /* Neutrals — slate oscuro */
-  --ink:          #0d1117;   /* fondo hero / dark */
-  --ink-2:        #161b22;   /* cards dark */
-  --ink-3:        #21262d;   /* borders dark */
-  --ink-4:        #30363d;   /* borders light dark */
+  /* Neutrals — Slate-based (warmer, more luxe) */
+  --ink:          #0f172a;   /* slate-950 — fondo hero/dark premium */
+  --ink-2:        #1e293b;   /* slate-900 — cards dark */
+  --ink-3:        #334155;   /* slate-800 — elevated surfaces */
+  --ink-4:        #475569;   /* slate-700 — borders/dividers */
+  --ink-light:    #1a1f35;   /* subtle navy tint */
 
-  /* Claros */
+  /* Light surfaces & text (refined for premium) */
   --snow:         #ffffff;
-  --surface:      #f6f8fa;   /* fondo secciones claras */
-  --surface-2:    #eaeef2;
-  --text-primary: #0d1117;
-  --text-muted:   #57606a;
-  --text-faint:   #8c959f;
-  --border:       #d0d7de;
+  --fog:          #f8fafc;   /* slate-50 — fondo secciones claras */
+  --surface:      #f1f5f9;   /* slate-100 — alternative light bg */
+
+  /* Text color tokens — contextual (light vs dark backgrounds) */
+  --text-on-light: #0f172a;  /* dark text for light backgrounds (white/surface/fog) */
+  --text-on-dark:  #f8fafc;  /* light text for dark backgrounds (ink/ink-2/etc.) */
+  --text-primary:  #f8fafc;  /* slate-50 — primary text on dark (kept for compat) */
+  --text-secondary: #cbd5e1; /* slate-300 — secondary text on dark */
+  --text-muted:   #94a3b8;   /* slate-400 — tertiary text */
+  --text-faint:   #64748b;   /* slate-500 — disabled/hints */
+  --border:       #d0d7de;   /* light mode border */
 
   /* Semánticos */
   --warn:         #f59e0b;
@@ -41,15 +48,19 @@
   --s5: 20px; --s6: 24px; --s8: 32px; --s10: 40px;
   --s12: 48px; --s16: 64px; --s20: 80px; --s24: 96px;
 
-  /* Radii */
-  --r-sm: 6px; --r-md: 10px; --r-lg: 14px;
-  --r-xl: 20px; --r-2xl: 28px; --r-full: 9999px;
+  /* Radii — Premium (softer) */
+  --r-xs: 4px; --r-sm: 8px; --r-md: 12px;
+  --r-lg: 16px; --r-xl: 24px; --r-2xl: 32px; --r-full: 9999px;
 
-  /* Shadows */
-  --sh-sm: 0 1px 3px rgb(13 17 23 / 0.08), 0 1px 2px rgb(13 17 23 / 0.04);
-  --sh-md: 0 4px 12px rgb(13 17 23 / 0.10), 0 2px 4px rgb(13 17 23 / 0.06);
-  --sh-lg: 0 12px 32px rgb(13 17 23 / 0.12), 0 4px 8px rgb(13 17 23 / 0.06);
-  --sh-em: 0 4px 20px var(--em-glow);
+  /* Shadows — Multi-layer elevation (premium depth) */
+  --sh-xs:  0 1px 2px rgb(0 0 0 / 0.08), 0 1px 3px rgb(0 0 0 / 0.04);
+  --sh-sm:  0 2px 4px rgb(0 0 0 / 0.08), 0 1px 2px rgb(0 0 0 / 0.04);
+  --sh-card: 0 4px 16px rgb(0 0 0 / 0.12), 0 2px 8px rgb(0 0 0 / 0.06);
+  --sh-md:  0 8px 24px rgb(0 0 0 / 0.16), 0 4px 12px rgb(0 0 0 / 0.08);
+  --sh-lg:  0 16px 40px rgb(0 0 0 / 0.20), 0 8px 16px rgb(0 0 0 / 0.10);
+  --sh-xl:  0 20px 48px rgb(0 0 0 / 0.25), 0 10px 20px rgb(0 0 0 / 0.12);
+  --sh-accent: 0 4px 24px rgb(13 148 136 / 0.20), 0 2px 12px rgb(13 148 136 / 0.10);
+  --sh-em: var(--sh-accent);
 
   /* Motion tokens (skill: motion-consistency) */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* spring overshoots */
@@ -66,7 +77,7 @@
 html { scroll-behavior: smooth; font-size: 16px; }
 body {
   font-family: var(--font-body);
-  color: var(--text-primary);
+  color: var(--text-on-light);  /* default for light backgrounds */
   background: var(--snow);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -89,11 +100,11 @@ img, svg { display: block; }
 @media (min-width: 768px) { .container { padding-inline: 40px; } }
 
 /* ── Sections ───────────────────────────────────────────────── */
-.section    { padding-block: 96px; }
+.section    { padding-block: 96px; }  /* breathing room — premium */
 .section-sm { padding-block: 64px; }
 @media (max-width: 768px) {
-  .section    { padding-block: 64px; }
-  .section-sm { padding-block: 48px; }
+  .section    { padding-block: 72px; }  /* increased from 64px */
+  .section-sm { padding-block: 56px; }  /* increased from 48px */
 }
 
 /* ── Buttons ────────────────────────────────────────────────── */
@@ -116,13 +127,13 @@ img, svg { display: block; }
 .btn:active { transform: scale(0.96); }
 
 .btn-primary {
-  background: var(--em);
+  background: var(--em-light);
   color: var(--snow);
-  box-shadow: 0 2px 10px var(--em-glow);
+  box-shadow: var(--sh-accent);
 }
 .btn-primary:hover {
-  background: var(--em-dark);
-  box-shadow: 0 4px 20px var(--em-glow);
+  background: var(--em);
+  box-shadow: var(--sh-md);
   transform: translateY(-2px);
 }
 
@@ -169,6 +180,7 @@ img, svg { display: block; }
 .chip-warn    { background: rgb(245 158 11 / 0.1);  color: #b45309; }
 .chip-success { background: rgb(16 185 129 / 0.1);  color: #047857; }
 .chip-info    { background: rgb(59 130 246 / 0.1);  color: #1d4ed8; }
+.chip-danger  { background: rgb(239 68 68 / 0.1);   color: #dc2626; }
 
 /* ── Cards ──────────────────────────────────────────────────── */
 .card {
@@ -256,6 +268,14 @@ img, svg { display: block; }
   0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
+@keyframes shimmer-sweep {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--em-glow); }
+  50%       { box-shadow: 0 0 0 12px transparent; }
+}
 @keyframes spin-slow {
   to { transform: rotate(360deg); }
 }
@@ -279,6 +299,19 @@ img, svg { display: block; }
   animation: shimmer 3s linear infinite;
 }
 
+.shimmer-gradient {
+  background: linear-gradient(90deg, var(--em-dark) 0%, #34d399 40%, var(--em-dark) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-sweep 3s linear infinite;
+}
+
+.glow-pulse {
+  animation: glow-pulse 2.5s ease-in-out infinite;
+}
+
 /* ── Reduce motion — skill: prefers-reduced-motion ─────────── */
 @media (prefers-reduced-motion: reduce) {
   .reveal, .reveal-left, .reveal-scale {
@@ -290,6 +323,23 @@ img, svg { display: block; }
     animation: none !important;
   }
   * { transition-duration: 0.01ms !important; }
+}
+
+/* ── Shared modal / component animations ───────────────────── */
+@keyframes slideInModal {
+  from { opacity: 0; transform: scale(0.94) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes fadeInBanner {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* ── Ticker / marquee ───────────────────────────────────────── */
