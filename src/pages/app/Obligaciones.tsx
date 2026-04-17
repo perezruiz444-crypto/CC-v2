@@ -2,11 +2,12 @@ import { useState, useMemo, useEffect } from 'react'
 import {
   ChevronDown, ChevronUp, ToggleLeft, ToggleRight,
   Calendar, Clock, CheckCircle2, AlertCircle,
-  BookOpen, AlertTriangle, StickyNote, X
+  BookOpen, AlertTriangle, StickyNote, X, Plus
 } from 'lucide-react'
 import { useEmpresa } from '../../hooks/useEmpresa'
 import { useObligaciones } from '../../hooks/useObligaciones'
 import { useRol } from '../../hooks/useRol'
+import { CrearObligacionDialog } from '../../components/CrearObligacionDialog'
 import type { ObligacionEmpresa, VencimientoResumen } from '../../hooks/useObligaciones'
 
 const CAT_LABELS: Record<string, { label: string; color: string }> = {
@@ -34,11 +35,12 @@ function formatFecha(f: string) {
 export default function Obligaciones() {
   const { empresa, loading: loadingEmp } = useEmpresa()
   const { puedeEditar } = useRol()
-  const { obligaciones, loading, toggleEstado, editarFechaVencimiento, agregarNota } = useObligaciones(empresa?.id ?? null)
+  const { obligaciones, loading, toggleEstado, editarFechaVencimiento, agregarNota, crearObligacionPersonalizada, refetch } = useObligaciones(empresa?.id ?? null)
 
   const [filtro, setFiltro] = useState<Filtro>('todas')
   const [busqueda, setBusqueda] = useState('')
   const [expandida, setExpandida] = useState<string | null>(null)
+  const [showCreateDialog, setShowCreateDialog] = useState(false)
 
   const lista = useMemo(() => {
     return obligaciones
@@ -66,7 +68,7 @@ export default function Obligaciones() {
         </p>
       </div>
 
-      {/* Filtros + búsqueda */}
+      {/* Filtros + búsqueda + Botón Crear Obligación */}
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 20, alignItems: 'center' }}>
         {(['todas', 'activas', 'inactivas'] as Filtro[]).map(f => (
           <button key={f} onClick={() => setFiltro(f)} style={{
@@ -89,16 +91,36 @@ export default function Obligaciones() {
           onChange={e => setBusqueda(e.target.value)}
           aria-label="Buscar obligación"
           style={{
-            marginLeft: 'auto', padding: '8px 14px',
+            flex: 1, minWidth: 200, padding: '8px 14px',
             background: 'var(--ink-2)', border: '1px solid var(--ink-4)',
             borderRadius: 'var(--r-full)', color: 'var(--snow)',
             fontSize: 13, fontFamily: 'var(--font-body)',
-            outline: 'none', minWidth: 200, minHeight: 36,
+            outline: 'none', minHeight: 36,
             transition: 'border-color var(--dur-fast)',
           }}
           onFocus={e => (e.target.style.borderColor = 'var(--em)')}
           onBlur={e => (e.target.style.borderColor = 'var(--ink-4)')}
         />
+
+        {puedeEditar && (
+          <button
+            onClick={() => setShowCreateDialog(true)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '8px 16px', borderRadius: 'var(--r-full)',
+              fontSize: 13, fontWeight: 600, cursor: 'pointer',
+              border: 'none',
+              background: 'var(--em)', color: 'var(--ink-0)',
+              transition: 'all var(--dur-fast)',
+              minHeight: 36,
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+          >
+            <Plus style={{ width: 16, height: 16 }} />
+            Crear Obligación Interna
+          </button>
+        )}
       </div>
 
       {/* Lista */}
@@ -128,6 +150,18 @@ export default function Obligaciones() {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Dialog para crear obligación personalizada */}
+      {empresa && (
+        <CrearObligacionDialog
+          isOpen={showCreateDialog}
+          onClose={() => setShowCreateDialog(false)}
+          onCreated={async () => {
+            await refetch()
+          }}
+          empresaId={empresa.id}
+        />
       )}
     </div>
   )
