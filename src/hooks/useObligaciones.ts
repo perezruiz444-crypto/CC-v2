@@ -40,6 +40,7 @@ interface UseObligacionesResult {
   toggleEstado: (id: string, nuevoEstado: boolean, motivo?: string) => Promise<void>
   editarFechaVencimiento: (vencimientoId: string, nuevaFecha: string) => Promise<void>
   agregarNota: (vencimientoId: string, nota: string) => Promise<void>
+  crearObligacionPersonalizada: (nombre: string, periodicidad: string, descripcion?: string) => Promise<void>
   refetch: () => void
 }
 
@@ -147,5 +148,109 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
     if (err) { console.error(err.message); refetch() }
   }, [refetch])
 
-  return { obligaciones, loading, error, toggleEstado, editarFechaVencimiento, agregarNota, refetch }
+  const crearObligacionPersonalizada = useCallback(async (
+    nombre: string,
+    periodicidad: string,
+    descripcion?: string
+  ) => {
+    if (!empresaId) throw new Error('empresaId requerido')
+
+    // Obtener usuario actual y su organizacion_id
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Usuario no autenticado')
+
+    // Obtener organizacion_id del usuario
+    const { data: userOrg, error: userOrgErr } = await supabase
+      .from('usuarios_organizacion')
+      .select('organizacion_id')
+      .eq('user_id', user.id)
+      .single()
+
+    if (userOrgErr || !userOrg) {
+      throw new Error('No se encontró la organización del usuario')
+    }
+
+    const organizacionId = userOrg.organizacion_id
+
+    // Generar UUID para el nuevo catálogo
+    const catalogoId = crypto.randomUUID()
+
+    // Mapear periodicidad a dia_vencimiento y mes_vencimiento
+    // Para obligaciones personalizadas, usamos días por defecto
+    let diaVencimiento = 15
+    let mesVencimiento = null
+
+    switch (periodicidad) {
+      case 'mensual':
+        diaVencimiento = 15 // Medio del mes
+        break
+      case 'bimestral':
+        diaVencimiento = 15
+        break
+      case 'trimestral':
+        diaVencimiento = 15
+        break
+      case 'anual':
+        diaVencimiento = 15
+        mesVencimiento = 6 // Junio
+        break
+    }
+
+    // 1. Insertar en obligaciones_catalogo (con organizacion_id)
+    const { error: catErr } = await supabase
+      .from('obligaciones_catalogo')
+      .insert({
+        id: catalogoId,
+        nombre,
+        descripcion: descripcion || null,
+        categoria: 'general',
+        periodicidad,
+        dia_vencimiento: diaVencimiento,
+        mes_vencimiento: mesVencimiento,
+        tipo_calculo: 'estatico',
+        activa: true,
+        organizacion_id: organizacionId,
+      })
+
+    if (catErr) throw new Error(`Error al crear obligación: ${catErr.message}`)
+
+    // 2. Insertar en obligaciones_empresa (vincular a esta empresa)
+    const { error: oemErr } = await supabase
+      .from('obligaciones_empresa')
+      .insert({
+        empresa_id: empresaId,
+        catalogo_id: catalogoId,
+        estado: true,
+        activa_desde: new Date().toISOString().split('T')[0],
+      })
+
+    if (oemErr) throw new Error(`Error al vincular obligación: ${oemErr.message}`)
+
+    // 3. Llamar a la stored procedure para proyectar vencimientos del año actual
+    const currentYear = new Date().getFullYear()
+    const { error: projErr } = await supabase
+      .rpc('proyectar_vencimientos', {
+        p_empresa_id: empresaId,
+        p_anio: currentYear,
+      })
+
+    if (projErr) {
+      console.warn(`Advertencia al proyectar vencimientos: ${projErr.message}`)
+      // No lanzamos error aquí, la obligación ya fue creada
+    }
+
+    // 4. Refetch para actualizar la lista
+    refetch()
+  }, [empresaId, refetch])
+
+  return {
+    obligaciones,
+    loading,
+    error,
+    toggleEstado,
+    editarFechaVencimiento,
+    agregarNota,
+    crearObligacionPersonalizada,
+    refetch
+  }
 }
