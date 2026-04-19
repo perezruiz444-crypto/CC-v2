@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { Settings, Lock, Plus, Trash2, CalendarDays, AlertCircle } from 'lucide-react'
+import { Settings, Plus, Trash2, CalendarDays, AlertCircle } from 'lucide-react'
 import { useEmpresa } from '../../hooks/useEmpresa'
 import { useRol } from '../../hooks/useRol'
 import { useDiasInhabilesOrg } from '../../hooks/useDiasInhabilesOrg'
-
-const PLANES_PAGO = ['equipo', 'agencia', 'enterprise']
+import { tieneFeature } from '../../lib/plans'
+import { PlanPaywall } from '../../components/PlanPaywall'
 
 function formatFecha(fecha: string): string {
   return new Date(fecha + 'T00:00:00').toLocaleDateString('es-MX', {
@@ -16,7 +16,7 @@ export default function Ajustes() {
   const { organizacion, loading: loadingEmpresa } = useEmpresa()
   const { esOwner, puedeEditar } = useRol()
 
-  const esPlanPago = PLANES_PAGO.includes(organizacion?.plan_actual ?? '')
+  const tieneDiasInhabiles = tieneFeature(organizacion?.plan_actual, 'diasInhabilesOrg')
 
   if (loadingEmpresa) {
     return (
@@ -43,9 +43,14 @@ export default function Ajustes() {
         </p>
       </div>
 
-      {/* Paywall: plan gratis */}
-      {!esPlanPago ? (
-        <PaywallCard planActual={organizacion?.plan_actual ?? 'gratis'} />
+      {/* Paywall: planes sin acceso */}
+      {!tieneDiasInhabiles ? (
+        <PlanPaywall
+          feature="diasInhabilesOrg"
+          titulo="Días inhábiles de tu organización"
+          descripcion="Agrega fechas especiales de tu empresa (cierres, vacaciones, etc.) para que el motor las considere al calcular vencimientos."
+          planActual={organizacion?.plan_actual}
+        />
       ) : (
         <DiasInhabilesSection
           organizacionId={organizacion?.id ?? null}
@@ -53,60 +58,6 @@ export default function Ajustes() {
           puedeEditar={puedeEditar}
         />
       )}
-    </div>
-  )
-}
-
-// ── Paywall ─────────────────────────────────────────────────────────────────
-
-function PaywallCard({ planActual }: { planActual: string }) {
-  return (
-    <div style={{
-      background: 'var(--ink-2)',
-      border: '1px solid rgb(255 255 255 / 0.08)',
-      borderRadius: 'var(--r-xl)',
-      padding: '48px 32px',
-      textAlign: 'center',
-      maxWidth: 480,
-    }}>
-      <div style={{
-        width: 64, height: 64, borderRadius: '50%',
-        background: 'rgb(255 255 255 / 0.05)',
-        border: '1px solid var(--ink-4)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        margin: '0 auto 20px',
-      }}>
-        <Lock size={26} color="rgb(255 255 255 / 0.3)" />
-      </div>
-
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 700, color: 'var(--snow)', marginBottom: 10 }}>
-        Funciones exclusivas de planes de pago
-      </h2>
-      <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.45)', lineHeight: 1.6, marginBottom: 28 }}>
-        Los ajustes avanzados — como agregar días inhábiles personalizados para tu organización — están disponibles en los planes <strong style={{ color: 'var(--em)' }}>Equipo</strong>, <strong style={{ color: 'var(--info)' }}>Agencia</strong> y <strong style={{ color: 'var(--warn)' }}>Enterprise</strong>.
-      </p>
-
-      <div style={{
-        display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 28,
-      }}>
-        {[
-          { label: 'Equipo', color: 'var(--em)' },
-          { label: 'Agencia', color: 'var(--info)' },
-          { label: 'Enterprise', color: 'var(--warn)' },
-        ].map(p => (
-          <span key={p.label} style={{
-            fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
-            padding: '5px 14px', borderRadius: 'var(--r-full)',
-            border: `1px solid ${p.color}`, color: p.color,
-          }}>
-            {p.label}
-          </span>
-        ))}
-      </div>
-
-      <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.25)' }}>
-        Plan actual: <span style={{ color: 'rgb(255 255 255 / 0.45)', fontWeight: 600 }}>{planActual}</span>
-      </p>
     </div>
   )
 }

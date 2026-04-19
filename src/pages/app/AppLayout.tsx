@@ -3,8 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { LayoutDashboard, Calendar, Building2, Menu, X, LogOut, ClipboardList, Users, Settings, Lock } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import { useEmpresa } from '../../hooks/useEmpresa'
-
-const PLANES_PAGO = ['equipo', 'agencia', 'enterprise']
+import { tieneFeature } from '../../lib/plans'
 
 const NAV = [
   { to: '/app',                label: 'Dashboard',    icon: LayoutDashboard, end: true,  planGated: false },
@@ -67,7 +66,7 @@ export default function AppLayout() {
       {/* Nav items */}
       <nav aria-label="Navegación principal" style={{ flex: 1, padding: '12px 10px', display: 'flex', flexDirection: 'column', gap: 2 }}>
         {NAV.map(({ to, label, icon: Icon, end, planGated }) => {
-          const isLocked = planGated && !PLANES_PAGO.includes(plan.label.toLowerCase())
+          const isLocked = planGated && !tieneFeature(organizacion?.plan_actual, 'diasInhabilesOrg')
           return (
             <NavLink
               key={to}

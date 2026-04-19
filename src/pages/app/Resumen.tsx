@@ -5,6 +5,8 @@ import { useVencimientos } from '../../hooks/useVencimientos'
 import { useRol } from '../../hooks/useRol'
 import { useResumenAnual } from '../../hooks/useResumenAnual'
 import { ESTADO_CONFIG } from '../../lib/constants'
+import { tieneFeature } from '../../lib/plans'
+import { PlanPaywall } from '../../components/PlanPaywall'
 import { Link } from 'react-router-dom'
 
 function diasRestantes(fecha: string): number {
@@ -196,10 +198,26 @@ export default function Resumen() {
         <div className={`reveal-scale delay-4 ${kpiVisible ? 'visible' : ''}`}><KpiCard label="Este mes"    value={loading ? '–' : stats.total}       icon={<CalendarDays size={16} />} accent="var(--info)"   topBorder="var(--info)" loading={loading}  /></div>
       </div>
 
-      {/* Paneles: Progreso Anual + Resumen por Categoría */}
+      {/* Paneles: Progreso Anual + Resumen por Categoría (solo planes de pago) */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20, marginBottom: 20 }}>
-        <ProgresoAnualPanel resumenAnual={resumenAnual} anio={mesActual.getFullYear()} />
-        <ResumenCategoriaPanel vencimientos={vencimientos} loading={loading} />
+        {tieneFeature(organizacion?.plan_actual, 'dashboardProgresoAnual')
+          ? <ProgresoAnualPanel resumenAnual={resumenAnual} anio={mesActual.getFullYear()} />
+          : <PlanPaywall
+              feature="dashboardProgresoAnual"
+              titulo="Progreso anual"
+              descripcion="Visualiza tu porcentaje de cumplimiento del año con desglose por estado. Disponible en planes de pago."
+              planActual={organizacion?.plan_actual}
+            />
+        }
+        {tieneFeature(organizacion?.plan_actual, 'dashboardResumenCategoria')
+          ? <ResumenCategoriaPanel vencimientos={vencimientos} loading={loading} />
+          : <PlanPaywall
+              feature="dashboardResumenCategoria"
+              titulo="Resumen por categoría"
+              descripcion="Consulta el avance de tus obligaciones IMMEX, IVA/IEPS y generales en un solo vistazo."
+              planActual={organizacion?.plan_actual}
+            />
+        }
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
