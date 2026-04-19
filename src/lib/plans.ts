@@ -2,7 +2,7 @@
 // TODOS los paywalls deben consumir este archivo.
 // NUNCA hardcodear strings de plan en componentes individuales.
 
-export type Plan = 'gratis' | 'equipo' | 'agencia' | 'enterprise'
+export type Plan = 'gratis' | 'equipo' | 'agencia'
 
 // ── Metadata de UI (label, precio, CTA, etc.) ─────────────────────────────────
 export const PLAN_META: Record<Plan, {
@@ -34,12 +34,6 @@ export const PLAN_META: Record<Plan, {
     color: 'var(--info)', badge: 'Recomendado',
     cta: 'Empezar prueba gratis', href: '/register?plan=agencia',
   },
-  enterprise: {
-    label: 'Enterprise', precio: 'A consultar', periodo: '', featured: false,
-    desc: 'Corporativos con docenas de RFCs.',
-    color: 'var(--warn)',
-    cta: 'Agendar demo', href: '/demo',
-  },
 }
 
 // ── Límites cuantitativos ──────────────────────────────────────────────────────
@@ -47,10 +41,9 @@ export const PLAN_LIMITS: Record<Plan, {
   maxEmpresas: number | null   // null = ilimitado
   maxUsuarios: number | null
 }> = {
-  gratis:     { maxEmpresas: 1,    maxUsuarios: 1    },
-  equipo:     { maxEmpresas: 1,    maxUsuarios: 5    },
-  agencia:    { maxEmpresas: 5,    maxUsuarios: 20   },
-  enterprise: { maxEmpresas: null, maxUsuarios: null },
+  gratis:  { maxEmpresas: 1,    maxUsuarios: 1  },
+  equipo:  { maxEmpresas: 1,    maxUsuarios: 5  },
+  agencia: { maxEmpresas: 5,    maxUsuarios: 20 },
 }
 
 // ── Features booleanas por plan ────────────────────────────────────────────────
@@ -71,71 +64,43 @@ export type FeatureKey =
   // Agencia+
   | 'dashboardGlobal'
   | 'aislamientoCliente'
-  // Enterprise
-  | 'whiteLabeling'
-  | 'slaGarantizado'
-  | 'onboardingDedicado'
 
 export const PLAN_FEATURES: Record<Plan, Record<FeatureKey, boolean>> = {
   gratis: {
-    dashboardProgresoAnual:    false,
-    dashboardResumenCategoria: false,
-    diasInhabilesOrg:          false,
-    invitarEquipo:             false,
-    asignacionObligaciones:    false,
-    evidenciaDocumental:       false,
+    dashboardProgresoAnual:     false,
+    dashboardResumenCategoria:  false,
+    diasInhabilesOrg:           false,
+    invitarEquipo:              false,
+    asignacionObligaciones:     false,
+    evidenciaDocumental:        false,
     obligacionesPersonalizadas: false,
-    reportesPdf:               false,
-    dashboardGlobal:           false,
-    aislamientoCliente:        false,
-    whiteLabeling:             false,
-    slaGarantizado:            false,
-    onboardingDedicado:        false,
+    reportesPdf:                false,
+    dashboardGlobal:            false,
+    aislamientoCliente:         false,
   },
   equipo: {
-    dashboardProgresoAnual:    true,
-    dashboardResumenCategoria: true,
-    diasInhabilesOrg:          true,
-    invitarEquipo:             true,
-    asignacionObligaciones:    true,
-    evidenciaDocumental:       true,
+    dashboardProgresoAnual:     true,
+    dashboardResumenCategoria:  true,
+    diasInhabilesOrg:           true,
+    invitarEquipo:              true,
+    asignacionObligaciones:     true,
+    evidenciaDocumental:        true,
     obligacionesPersonalizadas: true,
-    reportesPdf:               true,
-    dashboardGlobal:           false,
-    aislamientoCliente:        false,
-    whiteLabeling:             false,
-    slaGarantizado:            false,
-    onboardingDedicado:        false,
+    reportesPdf:                true,
+    dashboardGlobal:            false,
+    aislamientoCliente:         false,
   },
   agencia: {
-    dashboardProgresoAnual:    true,
-    dashboardResumenCategoria: true,
-    diasInhabilesOrg:          true,
-    invitarEquipo:             true,
-    asignacionObligaciones:    true,
-    evidenciaDocumental:       true,
+    dashboardProgresoAnual:     true,
+    dashboardResumenCategoria:  true,
+    diasInhabilesOrg:           true,
+    invitarEquipo:              true,
+    asignacionObligaciones:     true,
+    evidenciaDocumental:        true,
     obligacionesPersonalizadas: true,
-    reportesPdf:               true,
-    dashboardGlobal:           true,
-    aislamientoCliente:        true,
-    whiteLabeling:             false,
-    slaGarantizado:            false,
-    onboardingDedicado:        false,
-  },
-  enterprise: {
-    dashboardProgresoAnual:    true,
-    dashboardResumenCategoria: true,
-    diasInhabilesOrg:          true,
-    invitarEquipo:             true,
-    asignacionObligaciones:    true,
-    evidenciaDocumental:       true,
-    obligacionesPersonalizadas: true,
-    reportesPdf:               true,
-    dashboardGlobal:           true,
-    aislamientoCliente:        true,
-    whiteLabeling:             true,
-    slaGarantizado:            true,
-    onboardingDedicado:        true,
+    reportesPdf:                true,
+    dashboardGlobal:            true,
+    aislamientoCliente:         true,
   },
 }
 
@@ -181,17 +146,6 @@ export const PLAN_FEATURES_LANDING: Record<Plan, { included: string[]; disabled:
     ],
     disabled: [],
   },
-  enterprise: {
-    included: [
-      'Empresas ilimitadas',
-      'Usuarios ilimitados',
-      'Todo lo de Agencia',
-      'White-labeling',
-      'SLA garantizado',
-      'Onboarding dedicado',
-    ],
-    disabled: [],
-  },
 }
 
 // ── Helper principal: verifica si un plan tiene una feature ───────────────────
@@ -202,9 +156,9 @@ export function tieneFeature(plan: string | undefined | null, feature: FeatureKe
 }
 
 // Orden de planes para comparaciones
-export const PLAN_ORDER: Plan[] = ['gratis', 'equipo', 'agencia', 'enterprise']
+export const PLAN_ORDER: Plan[] = ['gratis', 'equipo', 'agencia']
 
 // Plan mínimo que tiene una feature
 export function planMinimoParaFeature(feature: FeatureKey): Plan {
-  return PLAN_ORDER.find(p => PLAN_FEATURES[p][feature]) ?? 'enterprise'
+  return PLAN_ORDER.find(p => PLAN_FEATURES[p][feature]) ?? 'agencia'
 }

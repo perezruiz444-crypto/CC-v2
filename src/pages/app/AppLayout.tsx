@@ -15,10 +15,9 @@ const NAV = [
 ]
 
 const PLAN_LABELS: Record<string, { label: string; color: string }> = {
-  gratis:    { label: 'Gratis',   color: 'rgb(255 255 255 / 0.25)' },
-  equipo:    { label: 'Equipo',   color: 'var(--em)' },
-  agencia:   { label: 'Agencia',  color: 'var(--info)' },
-  enterprise:{ label: 'Enterprise', color: 'var(--warn)' },
+  gratis:  { label: 'Gratis',  color: 'rgb(255 255 255 / 0.25)' },
+  equipo:  { label: 'Equipo',  color: 'var(--em)' },
+  agencia: { label: 'Agencia', color: 'var(--info)' },
 }
 
 export default function AppLayout() {
