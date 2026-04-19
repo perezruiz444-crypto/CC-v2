@@ -1,15 +1,18 @@
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Calendar, Building2, Menu, X, LogOut, ClipboardList, Users } from 'lucide-react'
+import { LayoutDashboard, Calendar, Building2, Menu, X, LogOut, ClipboardList, Users, Settings, Lock } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import { useEmpresa } from '../../hooks/useEmpresa'
 
+const PLANES_PAGO = ['equipo', 'agencia', 'enterprise']
+
 const NAV = [
-  { to: '/app',                label: 'Dashboard',    icon: LayoutDashboard, end: true },
-  { to: '/app/calendario',     label: 'Calendario',   icon: Calendar,        end: false },
-  { to: '/app/obligaciones',   label: 'Obligaciones', icon: ClipboardList,   end: false },
-  { to: '/app/empresa',        label: 'Mi Empresa',   icon: Building2,       end: false },
-  { to: '/app/equipo',         label: 'Mi Equipo',    icon: Users,           end: false },
+  { to: '/app',                label: 'Dashboard',    icon: LayoutDashboard, end: true,  planGated: false },
+  { to: '/app/calendario',     label: 'Calendario',   icon: Calendar,        end: false, planGated: false },
+  { to: '/app/obligaciones',   label: 'Obligaciones', icon: ClipboardList,   end: false, planGated: false },
+  { to: '/app/empresa',        label: 'Mi Empresa',   icon: Building2,       end: false, planGated: false },
+  { to: '/app/equipo',         label: 'Mi Equipo',    icon: Users,           end: false, planGated: false },
+  { to: '/app/ajustes',        label: 'Ajustes',      icon: Settings,        end: false, planGated: true  },
 ]
 
 const PLAN_LABELS: Record<string, { label: string; color: string }> = {
@@ -63,38 +66,42 @@ export default function AppLayout() {
 
       {/* Nav items */}
       <nav aria-label="Navegación principal" style={{ flex: 1, padding: '12px 10px', display: 'flex', flexDirection: 'column', gap: 2 }}>
-        {NAV.map(({ to, label, icon: Icon, end }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={end}
-            onClick={() => setMobileOpen(false)}
-            style={({ isActive }) => ({
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              padding: '10px 12px',
-              borderRadius: 'var(--r-lg)',
-              textDecoration: 'none',
-              fontSize: 14,
-              fontWeight: 500,
-              color: isActive ? 'var(--em)' : 'rgb(255 255 255 / 0.55)',
-              background: isActive ? 'var(--em-subtle)' : 'transparent',
-              borderLeft: isActive ? '3px solid var(--em)' : '3px solid transparent',
-              boxShadow: isActive ? 'inset 0 0 8px rgba(13, 148, 136, 0.1)' : 'none',
-              transition: 'all var(--dur-fast)',
-              cursor: 'pointer',
-              minHeight: 44,
-            })}
-          >
-            {({ isActive }) => (
-              <>
-                <Icon size={17} aria-hidden="true" color={isActive ? 'var(--em)' : 'rgb(255 255 255 / 0.4)'} />
-                {label}
-              </>
-            )}
-          </NavLink>
-        ))}
+        {NAV.map(({ to, label, icon: Icon, end, planGated }) => {
+          const isLocked = planGated && !PLANES_PAGO.includes(plan.label.toLowerCase())
+          return (
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              onClick={() => setMobileOpen(false)}
+              style={({ isActive }) => ({
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                padding: '10px 12px',
+                borderRadius: 'var(--r-lg)',
+                textDecoration: 'none',
+                fontSize: 14,
+                fontWeight: 500,
+                color: isActive ? 'var(--em)' : isLocked ? 'rgb(255 255 255 / 0.3)' : 'rgb(255 255 255 / 0.55)',
+                background: isActive ? 'var(--em-subtle)' : 'transparent',
+                borderLeft: isActive ? '3px solid var(--em)' : '3px solid transparent',
+                boxShadow: isActive ? 'inset 0 0 8px rgba(13, 148, 136, 0.1)' : 'none',
+                transition: 'all var(--dur-fast)',
+                cursor: 'pointer',
+                minHeight: 44,
+              })}
+            >
+              {({ isActive }) => (
+                <>
+                  <Icon size={17} aria-hidden="true" color={isActive ? 'var(--em)' : isLocked ? 'rgb(255 255 255 / 0.2)' : 'rgb(255 255 255 / 0.4)'} />
+                  <span style={{ flex: 1 }}>{label}</span>
+                  {isLocked && <Lock size={11} color="rgb(255 255 255 / 0.2)" aria-label="Plan de pago requerido" />}
+                </>
+              )}
+            </NavLink>
+          )
+        })}
       </nav>
 
       {/* Usuario + logout */}

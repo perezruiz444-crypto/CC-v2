@@ -1,8 +1,9 @@
 import { useMemo, useEffect, useState } from 'react'
-import { AlertCircle, CheckCircle2, Clock, CalendarDays, ChevronRight, CheckCheck, EyeOff } from 'lucide-react'
+import { AlertCircle, CheckCircle2, Clock, CalendarDays, ChevronRight, CheckCheck, EyeOff, TrendingUp } from 'lucide-react'
 import { useEmpresa } from '../../hooks/useEmpresa'
 import { useVencimientos } from '../../hooks/useVencimientos'
 import { useRol } from '../../hooks/useRol'
+import { useResumenAnual } from '../../hooks/useResumenAnual'
 import { ESTADO_CONFIG } from '../../lib/constants'
 import { Link } from 'react-router-dom'
 
@@ -56,6 +57,8 @@ export default function Resumen() {
   useEffect(() => {
     setKpiVisible(true)
   }, [])
+
+  const resumenAnual = useResumenAnual(empresa?.id ?? null)
 
   const stats = useMemo(() => {
     const proximos15 = vencimientos.filter(v => {
@@ -191,6 +194,12 @@ export default function Resumen() {
         <div className={`reveal-scale delay-2 ${kpiVisible ? 'visible' : ''}`}><KpiCard label="Completados" value={loading ? '–' : stats.completados} icon={<CheckCircle2 size={16} />} accent="var(--em)"     topBorder="var(--em)" loading={loading}  /></div>
         <div className={`reveal-scale delay-3 ${kpiVisible ? 'visible' : ''}`}><KpiCard label="Vencidos"    value={loading ? '–' : stats.vencidos}    icon={<AlertCircle size={16} />}  accent="var(--danger)" topBorder="var(--danger)" loading={loading} alert={stats.vencidos > 0}  /></div>
         <div className={`reveal-scale delay-4 ${kpiVisible ? 'visible' : ''}`}><KpiCard label="Este mes"    value={loading ? '–' : stats.total}       icon={<CalendarDays size={16} />} accent="var(--info)"   topBorder="var(--info)" loading={loading}  /></div>
+      </div>
+
+      {/* Paneles: Progreso Anual + Resumen por Categoría */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20, marginBottom: 20 }}>
+        <ProgresoAnualPanel resumenAnual={resumenAnual} anio={mesActual.getFullYear()} />
+        <ResumenCategoriaPanel vencimientos={vencimientos} loading={loading} />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
@@ -478,6 +487,182 @@ function SkeletonRows() {
           <div style={{ width: 64, height: 20, background: 'var(--ink-3)', borderRadius: 'var(--r-full)' }} />
         </div>
       ))}
+    </div>
+  )
+}
+
+// ── Panel: Progreso Anual ────────────────────────────────────
+
+function ProgresoAnualPanel({ resumenAnual, anio }: { resumenAnual: import('../../hooks/useResumenAnual').ResumenAnual; anio: number }) {
+  const { totalAnual, completadosAnual, pendientesAnual, vencidosAnual, porcentaje, loading } = resumenAnual
+
+  return (
+    <div style={{
+      background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+      borderRadius: 'var(--r-xl)', padding: '20px 24px',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+        <TrendingUp size={15} color="var(--em)" />
+        <div>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--snow)', marginBottom: 1 }}>
+            Progreso Anual {anio}
+          </h2>
+          <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>Cumplimiento total del año</p>
+        </div>
+      </div>
+
+      {loading ? (
+        <div>
+          <div style={{ height: 60, background: 'var(--ink-3)', borderRadius: 'var(--r-md)', marginBottom: 12 }} />
+          <div style={{ height: 8, background: 'var(--ink-3)', borderRadius: 'var(--r-full)' }} />
+        </div>
+      ) : (
+        <>
+          {/* Número grande */}
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, marginBottom: 14 }}>
+            <p style={{
+              fontFamily: 'var(--font-display)', fontSize: 52, fontWeight: 800, lineHeight: 1,
+              color: porcentaje >= 80 ? 'var(--em)' : porcentaje >= 50 ? 'var(--warn)' : 'var(--danger)',
+              fontVariantNumeric: 'tabular-nums',
+            }}>
+              {porcentaje}
+            </p>
+            <p style={{ fontSize: 18, fontWeight: 700, color: 'rgb(255 255 255 / 0.4)', marginBottom: 8 }}>%</p>
+          </div>
+
+          {/* Barra de progreso */}
+          <div style={{
+            height: 8, background: 'var(--ink-4)', borderRadius: 'var(--r-full)',
+            overflow: 'hidden', marginBottom: 14,
+          }}>
+            <div style={{
+              height: '100%',
+              width: `${porcentaje}%`,
+              borderRadius: 'var(--r-full)',
+              background: porcentaje >= 80
+                ? 'linear-gradient(90deg, var(--em), #34d399)'
+                : porcentaje >= 50
+                ? 'linear-gradient(90deg, var(--warn), #fbbf24)'
+                : 'linear-gradient(90deg, var(--danger), #f87171)',
+              transition: 'width 0.8s var(--ease-out)',
+            }} />
+          </div>
+
+          {/* Desglose */}
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+            {[
+              { label: 'Completados', value: completadosAnual, color: 'var(--em)' },
+              { label: 'Pendientes',  value: pendientesAnual,  color: 'var(--warn)' },
+              { label: 'Vencidos',    value: vencidosAnual,    color: 'var(--danger)' },
+            ].map(item => (
+              <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: item.color, flexShrink: 0 }} />
+                <span style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.4)' }}>{item.label}</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--snow)', fontVariantNumeric: 'tabular-nums' }}>
+                  {item.value}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {totalAnual === 0 && (
+            <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.3)', marginTop: 8, fontStyle: 'italic' }}>
+              Sin vencimientos generados para {anio}
+            </p>
+          )}
+        </>
+      )}
+    </div>
+  )
+}
+
+// ── Panel: Resumen por Categoría ─────────────────────────────
+
+const CATEGORIA_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
+  immex:    { label: 'IMMEX',    color: 'var(--em)',   bg: 'var(--em-subtle)' },
+  iva_ieps: { label: 'IVA/IEPS', color: 'var(--info)', bg: 'rgb(59 130 246 / 0.08)' },
+  general:  { label: 'General',  color: 'rgb(255 255 255 / 0.5)', bg: 'var(--ink-3)' },
+  prosec:   { label: 'PROSEC',   color: 'var(--warn)', bg: 'rgb(245 158 11 / 0.08)' },
+  padron:   { label: 'Padrón',   color: 'var(--warn)', bg: 'rgb(245 158 11 / 0.08)' },
+}
+
+function ResumenCategoriaPanel({ vencimientos, loading }: { vencimientos: any[]; loading: boolean }) {
+  const porCategoria = useMemo(() => {
+    const map: Record<string, { total: number; completados: number }> = {}
+    vencimientos.forEach(v => {
+      const cat = (v.catalogo?.categoria ?? 'general') as string
+      if (!map[cat]) map[cat] = { total: 0, completados: 0 }
+      map[cat].total++
+      if (v.estado_cumplimiento === 'completado') map[cat].completados++
+    })
+    // Ordenar por total desc, solo mostrar categorías con ≥1 vencimiento
+    return Object.entries(map)
+      .filter(([, { total }]) => total > 0)
+      .sort((a, b) => b[1].total - a[1].total)
+  }, [vencimientos])
+
+  return (
+    <div style={{
+      background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+      borderRadius: 'var(--r-xl)', overflow: 'hidden',
+    }}>
+      <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--ink-3)' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--snow)', marginBottom: 2 }}>
+          Este mes por categoría
+        </h2>
+        <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>Vencimientos del mes activo</p>
+      </div>
+
+      {loading ? (
+        <div style={{ padding: '16px 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {[1, 2, 3].map(i => (
+            <div key={i} style={{ height: 36, background: 'var(--ink-3)', borderRadius: 'var(--r-md)' }} />
+          ))}
+        </div>
+      ) : porCategoria.length === 0 ? (
+        <div style={{ padding: '36px 24px', textAlign: 'center' }}>
+          <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.3)' }}>Sin vencimientos este mes</p>
+        </div>
+      ) : (
+        <div style={{ padding: '12px 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {porCategoria.map(([cat, { total, completados }]) => {
+            const cfg = CATEGORIA_CONFIG[cat] ?? CATEGORIA_CONFIG.general
+            const pct = total > 0 ? Math.round((completados / total) * 100) : 0
+            return (
+              <div key={cat}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{
+                      fontSize: 10, fontWeight: 700, letterSpacing: '0.07em',
+                      textTransform: 'uppercase', padding: '2px 8px',
+                      borderRadius: 'var(--r-full)',
+                      background: cfg.bg,
+                      color: cfg.color,
+                    }}>
+                      {cfg.label}
+                    </span>
+                    <span style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>
+                      {completados}/{total}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: cfg.color }}>
+                    {pct}%
+                  </span>
+                </div>
+                <div style={{ height: 5, background: 'var(--ink-4)', borderRadius: 'var(--r-full)', overflow: 'hidden' }}>
+                  <div style={{
+                    height: '100%', width: `${pct}%`,
+                    background: cfg.color,
+                    borderRadius: 'var(--r-full)',
+                    transition: 'width 0.6s var(--ease-out)',
+                    opacity: 0.8,
+                  }} />
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

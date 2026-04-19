@@ -12,6 +12,7 @@ import Calendario from './pages/app/Calendario.tsx'
 import Empresa from './pages/app/Empresa.tsx'
 import Obligaciones from './pages/app/Obligaciones.tsx'
 import Equipo from './pages/app/Equipo.tsx'
+import Ajustes from './pages/app/Ajustes.tsx'
 import ProtectedRoute from './components/ProtectedRoute.tsx'
 import { RolProvider } from './context/RolContext.tsx'
 
@@ -41,6 +42,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="obligaciones" element={<Obligaciones />} />
           <Route path="empresa"      element={<Empresa />} />
           <Route path="equipo"       element={<Equipo />} />
+          <Route path="ajustes"      element={<Ajustes />} />
         </Route>
       </Routes>
     </RolProvider>
