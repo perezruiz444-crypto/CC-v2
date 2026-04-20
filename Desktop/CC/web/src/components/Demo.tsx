@@ -35,7 +35,7 @@ export default function Demo() {
               El compliance que siempre quisiste tener
             </h2>
             <p className="reveal delay-2" style={{
-              fontSize: 16, color: 'rgb(255 255 255 / 0.45)',
+              fontSize: 16, color: '#64748B',
               lineHeight: 1.7, maxWidth: 500, marginInline: 'auto'
             }}>
               Toda tu operación de ComEx en un solo lugar.

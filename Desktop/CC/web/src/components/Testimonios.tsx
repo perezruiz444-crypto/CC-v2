@@ -35,8 +35,8 @@ export default function Testimonios() {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 60, maxWidth: 560, marginInline: 'auto' }}>
           <span className="badge reveal" style={{
-            marginBottom: 16, background: 'rgb(13 148 136 / 0.12)',
-            borderColor: 'rgb(13 148 136 / 0.25)', color: 'var(--em-light)'
+            marginBottom: 16, background: 'rgba(3,105,161,0.08)',
+            borderColor: 'rgba(3,105,161,0.2)', color: '#0369A1'
           }}>
             CONFÍAN EN NOSOTROS
           </span>
@@ -47,7 +47,7 @@ export default function Testimonios() {
             Lo que dicen nuestros clientes
           </h2>
           <p className="reveal delay-2" style={{
-            fontSize: 16, color: 'rgb(255 255 255 / 0.6)', lineHeight: 1.7,
+            fontSize: 16, color: '#64748B', lineHeight: 1.7,
           }}>
             Directores de ComEx, agentes aduanales y CFOs que ya optimizaron su compliance.
           </p>
@@ -65,21 +65,21 @@ export default function Testimonios() {
               className={`reveal-scale delay-${i + 1}`}
               style={{
                 background: 'linear-gradient(135deg, var(--ink-3) 0%, var(--ink-2) 100%)',
-                border: '1px solid rgb(255 255 255 / 0.1)',
+                border: '1px solid var(--ink-4)',
                 borderRadius: 'var(--r-xl)',
                 borderLeft: '3px solid var(--em-light)',
                 padding: 32,
                 position: 'relative',
                 display: 'flex', flexDirection: 'column',
-                boxShadow: 'var(--sh-md), 0 0 24px rgb(13 148 136 / 0.08)',
+                boxShadow: 'var(--sh-md), 0 0 24px rgba(3,105,161,0.08)',
                 transition: 'all var(--dur-base)',
               }}
               onMouseEnter={e => {
-                (e.currentTarget as HTMLElement).style.boxShadow = 'var(--sh-lg), 0 0 32px rgb(13 148 136 / 0.12)'
+                (e.currentTarget as HTMLElement).style.boxShadow = 'var(--sh-lg), 0 0 32px rgba(3,105,161,0.12)'
                 ;(e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'
               }}
               onMouseLeave={e => {
-                (e.currentTarget as HTMLElement).style.boxShadow = 'var(--sh-md), 0 0 24px rgb(13 148 136 / 0.08)'
+                (e.currentTarget as HTMLElement).style.boxShadow = 'var(--sh-md), 0 0 24px rgba(3,105,161,0.08)'
                 ;(e.currentTarget as HTMLElement).style.transform = ''
               }}>
 
@@ -94,7 +94,7 @@ export default function Testimonios() {
 
               {/* Quote */}
               <p style={{
-                fontSize: 16, fontStyle: 'italic', color: 'rgb(255 255 255 / 0.8)',
+                fontSize: 16, fontStyle: 'italic', color: '#334155',
                 lineHeight: 1.6, marginBottom: 24, flexGrow: 1,
               }}>
                 {quote}
@@ -103,7 +103,7 @@ export default function Testimonios() {
               {/* Author */}
               <div style={{
                 display: 'flex', alignItems: 'center', gap: 12,
-                paddingTop: 20, borderTop: '1px solid rgb(255 255 255 / 0.08)',
+                paddingTop: 20, borderTop: '1px solid var(--ink-4)',
               }}>
                 <div style={{
                   width: 48, height: 48, borderRadius: '50%',
@@ -122,12 +122,12 @@ export default function Testimonios() {
                     {name}
                   </div>
                   <div style={{
-                    fontSize: 12, color: 'rgb(255 255 255 / 0.6)',
+                    fontSize: 12, color: '#64748B',
                   }}>
                     {role}
                   </div>
                   <div style={{
-                    fontSize: 11, color: 'rgb(255 255 255 / 0.4)',
+                    fontSize: 11, color: '#94A3B8',
                   }}>
                     {company}
                   </div>

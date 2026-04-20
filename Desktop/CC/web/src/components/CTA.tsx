@@ -6,13 +6,13 @@ export default function CTA() {
 
   return (
     <section ref={ref as React.RefObject<HTMLElement>} className="section-sm"
-      style={{ background: 'var(--snow)', borderTop: '1px solid var(--surface-2)', overflow: 'hidden', position: 'relative' }}>
+      style={{ background: 'var(--ink-2)', borderTop: '1px solid var(--ink-4)', overflow: 'hidden', position: 'relative' }}>
 
       {/* Emerald glow */}
       <div aria-hidden="true" style={{
         position: 'absolute', bottom: '-40%', left: '50%', transform: 'translateX(-50%)',
         width: 500, height: 300, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgb(16 185 129 / 0.12) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(3,105,161,0.08) 0%, transparent 70%)',
         filter: 'blur(50px)', pointerEvents: 'none',
       }} />
 
@@ -23,7 +23,7 @@ export default function CTA() {
           background: 'var(--em-subtle)',
           borderRadius: 'var(--r-xl)',
           marginBottom: 28,
-          border: '1px solid rgb(16 185 129 / 0.2)',
+          border: '1px solid rgba(3,105,161,0.2)',
         }}>
           <ShieldCheck size={28} color="var(--em)" aria-hidden="true" />
         </div>
