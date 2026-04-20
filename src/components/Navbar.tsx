@@ -22,9 +22,9 @@ export default function Navbar() {
     <header style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
       transition: `background ${220}ms, box-shadow ${220}ms, backdrop-filter ${220}ms`,
-      background: scrolled ? 'rgba(13,17,23,0.88)' : 'transparent',
-      boxShadow: scrolled ? '0 1px 0 rgb(255 255 255 / 0.06)' : 'none',
-      backdropFilter: scrolled ? 'blur(16px)' : 'none',
+      background: scrolled ? 'rgba(248,250,252,0.95)' : 'transparent',
+      boxShadow: scrolled ? `0 1px 0 rgba(14,165,233,0.15)` : 'none',
+      backdropFilter: scrolled ? 'blur(12px)' : 'none',
     }}>
       <div className="container" style={{ display: 'flex', alignItems: 'center', height: 68 }}>
 
@@ -46,18 +46,18 @@ export default function Navbar() {
           {NAV_LINKS.map(({ label, href }) => (
             <a key={href} href={href} className="nav-link-item" style={{
               fontSize: 14, fontWeight: 500,
-              color: 'rgb(255 255 255 / 0.7)',
+              color: '#334155',
               textDecoration: 'none',
               padding: '6px 14px',
               borderRadius: 'var(--r-full)',
               transition: 'color var(--dur-fast), background var(--dur-fast)',
             }}
               onMouseEnter={e => {
-                (e.target as HTMLElement).style.color = 'var(--snow)'
-                ;(e.target as HTMLElement).style.background = 'rgb(255 255 255 / 0.08)'
+                (e.target as HTMLElement).style.color = '#0369A1'
+                ;(e.target as HTMLElement).style.background = 'rgba(3,105,161,0.06)'
               }}
               onMouseLeave={e => {
-                (e.target as HTMLElement).style.color = 'rgb(255 255 255 / 0.7)'
+                (e.target as HTMLElement).style.color = '#334155'
                 ;(e.target as HTMLElement).style.background = 'transparent'
               }}
             >
@@ -101,7 +101,7 @@ export default function Navbar() {
             <a key={href} href={href} onClick={() => setOpen(false)} style={{
               display: 'block', padding: '13px 0',
               fontSize: 15, fontWeight: 500,
-              color: 'rgb(255 255 255 / 0.8)',
+              color: '#334155',
               textDecoration: 'none',
               borderBottom: '1px solid var(--ink-4)',
             }}>

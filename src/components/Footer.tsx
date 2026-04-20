@@ -6,7 +6,7 @@ const LINKS = {
 
 export default function Footer() {
   return (
-    <footer style={{ background: 'var(--ink)', color: 'rgb(255 255 255 / 0.4)', paddingBlock: 56 }}>
+    <footer style={{ background: 'var(--ink)', color: '#94A3B8', paddingBlock: 56, borderTop: '1px solid var(--ink-4)' }}>
       <div className="container">
         <div className="footer-grid" style={{
           display: 'grid',
@@ -35,12 +35,12 @@ export default function Footer() {
                 {items.map(item => (
                   <li key={item}>
                     <a href="#" style={{
-                      fontSize: 13, color: 'rgb(255 255 255 / 0.4)',
+                      fontSize: 13, color: '#94A3B8',
                       textDecoration: 'none',
                       transition: 'color var(--dur-fast)',
                     }}
                       onMouseEnter={e => (e.currentTarget.style.color = 'var(--em)')}
-                      onMouseLeave={e => (e.currentTarget.style.color = 'rgb(255 255 255 / 0.4)')}
+                      onMouseLeave={e => (e.currentTarget.style.color = '#94A3B8')}
                     >{item}</a>
                   </li>
                 ))}
