@@ -36,15 +36,15 @@ const SEMAFORO_CONFIG: Record<SemaforoEstado, {
   titulo: string; desc: string; emoji: string;
 }> = {
   verde: {
-    color: 'var(--em)', glow: 'var(--em-glow)', bg: 'var(--em-subtle)', border: 'rgb(16 185 129 / 0.25)',
+    color: '#16A34A', glow: 'rgba(22,163,74,0.12)', bg: 'rgba(22,163,74,0.06)', border: 'rgba(22,163,74,0.2)',
     titulo: 'Todo al día', desc: 'No tienes obligaciones vencidas ni vencimientos próximos urgentes.', emoji: '✅',
   },
   amarillo: {
-    color: 'var(--warn)', glow: 'rgb(245 158 11 / 0.18)', bg: 'rgb(245 158 11 / 0.08)', border: 'rgb(245 158 11 / 0.25)',
+    color: '#D97706', glow: 'rgba(217,119,6,0.12)', bg: 'rgba(217,119,6,0.06)', border: 'rgba(217,119,6,0.2)',
     titulo: 'Atención requerida', desc: 'Tienes vencimientos en los próximos 15 días. Revisa el panel de acción.', emoji: '⚠️',
   },
   rojo: {
-    color: 'var(--danger)', glow: 'rgb(239 68 68 / 0.18)', bg: 'rgb(239 68 68 / 0.08)', border: 'rgb(239 68 68 / 0.25)',
+    color: '#DC2626', glow: 'rgba(220,38,38,0.12)', bg: 'rgba(220,38,38,0.06)', border: 'rgba(220,38,38,0.2)',
     titulo: 'Obligaciones vencidas', desc: 'Hay obligaciones sin cumplir vencidas. Toma acción inmediata.', emoji: '🔴',
   },
 }
@@ -108,18 +108,18 @@ export default function Resumen() {
       <div style={{ marginBottom: 28 }}>
         <h1 style={{
           fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 3vw, 26px)',
-          fontWeight: 700, color: 'var(--snow)', marginBottom: 4,
+          fontWeight: 700, color: '#0F172A', marginBottom: 4,
         }}>
           {loadingEmpresa ? 'Cargando...' : `Hola, ${organizacion?.nombre_cuenta ?? ''}`}
         </h1>
-        <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.4)' }}>
+        <p style={{ fontSize: 13, color: '#64748B' }}>
           Dashboard · {mesLabel} · {empresa?.razon_social ?? ''}
         </p>
       </div>
 
       {/* Semáforo de cumplimiento */}
       {loading ? (
-        <div style={{ height: 100, background: 'var(--ink-2)', borderRadius: 'var(--r-xl)', marginBottom: 20, border: '1px solid var(--ink-3)' }} />
+        <div style={{ height: 100, background: '#FFFFFF', borderRadius: 'var(--r-xl)', marginBottom: 20, border: '1px solid #E2E8F0', boxShadow: 'var(--sh-card)' }} />
       ) : (
         <div style={{
           background: semaforo.bg,
@@ -152,7 +152,7 @@ export default function Resumen() {
             }}>
               {semaforo.titulo}
             </p>
-            <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.5)', lineHeight: 1.5 }}>
+            <p style={{ fontSize: 13, color: '#64748B', lineHeight: 1.5 }}>
               {semaforo.desc}
             </p>
           </div>
@@ -160,26 +160,26 @@ export default function Resumen() {
           <div style={{ display: 'flex', gap: 20, flexShrink: 0 }}>
             {stats.vencidos > 0 && (
               <div style={{ textAlign: 'center' }}>
-                <p style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, color: 'var(--danger)', lineHeight: 1 }}>
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, color: '#DC2626', lineHeight: 1 }}>
                   {stats.vencidos}
                 </p>
-                <p style={{ fontSize: 10, color: 'rgb(255 255 255 / 0.35)', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.07em' }}>vencidas</p>
+                <p style={{ fontSize: 10, color: '#94A3B8', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.07em' }}>vencidas</p>
               </div>
             )}
             {stats.proximos15 > 0 && (
               <div style={{ textAlign: 'center' }}>
-                <p style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, color: 'var(--warn)', lineHeight: 1 }}>
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, color: '#D97706', lineHeight: 1 }}>
                   {stats.proximos15}
                 </p>
-                <p style={{ fontSize: 10, color: 'rgb(255 255 255 / 0.35)', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.07em' }}>próximas</p>
+                <p style={{ fontSize: 10, color: '#94A3B8', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.07em' }}>próximas</p>
               </div>
             )}
             {semaforoEstado === 'verde' && (
               <div style={{ textAlign: 'center' }}>
-                <p style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, color: 'var(--em)', lineHeight: 1 }}>
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, color: '#16A34A', lineHeight: 1 }}>
                   {stats.completados}
                 </p>
-                <p style={{ fontSize: 10, color: 'rgb(255 255 255 / 0.35)', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.07em' }}>completadas</p>
+                <p style={{ fontSize: 10, color: '#94A3B8', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.07em' }}>completadas</p>
               </div>
             )}
           </div>
@@ -224,24 +224,24 @@ export default function Resumen() {
 
         {/* Panel Acción Requerida */}
         <div style={{
-          background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+          background: '#FFFFFF', border: '1px solid #E2E8F0',
           borderRadius: 'var(--r-xl)', overflow: 'hidden',
         }}>
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '16px 20px', borderBottom: '1px solid var(--ink-3)',
+            padding: '16px 20px', borderBottom: '1px solid #E2E8F0',
           }}>
             <div>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--snow)', marginBottom: 2 }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: '#0F172A', marginBottom: 2 }}>
                 Acción Requerida
               </h2>
-              <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>Vencidas y próximas 15 días</p>
+              <p style={{ fontSize: 11, color: '#94A3B8' }}>Vencidas y próximas 15 días</p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               {!puedeEditar && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '3px 8px', borderRadius: 'var(--r-full)', background: 'rgb(255 255 255 / 0.05)', border: '1px solid var(--ink-4)' }}>
-                  <EyeOff size={10} color="rgb(255 255 255 / 0.3)" />
-                  <span style={{ fontSize: 9, fontWeight: 700, color: 'rgb(255 255 255 / 0.3)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Lectura</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '3px 8px', borderRadius: 'var(--r-full)', background: '#F1F5F9', border: '1px solid #E2E8F0' }}>
+                  <EyeOff size={10} color="#CBD5E1" />
+                  <span style={{ fontSize: 9, fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Lectura</span>
                 </div>
               )}
               {accionRequerida.length > 0 && (
@@ -262,8 +262,8 @@ export default function Resumen() {
           ) : accionRequerida.length === 0 ? (
             <div style={{ padding: '36px 20px', textAlign: 'center' }}>
               <div style={{ fontSize: 28, marginBottom: 8 }} aria-hidden="true">✅</div>
-              <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--snow)', marginBottom: 4 }}>Sin acciones urgentes</p>
-              <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.35)', lineHeight: 1.5 }}>No hay vencimientos inmediatos.</p>
+              <p style={{ fontSize: 13, fontWeight: 600, color: '#0F172A', marginBottom: 4 }}>Sin acciones urgentes</p>
+              <p style={{ fontSize: 12, color: '#94A3B8', lineHeight: 1.5 }}>No hay vencimientos inmediatos.</p>
             </div>
           ) : (
             <div>
@@ -274,7 +274,7 @@ export default function Resumen() {
                   <div key={v.id} style={{
                     display: 'flex', alignItems: 'center', gap: 12,
                     padding: '12px 20px',
-                    borderBottom: i < accionRequerida.length - 1 ? '1px solid var(--ink-3)' : 'none',
+                    borderBottom: i < accionRequerida.length - 1 ? '1px solid #E2E8F0' : 'none',
                   }}>
                     {/* Indicador */}
                     <div style={{
@@ -285,14 +285,14 @@ export default function Resumen() {
                       <p style={{ fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 800, lineHeight: 1, color: isVencido ? 'var(--danger)' : 'var(--warn)' }}>
                         {Math.abs(dias)}
                       </p>
-                      <p style={{ fontSize: 8, color: 'rgb(255 255 255 / 0.3)', marginTop: 1 }}>días</p>
+                      <p style={{ fontSize: 8, color: '#94A3B8', marginTop: 1 }}>días</p>
                     </div>
                     {/* Info */}
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--snow)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: 2 }}>
+                      <p style={{ fontSize: 12, fontWeight: 600, color: '#0F172A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: 2 }}>
                         {v.titulo_instancia}
                       </p>
-                      <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>
+                      <p style={{ fontSize: 11, color: '#94A3B8' }}>
                         {isVencido ? `Venció ${formatFecha(v.fecha_limite)}` : `Vence ${formatFecha(v.fecha_limite)}`}
                       </p>
                     </div>
@@ -359,18 +359,18 @@ function ProximosVencimientos({ proximos, vencimientos, loading }: {
 
   return (
     <div style={{
-      background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+      background: '#FFFFFF', border: '1px solid #E2E8F0',
       borderRadius: 'var(--r-xl)', overflow: 'hidden',
     }}>
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '16px 20px', borderBottom: '1px solid var(--ink-3)',
+        padding: '16px 20px', borderBottom: '1px solid #E2E8F0',
       }}>
         <div>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--snow)', marginBottom: 2 }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: '#0F172A', marginBottom: 2 }}>
             Próximos vencimientos
           </h2>
-          <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>Pendientes del mes</p>
+          <p style={{ fontSize: 11, color: '#94A3B8' }}>Pendientes del mes</p>
         </div>
         <Link to="/app/calendario" style={{
           display: 'flex', alignItems: 'center', gap: 4,
@@ -385,8 +385,8 @@ function ProximosVencimientos({ proximos, vencimientos, loading }: {
       ) : proximos.length === 0 ? (
         <div style={{ padding: '36px 20px', textAlign: 'center' }}>
           <div style={{ fontSize: 28, marginBottom: 8 }} aria-hidden="true">📅</div>
-          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--snow)', marginBottom: 4 }}>Sin pendientes</p>
-          <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.35)', lineHeight: 1.5 }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: '#0F172A', marginBottom: 4 }}>Sin pendientes</p>
+          <p style={{ fontSize: 12, color: '#94A3B8', lineHeight: 1.5 }}>
             {vencimientos.length === 0 ? 'No hay obligaciones generadas aún.' : 'Todo al día este mes.'}
           </p>
         </div>
@@ -402,12 +402,12 @@ function ProximosVencimientos({ proximos, vencimientos, loading }: {
                 style={{
                   display: 'flex', alignItems: 'center', gap: 12,
                   padding: '12px 20px',
-                  borderBottom: i < proximos.length - 1 ? '1px solid var(--ink-3)' : 'none',
+                  borderBottom: i < proximos.length - 1 ? '1px solid #E2E8F0' : 'none',
                   transition: 'background var(--dur-fast)',
                   opacity: itemsVisible[i] ? 1 : 0,
                   transform: itemsVisible[i] ? 'translateX(0)' : 'translateX(-44px)',
                 }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgb(255 255 255 / 0.025)'}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#F8FAFC'}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
               >
                 <div style={{
@@ -422,13 +422,13 @@ function ProximosVencimientos({ proximos, vencimientos, loading }: {
                   }}>
                     {Math.abs(dias)}
                   </p>
-                  <p style={{ fontSize: 8, color: 'rgb(255 255 255 / 0.3)', marginTop: 1 }}>días</p>
+                  <p style={{ fontSize: 8, color: '#94A3B8', marginTop: 1 }}>días</p>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--snow)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: 2 }}>
+                  <p style={{ fontSize: 12, fontWeight: 600, color: '#0F172A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: 2 }}>
                     {v.titulo_instancia}
                   </p>
-                  <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>
+                  <p style={{ fontSize: 11, color: '#94A3B8' }}>
                     {formatFecha(v.fecha_limite)}
                   </p>
                 </div>
@@ -452,11 +452,12 @@ function KpiCard({ label, value, icon, accent, loading, alert, topBorder }: {
 }) {
   return (
     <div style={{
-      background: `linear-gradient(135deg, var(--ink-2), var(--ink-3))`,
-      border: `1px solid ${alert ? 'rgb(239 68 68 / 0.3)' : 'var(--ink-3)'}`,
-      borderTop: topBorder ? `3px solid ${topBorder}` : `1px solid ${alert ? 'rgb(239 68 68 / 0.3)' : 'var(--ink-3)'}`,
+      background: '#FFFFFF',
+      border: `1px solid ${alert ? 'rgba(220,38,38,0.25)' : '#E2E8F0'}`,
+      borderTop: topBorder ? `3px solid ${topBorder}` : `1px solid ${alert ? 'rgba(220,38,38,0.25)' : '#E2E8F0'}`,
       borderRadius: 'var(--r-xl)',
       padding: '18px 20px',
+      boxShadow: 'var(--sh-card)',
       transition: 'transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out)',
       cursor: 'default',
     }}
@@ -466,11 +467,11 @@ function KpiCard({ label, value, icon, accent, loading, alert, topBorder }: {
       }}
       onMouseLeave={e => {
         (e.currentTarget as HTMLElement).style.transform = ''
-        ;(e.currentTarget as HTMLElement).style.boxShadow = 'none'
+        ;(e.currentTarget as HTMLElement).style.boxShadow = 'var(--sh-card)'
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-        <p style={{ fontSize: 11, fontWeight: 600, color: 'rgb(255 255 255 / 0.4)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+        <p style={{ fontSize: 11, fontWeight: 600, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
           {label}
         </p>
         <div style={{ color: accent }}>{icon}</div>
@@ -479,7 +480,7 @@ function KpiCard({ label, value, icon, accent, loading, alert, topBorder }: {
         fontFamily: 'var(--font-display)',
         fontSize: loading ? 22 : 36,
         fontWeight: 800, lineHeight: 1,
-        color: loading ? 'rgb(255 255 255 / 0.15)' : 'var(--snow)',
+        color: loading ? '#E2E8F0' : '#0F172A',
         fontVariantNumeric: 'tabular-nums',
       }}>
         {loading ? '–' : value}
@@ -495,14 +496,14 @@ function SkeletonRows() {
         <div key={i} style={{
           display: 'flex', alignItems: 'center', gap: 12,
           padding: '12px 20px',
-          borderBottom: i < 3 ? '1px solid var(--ink-3)' : 'none',
+          borderBottom: i < 3 ? '1px solid #E2E8F0' : 'none',
         }}>
-          <div style={{ width: 40, height: 40, borderRadius: 'var(--r-md)', background: 'var(--ink-3)' }} />
+          <div style={{ width: 40, height: 40, borderRadius: 'var(--r-md)', background: '#E2E8F0' }} />
           <div style={{ flex: 1 }}>
-            <div style={{ height: 11, width: '55%', background: 'var(--ink-3)', borderRadius: 4, marginBottom: 7 }} />
-            <div style={{ height: 10, width: '30%', background: 'var(--ink-4)', borderRadius: 4 }} />
+            <div style={{ height: 11, width: '55%', background: '#E2E8F0', borderRadius: 4, marginBottom: 7 }} />
+            <div style={{ height: 10, width: '30%', background: '#F1F5F9', borderRadius: 4 }} />
           </div>
-          <div style={{ width: 64, height: 20, background: 'var(--ink-3)', borderRadius: 'var(--r-full)' }} />
+          <div style={{ width: 64, height: 20, background: '#E2E8F0', borderRadius: 'var(--r-full)' }} />
         </div>
       ))}
     </div>
@@ -516,23 +517,23 @@ function ProgresoAnualPanel({ resumenAnual, anio }: { resumenAnual: import('../.
 
   return (
     <div style={{
-      background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+      background: '#FFFFFF', border: '1px solid #E2E8F0',
       borderRadius: 'var(--r-xl)', padding: '20px 24px',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
         <TrendingUp size={15} color="var(--em)" />
         <div>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--snow)', marginBottom: 1 }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: '#0F172A', marginBottom: 1 }}>
             Progreso Anual {anio}
           </h2>
-          <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>Cumplimiento total del año</p>
+          <p style={{ fontSize: 11, color: '#94A3B8' }}>Cumplimiento total del año</p>
         </div>
       </div>
 
       {loading ? (
         <div>
-          <div style={{ height: 60, background: 'var(--ink-3)', borderRadius: 'var(--r-md)', marginBottom: 12 }} />
-          <div style={{ height: 8, background: 'var(--ink-3)', borderRadius: 'var(--r-full)' }} />
+          <div style={{ height: 60, background: '#E2E8F0', borderRadius: 'var(--r-md)', marginBottom: 12 }} />
+          <div style={{ height: 8, background: '#E2E8F0', borderRadius: 'var(--r-full)' }} />
         </div>
       ) : (
         <>
@@ -545,12 +546,12 @@ function ProgresoAnualPanel({ resumenAnual, anio }: { resumenAnual: import('../.
             }}>
               {porcentaje}
             </p>
-            <p style={{ fontSize: 18, fontWeight: 700, color: 'rgb(255 255 255 / 0.4)', marginBottom: 8 }}>%</p>
+            <p style={{ fontSize: 18, fontWeight: 700, color: '#64748B', marginBottom: 8 }}>%</p>
           </div>
 
           {/* Barra de progreso */}
           <div style={{
-            height: 8, background: 'var(--ink-4)', borderRadius: 'var(--r-full)',
+            height: 8, background: '#F1F5F9', borderRadius: 'var(--r-full)',
             overflow: 'hidden', marginBottom: 14,
           }}>
             <div style={{
@@ -575,8 +576,8 @@ function ProgresoAnualPanel({ resumenAnual, anio }: { resumenAnual: import('../.
             ].map(item => (
               <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: item.color, flexShrink: 0 }} />
-                <span style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.4)' }}>{item.label}</span>
-                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--snow)', fontVariantNumeric: 'tabular-nums' }}>
+                <span style={{ fontSize: 11, color: '#64748B' }}>{item.label}</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color: '#0F172A', fontVariantNumeric: 'tabular-nums' }}>
                   {item.value}
                 </span>
               </div>
@@ -584,7 +585,7 @@ function ProgresoAnualPanel({ resumenAnual, anio }: { resumenAnual: import('../.
           </div>
 
           {totalAnual === 0 && (
-            <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.3)', marginTop: 8, fontStyle: 'italic' }}>
+            <p style={{ fontSize: 12, color: '#94A3B8', marginTop: 8, fontStyle: 'italic' }}>
               Sin vencimientos generados para {anio}
             </p>
           )}
@@ -599,7 +600,7 @@ function ProgresoAnualPanel({ resumenAnual, anio }: { resumenAnual: import('../.
 const CATEGORIA_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   immex:    { label: 'IMMEX',    color: 'var(--em)',   bg: 'var(--em-subtle)' },
   iva_ieps: { label: 'IVA/IEPS', color: 'var(--info)', bg: 'rgb(59 130 246 / 0.08)' },
-  general:  { label: 'General',  color: 'rgb(255 255 255 / 0.5)', bg: 'var(--ink-3)' },
+  general:  { label: 'General',  color: '#64748B', bg: '#F1F5F9' },
   prosec:   { label: 'PROSEC',   color: 'var(--warn)', bg: 'rgb(245 158 11 / 0.08)' },
   padron:   { label: 'Padrón',   color: 'var(--warn)', bg: 'rgb(245 158 11 / 0.08)' },
 }
@@ -621,25 +622,25 @@ function ResumenCategoriaPanel({ vencimientos, loading }: { vencimientos: any[];
 
   return (
     <div style={{
-      background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+      background: '#FFFFFF', border: '1px solid #E2E8F0',
       borderRadius: 'var(--r-xl)', overflow: 'hidden',
     }}>
-      <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--ink-3)' }}>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--snow)', marginBottom: 2 }}>
+      <div style={{ padding: '16px 24px', borderBottom: '1px solid #E2E8F0' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: '#0F172A', marginBottom: 2 }}>
           Este mes por categoría
         </h2>
-        <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>Vencimientos del mes activo</p>
+        <p style={{ fontSize: 11, color: '#94A3B8' }}>Vencimientos del mes activo</p>
       </div>
 
       {loading ? (
         <div style={{ padding: '16px 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
           {[1, 2, 3].map(i => (
-            <div key={i} style={{ height: 36, background: 'var(--ink-3)', borderRadius: 'var(--r-md)' }} />
+            <div key={i} style={{ height: 36, background: '#E2E8F0', borderRadius: 'var(--r-md)' }} />
           ))}
         </div>
       ) : porCategoria.length === 0 ? (
         <div style={{ padding: '36px 24px', textAlign: 'center' }}>
-          <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.3)' }}>Sin vencimientos este mes</p>
+          <p style={{ fontSize: 13, color: '#94A3B8' }}>Sin vencimientos este mes</p>
         </div>
       ) : (
         <div style={{ padding: '12px 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -659,7 +660,7 @@ function ResumenCategoriaPanel({ vencimientos, loading }: { vencimientos: any[];
                     }}>
                       {cfg.label}
                     </span>
-                    <span style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>
+                    <span style={{ fontSize: 11, color: '#94A3B8' }}>
                       {completados}/{total}
                     </span>
                   </div>
@@ -667,7 +668,7 @@ function ResumenCategoriaPanel({ vencimientos, loading }: { vencimientos: any[];
                     {pct}%
                   </span>
                 </div>
-                <div style={{ height: 5, background: 'var(--ink-4)', borderRadius: 'var(--r-full)', overflow: 'hidden' }}>
+                <div style={{ height: 5, background: '#F1F5F9', borderRadius: 'var(--r-full)', overflow: 'hidden' }}>
                   <div style={{
                     height: '100%', width: `${pct}%`,
                     background: cfg.color,
@@ -692,14 +693,14 @@ function SkeletonAccion() {
         <div key={i} style={{
           display: 'flex', alignItems: 'center', gap: 12,
           padding: '12px 20px',
-          borderBottom: i < 2 ? '1px solid var(--ink-3)' : 'none',
+          borderBottom: i < 2 ? '1px solid #E2E8F0' : 'none',
         }}>
-          <div style={{ width: 40, height: 40, borderRadius: 'var(--r-md)', background: 'var(--ink-3)' }} />
+          <div style={{ width: 40, height: 40, borderRadius: 'var(--r-md)', background: '#E2E8F0' }} />
           <div style={{ flex: 1 }}>
-            <div style={{ height: 11, width: '65%', background: 'var(--ink-3)', borderRadius: 4, marginBottom: 7 }} />
-            <div style={{ height: 10, width: '40%', background: 'var(--ink-4)', borderRadius: 4 }} />
+            <div style={{ height: 11, width: '65%', background: '#E2E8F0', borderRadius: 4, marginBottom: 7 }} />
+            <div style={{ height: 10, width: '40%', background: '#F1F5F9', borderRadius: 4 }} />
           </div>
-          <div style={{ width: 32, height: 32, borderRadius: 'var(--r-md)', background: 'var(--ink-3)' }} />
+          <div style={{ width: 32, height: 32, borderRadius: 'var(--r-md)', background: '#E2E8F0' }} />
         </div>
       ))}
     </div>

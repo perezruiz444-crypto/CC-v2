@@ -22,7 +22,7 @@ export default function Ajustes() {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {[1, 2].map(i => (
-          <div key={i} style={{ height: 80, background: 'var(--ink-2)', borderRadius: 'var(--r-xl)', border: '1px solid var(--ink-3)' }} />
+          <div key={i} style={{ height: 80, background: '#FFFFFF', borderRadius: 'var(--r-xl)', border: '1px solid #E2E8F0' }} />
         ))}
       </div>
     )
@@ -34,11 +34,11 @@ export default function Ajustes() {
       <div style={{ marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
           <Settings size={20} color="var(--em)" />
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: 700, color: 'var(--snow)' }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: 700, color: '#0F172A' }}>
             Ajustes
           </h1>
         </div>
-        <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.4)' }}>
+        <p style={{ fontSize: 13, color: '#64748B' }}>
           Configuración de tu organización · Plan {organizacion?.plan_actual ?? 'gratis'}
         </p>
       </div>
@@ -105,23 +105,23 @@ function DiasInhabilesSection({
 
   return (
     <div style={{
-      background: 'var(--ink-2)',
-      border: '1px solid var(--ink-3)',
+      background: '#FFFFFF',
+      border: '1px solid #E2E8F0',
       borderRadius: 'var(--r-xl)',
       overflow: 'hidden',
     }}>
       {/* Header de sección */}
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '18px 24px', borderBottom: '1px solid var(--ink-3)',
+        padding: '18px 24px', borderBottom: '1px solid #E2E8F0',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <CalendarDays size={16} color="var(--em)" />
           <div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--snow)', marginBottom: 2 }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: '#0F172A', marginBottom: 2 }}>
               Días Inhábiles de mi Organización
             </h2>
-            <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>
+            <p style={{ fontSize: 11, color: '#94A3B8' }}>
               Se suman a los días festivos nacionales del catálogo
             </p>
           </div>
@@ -133,9 +133,9 @@ function DiasInhabilesSection({
             style={{
               display: 'flex', alignItems: 'center', gap: 6,
               padding: '8px 14px', borderRadius: 'var(--r-lg)',
-              background: showForm ? 'var(--ink-3)' : 'var(--em-subtle)',
-              border: `1px solid ${showForm ? 'var(--ink-4)' : 'rgb(16 185 129 / 0.3)'}`,
-              color: showForm ? 'rgb(255 255 255 / 0.5)' : 'var(--em)',
+              background: showForm ? '#F1F5F9' : 'var(--em-subtle)',
+              border: `1px solid ${showForm ? '#E2E8F0' : 'rgb(16 185 129 / 0.3)'}`,
+              color: showForm ? '#64748B' : 'var(--em)',
               cursor: 'pointer', fontSize: 13, fontWeight: 600,
               transition: 'all var(--dur-fast)',
             }}
@@ -150,12 +150,12 @@ function DiasInhabilesSection({
       {showForm && esOwner && (
         <div style={{
           padding: '20px 24px',
-          borderBottom: '1px solid var(--ink-3)',
-          background: 'rgb(255 255 255 / 0.02)',
+          borderBottom: '1px solid #E2E8F0',
+          background: '#F8FAFC',
         }}>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-end' }}>
             <div style={{ flex: '0 0 auto' }}>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'rgb(255 255 255 / 0.45)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#64748B', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
                 Fecha *
               </label>
               <input
@@ -163,17 +163,17 @@ function DiasInhabilesSection({
                 value={fecha}
                 onChange={e => setFecha(e.target.value)}
                 style={{
-                  background: 'var(--ink-3)', border: '1px solid var(--ink-4)',
+                  background: '#F1F5F9', border: '1px solid #E2E8F0',
                   borderRadius: 'var(--r-md)', padding: '8px 12px',
-                  color: 'var(--snow)', fontSize: 13,
+                  color: '#0F172A', fontSize: 13,
                   outline: 'none', cursor: 'pointer',
-                  colorScheme: 'dark',
+                  colorScheme: 'light',
                 }}
               />
             </div>
 
             <div style={{ flex: '1 1 200px', minWidth: 180 }}>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'rgb(255 255 255 / 0.45)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#64748B', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
                 Descripción (opcional)
               </label>
               <input
@@ -183,13 +183,13 @@ function DiasInhabilesSection({
                 placeholder="Ej. Cierre de año fiscal"
                 maxLength={80}
                 style={{
-                  width: '100%', background: 'var(--ink-3)', border: '1px solid var(--ink-4)',
+                  width: '100%', background: '#F1F5F9', border: '1px solid #E2E8F0',
                   borderRadius: 'var(--r-md)', padding: '8px 12px',
-                  color: 'var(--snow)', fontSize: 13, outline: 'none',
+                  color: '#0F172A', fontSize: 13, outline: 'none',
                   boxSizing: 'border-box',
                 }}
                 onFocus={e => (e.currentTarget.style.borderColor = 'var(--em)')}
-                onBlur={e => (e.currentTarget.style.borderColor = 'var(--ink-4)')}
+                onBlur={e => (e.currentTarget.style.borderColor = '#E2E8F0')}
               />
             </div>
 
@@ -198,8 +198,8 @@ function DiasInhabilesSection({
               disabled={saving}
               style={{
                 padding: '8px 20px', borderRadius: 'var(--r-md)',
-                background: saving ? 'var(--ink-3)' : 'var(--em)',
-                border: 'none', color: saving ? 'rgb(255 255 255 / 0.4)' : '#fff',
+                background: saving ? '#E2E8F0' : 'var(--em)',
+                border: 'none', color: saving ? '#94A3B8' : '#fff',
                 cursor: saving ? 'not-allowed' : 'pointer',
                 fontSize: 13, fontWeight: 600,
                 transition: 'all var(--dur-fast)',
@@ -223,7 +223,7 @@ function DiasInhabilesSection({
       {loading ? (
         <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
           {[1, 2].map(i => (
-            <div key={i} style={{ height: 44, background: 'var(--ink-3)', borderRadius: 'var(--r-md)' }} />
+            <div key={i} style={{ height: 44, background: '#F1F5F9', borderRadius: 'var(--r-md)' }} />
           ))}
         </div>
       ) : error ? (
@@ -233,8 +233,8 @@ function DiasInhabilesSection({
       ) : dias.length === 0 ? (
         <div style={{ padding: '40px 24px', textAlign: 'center' }}>
           <div style={{ fontSize: 28, marginBottom: 8 }}>📅</div>
-          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--snow)', marginBottom: 4 }}>Sin días personalizados</p>
-          <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.35)', lineHeight: 1.5 }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: '#0F172A', marginBottom: 4 }}>Sin días personalizados</p>
+          <p style={{ fontSize: 12, color: '#94A3B8', lineHeight: 1.5 }}>
             {esOwner
               ? 'Agrega fechas especiales de tu organización (vacaciones, cierres, etc.)'
               : 'Tu organización no ha agregado días inhábiles personalizados aún.'}
@@ -248,10 +248,10 @@ function DiasInhabilesSection({
               style={{
                 display: 'flex', alignItems: 'center', gap: 14,
                 padding: '14px 24px',
-                borderBottom: i < dias.length - 1 ? '1px solid var(--ink-3)' : 'none',
+                borderBottom: i < dias.length - 1 ? '1px solid #E2E8F0' : 'none',
                 transition: 'background var(--dur-fast)',
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgb(255 255 255 / 0.02)')}
+              onMouseEnter={e => (e.currentTarget.style.background = '#F8FAFC')}
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               {/* Fecha badge */}
@@ -270,10 +270,10 @@ function DiasInhabilesSection({
 
               {/* Descripción */}
               <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ fontSize: 13, color: 'var(--snow)', fontWeight: 500, marginBottom: 2 }}>
-                  {dia.descripcion || <span style={{ color: 'rgb(255 255 255 / 0.3)', fontStyle: 'italic' }}>Sin descripción</span>}
+                <p style={{ fontSize: 13, color: '#0F172A', fontWeight: 500, marginBottom: 2 }}>
+                  {dia.descripcion || <span style={{ color: '#94A3B8', fontStyle: 'italic' }}>Sin descripción</span>}
                 </p>
-                <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.3)' }}>
+                <p style={{ fontSize: 11, color: '#94A3B8' }}>
                   {formatFecha(dia.fecha)}
                 </p>
               </div>
@@ -291,7 +291,7 @@ function DiasInhabilesSection({
                     background: 'transparent',
                     border: '1px solid transparent',
                     cursor: deletingId === dia.id ? 'not-allowed' : 'pointer',
-                    color: 'rgb(255 255 255 / 0.3)',
+                    color: '#94A3B8',
                     opacity: deletingId === dia.id ? 0.4 : 1,
                     transition: 'all var(--dur-fast)',
                     minWidth: 44, minHeight: 44,
@@ -302,7 +302,7 @@ function DiasInhabilesSection({
                     ;(e.currentTarget as HTMLElement).style.borderColor = 'rgb(239 68 68 / 0.2)'
                   }}
                   onMouseLeave={e => {
-                    (e.currentTarget as HTMLElement).style.color = 'rgb(255 255 255 / 0.3)'
+                    (e.currentTarget as HTMLElement).style.color = '#CBD5E1'
                     ;(e.currentTarget as HTMLElement).style.background = 'transparent'
                     ;(e.currentTarget as HTMLElement).style.borderColor = 'transparent'
                   }}
@@ -318,10 +318,10 @@ function DiasInhabilesSection({
       {/* Footer informativo */}
       <div style={{
         padding: '12px 24px',
-        borderTop: '1px solid var(--ink-3)',
-        background: 'rgb(255 255 255 / 0.01)',
+        borderTop: '1px solid #E2E8F0',
+        background: '#F8FAFC',
       }}>
-        <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.25)', lineHeight: 1.5 }}>
+        <p style={{ fontSize: 11, color: '#94A3B8', lineHeight: 1.5 }}>
           💡 Estos días se suman al catálogo nacional de días inhábiles. El motor de calendario los considerará al proyectar fechas límite.
           {!esOwner && ' Solo los owners pueden agregar o eliminar fechas.'}
         </p>

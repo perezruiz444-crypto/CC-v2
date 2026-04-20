@@ -15,9 +15,9 @@ const NAV = [
 ]
 
 const PLAN_LABELS: Record<string, { label: string; color: string }> = {
-  gratis:  { label: 'Gratis',  color: 'rgb(255 255 255 / 0.25)' },
-  equipo:  { label: 'Equipo',  color: 'var(--em)' },
-  agencia: { label: 'Agencia', color: 'var(--info)' },
+  gratis:  { label: 'Básico',  color: '#64748B' },
+  equipo:  { label: 'Equipo',  color: '#0369A1' },
+  agencia: { label: 'Agencia', color: '#0F172A' },
 }
 
 export default function AppLayout() {
@@ -37,8 +37,8 @@ export default function AppLayout() {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 
       {/* Logo */}
-      <div style={{ padding: '24px 20px 20px', borderBottom: '1px solid var(--ink-3)' }}>
-        <span className="shimmer-gradient" style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: 'var(--snow)' }}>
+      <div style={{ padding: '24px 20px 20px', borderBottom: '1px solid var(--ink-4)' }}>
+        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: 'var(--snow)' }}>
           Calendario<span style={{ color: 'var(--em)' }}>Compliance</span>
         </span>
         {/* Badge plan + status indicator */}
@@ -52,11 +52,10 @@ export default function AppLayout() {
           }}>
             {plan.label}
           </span>
-          {/* Green glow indicator */}
+          {/* Active indicator */}
           <div style={{
-            width: 8, height: 8, borderRadius: '50%',
-            background: 'var(--em)',
-            boxShadow: '0 0 12px var(--em-glow), 0 0 6px var(--em)',
+            width: 7, height: 7, borderRadius: '50%',
+            background: '#16A34A',
             flexShrink: 0,
           }} aria-label="Status: Activo" />
         </div>
@@ -81,10 +80,9 @@ export default function AppLayout() {
                 textDecoration: 'none',
                 fontSize: 14,
                 fontWeight: 500,
-                color: isActive ? 'var(--em)' : isLocked ? 'rgb(255 255 255 / 0.3)' : 'rgb(255 255 255 / 0.55)',
-                background: isActive ? 'var(--em-subtle)' : 'transparent',
-                borderLeft: isActive ? '3px solid var(--em)' : '3px solid transparent',
-                boxShadow: isActive ? 'inset 0 0 8px rgba(13, 148, 136, 0.1)' : 'none',
+                color: isActive ? '#0369A1' : isLocked ? '#CBD5E1' : '#64748B',
+                background: isActive ? '#EFF6FF' : 'transparent',
+                borderLeft: isActive ? '3px solid #0369A1' : '3px solid transparent',
                 transition: 'all var(--dur-fast)',
                 cursor: 'pointer',
                 minHeight: 44,
@@ -92,9 +90,9 @@ export default function AppLayout() {
             >
               {({ isActive }) => (
                 <>
-                  <Icon size={17} aria-hidden="true" color={isActive ? 'var(--em)' : isLocked ? 'rgb(255 255 255 / 0.2)' : 'rgb(255 255 255 / 0.4)'} />
+                  <Icon size={17} aria-hidden="true" color={isActive ? '#0369A1' : isLocked ? '#CBD5E1' : '#94A3B8'} />
                   <span style={{ flex: 1 }}>{label}</span>
-                  {isLocked && <Lock size={11} color="rgb(255 255 255 / 0.2)" aria-label="Plan de pago requerido" />}
+                  {isLocked && <Lock size={11} color="#CBD5E1" aria-label="Plan de pago requerido" />}
                 </>
               )}
             </NavLink>
@@ -103,29 +101,29 @@ export default function AppLayout() {
       </nav>
 
       {/* Usuario + logout */}
-      <div style={{ padding: '12px 10px', borderTop: '1px solid var(--ink-3)' }}>
+      <div style={{ padding: '12px 10px', borderTop: '1px solid var(--ink-4)', background: '#F8FAFC' }}>
         <div style={{
           display: 'flex', alignItems: 'center', gap: 10,
           padding: '10px 12px', borderRadius: 'var(--r-lg)',
-          background: 'var(--ink-3)',
+          background: '#FFFFFF',
+          border: '1px solid #E2E8F0',
           marginBottom: 6,
         }}>
           <div style={{
             width: 30, height: 30, borderRadius: '50%',
-            background: 'var(--em-subtle)',
-            border: '1px solid var(--em)',
+            background: 'rgba(3,105,161,0.08)',
+            border: '1px solid rgba(3,105,161,0.25)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 12, fontWeight: 700, color: 'var(--em)',
+            fontSize: 12, fontWeight: 700, color: '#0369A1',
             flexShrink: 0,
-            boxShadow: '0 0 12px var(--em-glow), 0 0 6px var(--em)',
           }}>
             {user?.email?.[0]?.toUpperCase() ?? 'U'}
           </div>
           <div style={{ minWidth: 0, flex: 1 }}>
-            <p style={{ fontSize: 12, color: 'var(--snow)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <p style={{ fontSize: 12, color: '#0F172A', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {organizacion?.nombre_cuenta ?? 'Mi organización'}
             </p>
-            <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <p style={{ fontSize: 11, color: '#94A3B8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {user?.email}
             </p>
           </div>
@@ -138,16 +136,16 @@ export default function AppLayout() {
             padding: '9px 12px', borderRadius: 'var(--r-lg)',
             background: 'none', border: 'none', cursor: 'pointer',
             fontSize: 13, fontWeight: 500,
-            color: 'rgb(255 255 255 / 0.4)',
+            color: '#94A3B8',
             transition: 'color var(--dur-fast), background var(--dur-fast)',
             minHeight: 44,
           }}
           onMouseEnter={e => {
-            (e.currentTarget as HTMLElement).style.color = 'var(--danger)'
-            ;(e.currentTarget as HTMLElement).style.background = 'rgb(239 68 68 / 0.08)'
+            (e.currentTarget as HTMLElement).style.color = '#DC2626'
+            ;(e.currentTarget as HTMLElement).style.background = 'rgba(220,38,38,0.06)'
           }}
           onMouseLeave={e => {
-            (e.currentTarget as HTMLElement).style.color = 'rgb(255 255 255 / 0.4)'
+            (e.currentTarget as HTMLElement).style.color = '#94A3B8'
             ;(e.currentTarget as HTMLElement).style.background = 'none'
           }}
         >
@@ -159,13 +157,13 @@ export default function AppLayout() {
   )
 
   return (
-    <div style={{ display: 'flex', minHeight: '100dvh', background: 'var(--ink)', fontFamily: 'var(--font-body)' }}>
+    <div style={{ display: 'flex', minHeight: '100dvh', background: '#F8FAFC', fontFamily: 'var(--font-body)' }}>
 
       {/* Sidebar desktop */}
       <aside style={{
         width: 240, flexShrink: 0,
-        background: 'var(--ink-2)',
-        borderRight: '1px solid var(--ink-3)',
+        background: '#FFFFFF',
+        borderRight: '1px solid #E2E8F0',
         position: 'fixed', top: 0, left: 0, bottom: 0,
         zIndex: 40, overflowY: 'auto',
         display: 'flex', flexDirection: 'column',
@@ -192,8 +190,8 @@ export default function AppLayout() {
           <aside style={{
             position: 'fixed', top: 0, left: 0, bottom: 0,
             width: 260, zIndex: 50,
-            background: 'var(--ink-2)',
-            borderRight: '1px solid var(--ink-3)',
+            background: '#FFFFFF',
+            borderRight: '1px solid #E2E8F0',
             overflowY: 'auto',
             animation: 'slideInLeft 220ms var(--ease-spring)',
           }}>
@@ -203,7 +201,7 @@ export default function AppLayout() {
                 aria-label="Cerrar menú"
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
-                  color: 'rgb(255 255 255 / 0.4)', padding: 8, borderRadius: 'var(--r-md)',
+                  color: '#64748B', padding: 8, borderRadius: 'var(--r-md)',
                   minWidth: 44, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}
               >
@@ -223,12 +221,12 @@ export default function AppLayout() {
         <header style={{
           display: 'none', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 16px', height: 56,
-          background: 'var(--ink-2)', borderBottom: '1px solid var(--ink-3)',
+          background: '#FFFFFF', borderBottom: '1px solid #E2E8F0',
           position: 'sticky', top: 0, zIndex: 30,
         }}
           className="topbar-mobile"
         >
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 15, color: 'var(--snow)' }}>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 15, color: '#0F172A' }}>
             Calendario<span style={{ color: 'var(--em)' }}>Compliance</span>
           </span>
           <button
@@ -236,7 +234,7 @@ export default function AppLayout() {
             aria-label="Abrir menú"
             style={{
               background: 'none', border: 'none', cursor: 'pointer',
-              color: 'rgb(255 255 255 / 0.7)', padding: 8, borderRadius: 'var(--r-md)',
+              color: '#64748B', padding: 8, borderRadius: 'var(--r-md)',
               minWidth: 44, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >

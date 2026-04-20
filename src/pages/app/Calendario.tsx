@@ -106,23 +106,23 @@ export default function Calendario() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28, flexWrap: 'wrap', gap: 12 }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(18px, 3vw, 24px)', fontWeight: 700, color: 'var(--snow)' }}>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(18px, 3vw, 24px)', fontWeight: 700, color: '#0F172A' }}>
               Calendario
             </h1>
             {rol === 'viewer' && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '3px 9px', borderRadius: 'var(--r-full)', background: 'rgb(255 255 255 / 0.05)', border: '1px solid var(--ink-4)' }}>
-                <EyeOff size={11} color="rgb(255 255 255 / 0.3)" />
-                <span style={{ fontSize: 10, fontWeight: 600, color: 'rgb(255 255 255 / 0.3)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Solo lectura</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '3px 9px', borderRadius: 'var(--r-full)', background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+                <EyeOff size={11} color="#CBD5E1" />
+                <span style={{ fontSize: 10, fontWeight: 600, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Solo lectura</span>
               </div>
             )}
           </div>
-          <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.4)' }}>
+          <p style={{ fontSize: 13, color: '#64748B' }}>
             {empresa?.razon_social ?? ''}
           </p>
         </div>
 
         {/* Navegador de mes */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'var(--ink-2)', border: '1px solid var(--ink-3)', borderRadius: 'var(--r-full)', padding: '4px 6px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4, background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 'var(--r-full)', padding: '4px 6px' }}>
           <button
             onClick={() => navMes(-1)}
             aria-label="Mes anterior"
@@ -130,16 +130,16 @@ export default function Calendario() {
               width: 36, height: 36, borderRadius: '50%',
               background: 'none', border: 'none', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'rgb(255 255 255 / 0.5)',
+              color: '#64748B',
               transition: 'background var(--dur-fast), color var(--dur-fast)',
             }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--ink-3)'; (e.currentTarget as HTMLElement).style.color = 'var(--snow)' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none'; (e.currentTarget as HTMLElement).style.color = 'rgb(255 255 255 / 0.5)' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F1F5F9'; (e.currentTarget as HTMLElement).style.color = '#0F172A' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none'; (e.currentTarget as HTMLElement).style.color = '#64748B' }}
           >
             <ChevronLeft size={16} aria-hidden="true" />
           </button>
 
-          <span style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 700, color: 'var(--snow)', padding: '0 10px', minWidth: 130, textAlign: 'center' }}>
+          <span style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 700, color: '#0F172A', padding: '0 10px', minWidth: 130, textAlign: 'center' }}>
             {MESES[mes.getMonth()]} {mes.getFullYear()}
           </span>
 
@@ -150,11 +150,11 @@ export default function Calendario() {
               width: 36, height: 36, borderRadius: '50%',
               background: 'none', border: 'none', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'rgb(255 255 255 / 0.5)',
+              color: '#64748B',
               transition: 'background var(--dur-fast), color var(--dur-fast)',
             }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--ink-3)'; (e.currentTarget as HTMLElement).style.color = 'var(--snow)' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none'; (e.currentTarget as HTMLElement).style.color = 'rgb(255 255 255 / 0.5)' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F1F5F9'; (e.currentTarget as HTMLElement).style.color = '#0F172A' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none'; (e.currentTarget as HTMLElement).style.color = '#64748B' }}
           >
             <ChevronRight size={16} aria-hidden="true" />
           </button>
@@ -166,27 +166,27 @@ export default function Calendario() {
         <SkeletonCalendario />
       ) : vencimientos.length === 0 ? (
         <div style={{
-          background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+          background: '#FFFFFF', border: '1px solid #E2E8F0',
           borderRadius: 'var(--r-xl)', padding: '64px 24px', textAlign: 'center',
         }}>
           <div style={{ fontSize: 40, marginBottom: 16 }} aria-hidden="true">📭</div>
-          <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--snow)', marginBottom: 8 }}>
+          <p style={{ fontSize: 15, fontWeight: 600, color: '#0F172A', marginBottom: 8 }}>
             Sin vencimientos en {MESES[mes.getMonth()]}
           </p>
-          <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.35)', lineHeight: 1.6, maxWidth: 300, margin: '0 auto' }}>
+          <p style={{ fontSize: 13, color: '#94A3B8', lineHeight: 1.6, maxWidth: 300, margin: '0 auto' }}>
             Los vencimientos se generan automáticamente cuando se activen las obligaciones de tu empresa.
           </p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {/* Mini calendar grid */}
-          <div style={{ background: 'var(--ink-2)', border: '1px solid var(--ink-3)', borderRadius: 'var(--r-lg)', padding: 16 }}>
+          <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 'var(--r-lg)', padding: 16 }}>
             {/* Weekday headers */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 8, marginBottom: 12 }}>
               {WEEKDAYS.map(day => (
                 <div key={day} style={{
                   textAlign: 'center', fontSize: 11, fontWeight: 700,
-                  color: 'rgb(255 255 255 / 0.4)', textTransform: 'uppercase',
+                  color: '#64748B', textTransform: 'uppercase',
                   letterSpacing: '0.08em', minHeight: 36, display: 'flex',
                   alignItems: 'center', justifyContent: 'center'
                 }}>
@@ -219,8 +219,8 @@ export default function Calendario() {
                       minHeight: 36,
                       padding: 4,
                       borderRadius: 'var(--r-md)',
-                      background: isSelected ? 'var(--em-subtle)' : isToday ? 'var(--ink-3)' : 'transparent',
-                      border: isSelected ? '1px solid var(--em-light)' : isToday ? '1px solid var(--ink-4)' : '1px solid transparent',
+                      background: isSelected ? 'var(--em-subtle)' : isToday ? '#F1F5F9' : 'transparent',
+                      border: isSelected ? '1px solid var(--em-light)' : isToday ? '1px solid #E2E8F0' : '1px solid transparent',
                       cursor: 'pointer',
                       display: 'flex',
                       flexDirection: 'column',
@@ -230,11 +230,11 @@ export default function Calendario() {
                       transition: 'background var(--dur-fast), border-color var(--dur-fast)',
                       fontSize: 13,
                       fontWeight: 600,
-                      color: 'var(--snow)',
+                      color: '#0F172A',
                     }}
                     onMouseEnter={e => {
                       if (!isSelected) {
-                        (e.currentTarget as HTMLElement).style.background = 'var(--ink-3)'
+                        (e.currentTarget as HTMLElement).style.background = '#F1F5F9'
                       }
                     }}
                     onMouseLeave={e => {
@@ -262,7 +262,7 @@ export default function Calendario() {
             {selectedDay !== null && (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
                 <p style={{
-                  fontSize: 13, fontWeight: 600, color: 'rgb(255 255 255 / 0.5)',
+                  fontSize: 13, fontWeight: 600, color: '#64748B',
                   textTransform: 'uppercase', letterSpacing: '0.08em'
                 }}>
                   Vencimientos del {selectedDay} de {MESES[mes.getMonth()]}
@@ -272,20 +272,20 @@ export default function Calendario() {
                   style={{
                     display: 'flex', alignItems: 'center', gap: 6,
                     padding: '6px 12px', borderRadius: 'var(--r-full)',
-                    background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
-                    color: 'rgb(255 255 255 / 0.6)', fontSize: 12, fontWeight: 600,
+                    background: '#FFFFFF', border: '1px solid #E2E8F0',
+                    color: '#64748B', fontSize: 12, fontWeight: 600,
                     cursor: 'pointer',
                     transition: 'background var(--dur-fast), color var(--dur-fast)',
                   }}
                   onMouseEnter={e => {
                     const el = e.currentTarget as HTMLElement
-                    el.style.background = 'var(--ink-3)'
-                    el.style.color = 'var(--snow)'
+                    el.style.background = '#F1F5F9'
+                    el.style.color = '#0F172A'
                   }}
                   onMouseLeave={e => {
                     const el = e.currentTarget as HTMLElement
-                    el.style.background = 'var(--ink-2)'
-                    el.style.color = 'rgb(255 255 255 / 0.6)'
+                    el.style.background = '#FFFFFF'
+                    el.style.color = '#64748B'
                   }}
                 >
                   <X size={14} aria-hidden="true" />
@@ -298,10 +298,10 @@ export default function Calendario() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {filteredVencimientos.length === 0 ? (
                 <div style={{
-                  background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+                  background: '#FFFFFF', border: '1px solid #E2E8F0',
                   borderRadius: 'var(--r-lg)', padding: '24px 16px', textAlign: 'center',
                 }}>
-                  <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.35)' }}>
+                  <p style={{ fontSize: 13, color: '#94A3B8' }}>
                     {selectedDay !== null ? 'Sin vencimientos este día' : 'Sin vencimientos'}
                   </p>
                 </div>
@@ -339,8 +339,8 @@ function VencimientoCard({ v, onCompletar, puedeEditar }: { v: any; onCompletar:
   return (
     <div style={{
       display: 'flex', alignItems: 'center', gap: 14,
-      background: 'var(--ink-2)',
-      border: '1px solid var(--ink-3)',
+      background: '#FFFFFF',
+      border: '1px solid #E2E8F0',
       borderRadius: 'var(--r-lg)',
       padding: '14px 18px',
       transition: 'box-shadow var(--dur-fast), transform var(--dur-fast)',
@@ -360,20 +360,20 @@ function VencimientoCard({ v, onCompletar, puedeEditar }: { v: any; onCompletar:
       {/* Info */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <p style={{
-          fontSize: 13, fontWeight: 600, color: 'var(--snow)',
+          fontSize: 13, fontWeight: 600, color: '#0F172A',
           marginBottom: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
           textDecoration: completado ? 'line-through' : 'none',
         }}>
           {v.titulo_instancia}
         </p>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>
+          <p style={{ fontSize: 11, color: '#94A3B8' }}>
             {formatFechaCorta(v.fecha_limite)}
           </p>
           {!completado && (
             <span style={{
               fontSize: 10, fontWeight: 600,
-              color: dias < 0 ? 'var(--danger)' : dias <= 7 ? 'var(--warn)' : 'rgb(255 255 255 / 0.35)',
+              color: dias < 0 ? 'var(--danger)' : dias <= 7 ? 'var(--warn)' : '#94A3B8',
             }}>
               {dias < 0 ? `${Math.abs(dias)}d vencido` : dias === 0 ? 'Hoy' : `${dias}d restantes`}
             </span>
@@ -427,15 +427,15 @@ function SkeletonCalendario() {
       {[1,2,3,4].map(i => (
         <div key={i} style={{
           display: 'flex', alignItems: 'center', gap: 14,
-          background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+          background: '#FFFFFF', border: '1px solid #E2E8F0',
           borderRadius: 'var(--r-lg)', padding: '14px 18px',
         }}>
-          <div style={{ width: 36, height: 36, borderRadius: 'var(--r-md)', background: 'var(--ink-3)', flexShrink: 0 }} />
+          <div style={{ width: 36, height: 36, borderRadius: 'var(--r-md)', background: '#F1F5F9', flexShrink: 0 }} />
           <div style={{ flex: 1 }}>
-            <div style={{ height: 12, width: '50%', background: 'var(--ink-3)', borderRadius: 4, marginBottom: 8 }} />
-            <div style={{ height: 10, width: '25%', background: 'var(--ink-4)', borderRadius: 4 }} />
+            <div style={{ height: 12, width: '50%', background: '#F1F5F9', borderRadius: 4, marginBottom: 8 }} />
+            <div style={{ height: 10, width: '25%', background: '#E2E8F0', borderRadius: 4 }} />
           </div>
-          <div style={{ width: 80, height: 28, background: 'var(--ink-3)', borderRadius: 'var(--r-full)' }} />
+          <div style={{ width: 80, height: 28, background: '#F1F5F9', borderRadius: 'var(--r-full)' }} />
         </div>
       ))}
     </div>

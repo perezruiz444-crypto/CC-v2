@@ -1,23 +1,6 @@
 import { useState } from 'react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { X, AlertCircle, Plus } from 'lucide-react'
+import { useObligaciones } from '../hooks/useObligaciones'
 
 export interface CrearObligacionDialogProps {
   isOpen: boolean
@@ -27,10 +10,10 @@ export interface CrearObligacionDialogProps {
 }
 
 const PERIODICIDADES = [
-  { value: 'mensual', label: 'Mensual' },
+  { value: 'mensual',    label: 'Mensual' },
   { value: 'bimestral', label: 'Bimestral' },
   { value: 'trimestral', label: 'Trimestral' },
-  { value: 'anual', label: 'Anual' },
+  { value: 'anual',     label: 'Anual' },
 ]
 
 export function CrearObligacionDialog({
@@ -39,148 +22,219 @@ export function CrearObligacionDialog({
   onCreated,
   empresaId,
 }: CrearObligacionDialogProps) {
+  const { crearObligacionPersonalizada } = useObligaciones(empresaId)
   const [nombre, setNombre] = useState('')
   const [periodicidad, setPeriodicidad] = useState('mensual')
   const [descripcion, setDescripcion] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  if (!isOpen) return null
+
+  const reset = () => {
+    setNombre('')
+    setPeriodicidad('mensual')
+    setDescripcion('')
+    setError(null)
+  }
+
+  const handleClose = () => { reset(); onClose() }
+
   const handleCrear = async () => {
     setError(null)
-
-    if (!nombre.trim()) {
-      setError('El nombre de la obligación es requerido')
-      return
-    }
-
-    if (nombre.trim().length < 3) {
+    if (!nombre.trim() || nombre.trim().length < 3) {
       setError('El nombre debe tener al menos 3 caracteres')
       return
     }
-
     setLoading(true)
     try {
-      // Llamar hook para crear la obligación
-      // (El hook se implementará en useObligaciones.ts)
-      const response = await fetch('/api/obligaciones/crear', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombre: nombre.trim(),
-          periodicidad,
-          descripcion: descripcion.trim() || null,
-          empresaId,
-        }),
-      })
-
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Error al crear obligación')
-      }
-
-      // Llamar callback
+      await crearObligacionPersonalizada(nombre.trim(), periodicidad, descripcion.trim() || undefined)
       await onCreated()
-
-      // Resetear form
-      setNombre('')
-      setPeriodicidad('mensual')
-      setDescripcion('')
+      reset()
       onClose()
     } catch (err) {
-      console.error(err)
-      setError(err instanceof Error ? err.message : 'Error desconocido')
+      setError(err instanceof Error ? err.message : 'Error al crear la obligación')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      setNombre('')
-      setPeriodicidad('mensual')
-      setDescripcion('')
-      setError(null)
-      onClose()
-    }
-  }
-
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Crear Obligación Interna</DialogTitle>
-          <DialogDescription>
-            Crea una obligación personalizada para esta empresa. Se generarán automáticamente los vencimientos.
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      {/* Overlay */}
+      <div
+        onClick={handleClose}
+        style={{
+          position: 'fixed', inset: 0, zIndex: 60,
+          background: 'rgb(0 0 0 / 0.6)',
+          backdropFilter: 'blur(2px)',
+        }}
+        aria-hidden="true"
+      />
 
-        <div className="grid gap-4 py-4">
-          <div className="grid gap-2">
-            <Label htmlFor="nombre">Nombre de la obligación *</Label>
-            <Input
-              id="nombre"
-              placeholder="Ej. Reporte de Inventario, Auditoría Interna"
+      {/* Modal */}
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dialog-title"
+        style={{
+          position: 'fixed', top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 61,
+          width: '100%', maxWidth: 460,
+          background: 'var(--ink-2)',
+          border: '1px solid var(--ink-3)',
+          borderRadius: 'var(--r-2xl)',
+          boxShadow: 'var(--sh-xl)',
+          padding: '28px 28px 24px',
+          animation: 'fadeIn 150ms var(--ease-out)',
+        }}
+      >
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 34, height: 34, borderRadius: 'var(--r-lg)',
+              background: 'var(--em-subtle)', border: '1px solid rgb(16 185 129 / 0.25)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Plus size={16} color="var(--em)" />
+            </div>
+            <div>
+              <h2 id="dialog-title" style={{ fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 700, color: 'var(--snow)', marginBottom: 2 }}>
+                Crear Obligación Interna
+              </h2>
+              <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.35)' }}>
+                Se generarán los vencimientos automáticamente
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={handleClose}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              color: 'rgb(255 255 255 / 0.4)', padding: 6, borderRadius: 'var(--r-md)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+            aria-label="Cerrar"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* Form */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Nombre */}
+          <div>
+            <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'rgb(255 255 255 / 0.45)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+              Nombre *
+            </label>
+            <input
+              type="text"
               value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              disabled={loading}
+              onChange={e => setNombre(e.target.value)}
+              placeholder="Ej. Reporte de Inventario, Auditoría Interna"
+              maxLength={100}
               autoFocus
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="periodicidad">Periodicidad *</Label>
-            <Select value={periodicidad} onValueChange={setPeriodicidad} disabled={loading}>
-              <SelectTrigger id="periodicidad">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {PERIODICIDADES.map((p) => (
-                  <SelectItem key={p.value} value={p.value}>
-                    {p.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="descripcion">Descripción (opcional)</Label>
-            <Textarea
-              id="descripcion"
-              placeholder="Notas, requisitos, o detalles adicionales..."
-              value={descripcion}
-              onChange={(e) => setDescripcion(e.target.value)}
               disabled={loading}
-              rows={4}
+              style={{
+                width: '100%', boxSizing: 'border-box',
+                background: 'var(--ink-3)', border: '1px solid var(--ink-4)',
+                borderRadius: 'var(--r-md)', padding: '9px 12px',
+                color: 'var(--snow)', fontSize: 13, outline: 'none',
+              }}
+              onFocus={e => (e.currentTarget.style.borderColor = 'var(--em)')}
+              onBlur={e => (e.currentTarget.style.borderColor = 'var(--ink-4)')}
             />
           </div>
 
+          {/* Periodicidad */}
+          <div>
+            <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'rgb(255 255 255 / 0.45)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+              Periodicidad *
+            </label>
+            <select
+              value={periodicidad}
+              onChange={e => setPeriodicidad(e.target.value)}
+              disabled={loading}
+              style={{
+                width: '100%', boxSizing: 'border-box',
+                background: 'var(--ink-3)', border: '1px solid var(--ink-4)',
+                borderRadius: 'var(--r-md)', padding: '9px 12px',
+                color: 'var(--snow)', fontSize: 13, outline: 'none',
+                colorScheme: 'dark', cursor: 'pointer',
+              }}
+            >
+              {PERIODICIDADES.map(p => (
+                <option key={p.value} value={p.value}>{p.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Descripción */}
+          <div>
+            <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'rgb(255 255 255 / 0.45)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+              Descripción (opcional)
+            </label>
+            <textarea
+              value={descripcion}
+              onChange={e => setDescripcion(e.target.value)}
+              placeholder="Notas, requisitos o detalles adicionales..."
+              rows={3}
+              maxLength={300}
+              disabled={loading}
+              style={{
+                width: '100%', boxSizing: 'border-box',
+                background: 'var(--ink-3)', border: '1px solid var(--ink-4)',
+                borderRadius: 'var(--r-md)', padding: '9px 12px',
+                color: 'var(--snow)', fontSize: 13, outline: 'none',
+                resize: 'vertical', fontFamily: 'inherit',
+              }}
+              onFocus={e => (e.currentTarget.style.borderColor = 'var(--em)')}
+              onBlur={e => (e.currentTarget.style.borderColor = 'var(--ink-4)')}
+            />
+          </div>
+
+          {/* Error */}
           {error && (
-            <div className="rounded-md bg-red-50 p-3 text-sm text-red-700 border border-red-200">
-              {error}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', background: 'rgb(239 68 68 / 0.08)', border: '1px solid rgb(239 68 68 / 0.2)', borderRadius: 'var(--r-md)' }}>
+              <AlertCircle size={13} color="var(--danger)" flexShrink={0} />
+              <p style={{ fontSize: 12, color: 'var(--danger)' }}>{error}</p>
             </div>
           )}
         </div>
 
-        <DialogFooter>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onClose}
+        {/* Footer */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 24 }}>
+          <button
+            onClick={handleClose}
             disabled={loading}
+            style={{
+              padding: '9px 18px', borderRadius: 'var(--r-md)',
+              background: 'transparent', border: '1px solid var(--ink-4)',
+              color: 'rgb(255 255 255 / 0.5)', cursor: 'pointer', fontSize: 13, fontWeight: 500,
+            }}
           >
             Cancelar
-          </Button>
-          <Button
-            type="button"
+          </button>
+          <button
             onClick={handleCrear}
-            loading={loading}
             disabled={loading || !nombre.trim()}
+            style={{
+              padding: '9px 20px', borderRadius: 'var(--r-md)',
+              background: loading || !nombre.trim() ? 'var(--ink-3)' : 'var(--em)',
+              border: 'none',
+              color: loading || !nombre.trim() ? 'rgb(255 255 255 / 0.3)' : '#fff',
+              cursor: loading || !nombre.trim() ? 'not-allowed' : 'pointer',
+              fontSize: 13, fontWeight: 600,
+              display: 'flex', alignItems: 'center', gap: 6,
+              transition: 'all var(--dur-fast)',
+            }}
           >
-            Crear Obligación
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+            {loading ? 'Creando…' : 'Crear Obligación'}
+          </button>
+        </div>
+      </div>
+    </>
   )
 }

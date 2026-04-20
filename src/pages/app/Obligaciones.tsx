@@ -15,14 +15,14 @@ const CAT_LABELS: Record<string, { label: string; color: string }> = {
   prosec:   { label: 'PROSEC',     color: 'var(--info)' },
   iva_ieps: { label: 'IVA/IEPS',   color: 'var(--warn)' },
   padron:   { label: 'Padrón',     color: '#a855f7' },
-  general:  { label: 'General',    color: 'rgb(255 255 255 / 0.4)' },
+  general:  { label: 'General',    color: '#64748B' },
 }
 
 const ESTADO_VENC: Record<string, { label: string; color: string; icon: any }> = {
   pendiente:  { label: 'Pendiente',  color: 'var(--warn)',   icon: Clock },
   completado: { label: 'Completado', color: 'var(--em)',     icon: CheckCircle2 },
   vencido:    { label: 'Vencido',    color: 'var(--danger)', icon: AlertCircle },
-  omitido:    { label: 'Omitido',    color: 'rgb(255 255 255 / 0.35)', icon: Clock },
+  omitido:    { label: 'Omitido',    color: '#94A3B8', icon: Clock },
   prorrogado: { label: 'Prorrogado', color: 'var(--info)',   icon: Clock },
 }
 
@@ -60,10 +60,10 @@ export default function Obligaciones() {
     <div>
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(18px,3vw,24px)', fontWeight: 700, color: 'var(--snow)', marginBottom: 4 }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(18px,3vw,24px)', fontWeight: 700, color: '#0F172A', marginBottom: 4 }}>
           Obligaciones
         </h1>
-        <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.4)' }}>
+        <p style={{ fontSize: 13, color: '#64748B' }}>
           {loadingEmp ? '...' : empresa?.razon_social}
         </p>
       </div>
@@ -74,9 +74,9 @@ export default function Obligaciones() {
           <button key={f} onClick={() => setFiltro(f)} style={{
             padding: '7px 14px', borderRadius: 'var(--r-full)',
             fontSize: 12, fontWeight: 600, cursor: 'pointer',
-            border: `1px solid ${filtro === f ? 'var(--em)' : 'var(--ink-4)'}`,
-            background: filtro === f ? 'var(--em-subtle)' : 'var(--ink-2)',
-            color: filtro === f ? 'var(--em)' : 'rgb(255 255 255 / 0.45)',
+            border: `1px solid ${filtro === f ? 'var(--em)' : '#E2E8F0'}`,
+            background: filtro === f ? 'var(--em-subtle)' : '#FFFFFF',
+            color: filtro === f ? 'var(--em)' : '#64748B',
             transition: 'all var(--dur-fast)',
             minHeight: 36,
           }}>
@@ -92,14 +92,14 @@ export default function Obligaciones() {
           aria-label="Buscar obligación"
           style={{
             flex: 1, minWidth: 200, padding: '8px 14px',
-            background: 'var(--ink-2)', border: '1px solid var(--ink-4)',
-            borderRadius: 'var(--r-full)', color: 'var(--snow)',
+            background: '#FFFFFF', border: '1px solid #E2E8F0',
+            borderRadius: 'var(--r-full)', color: '#0F172A',
             fontSize: 13, fontFamily: 'var(--font-body)',
             outline: 'none', minHeight: 36,
             transition: 'border-color var(--dur-fast)',
           }}
           onFocus={e => (e.target.style.borderColor = 'var(--em)')}
-          onBlur={e => (e.target.style.borderColor = 'var(--ink-4)')}
+          onBlur={e => (e.target.style.borderColor = '#E2E8F0')}
         />
 
         {puedeEditar && (
@@ -110,7 +110,7 @@ export default function Obligaciones() {
               padding: '8px 16px', borderRadius: 'var(--r-full)',
               fontSize: 13, fontWeight: 600, cursor: 'pointer',
               border: 'none',
-              background: 'var(--em)', color: 'var(--ink-0)',
+              background: 'var(--em)', color: '#FFFFFF',
               transition: 'all var(--dur-fast)',
               minHeight: 36,
             }}
@@ -127,10 +127,10 @@ export default function Obligaciones() {
       {loading || loadingEmp ? (
         <SkeletonLista />
       ) : lista.length === 0 ? (
-        <div style={{ background: 'var(--ink-2)', border: '1px solid var(--ink-3)', borderRadius: 'var(--r-xl)', padding: '56px 24px', textAlign: 'center' }}>
+        <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 'var(--r-xl)', padding: '56px 24px', textAlign: 'center' }}>
           <div style={{ fontSize: 36, marginBottom: 12 }} aria-hidden="true">📋</div>
-          <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--snow)', marginBottom: 6 }}>Sin obligaciones</p>
-          <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.35)', lineHeight: 1.6 }}>
+          <p style={{ fontSize: 15, fontWeight: 600, color: '#0F172A', marginBottom: 6 }}>Sin obligaciones</p>
+          <p style={{ fontSize: 13, color: '#94A3B8', lineHeight: 1.6 }}>
             {busqueda ? 'Ninguna obligación coincide con tu búsqueda.' : 'No hay obligaciones registradas para esta empresa.'}
           </p>
         </div>
@@ -202,8 +202,8 @@ function ObligacionRow({
   return (
     <>
       <div style={{
-        background: 'var(--ink-2)',
-        border: `1px solid ${expanded ? 'var(--ink-4)' : 'var(--ink-3)'}`,
+        background: '#FFFFFF',
+        border: `1px solid ${expanded ? '#CBD5E1' : '#E2E8F0'}`,
         borderRadius: 'var(--r-xl)',
         overflow: 'hidden',
         opacity: o.estado ? 1 : 0.6,
@@ -230,7 +230,7 @@ function ObligacionRow({
 
           {/* Nombre */}
           <p style={{
-            flex: 1, fontSize: 13, fontWeight: 600, color: o.estado ? 'var(--snow)' : 'rgb(255 255 255 / 0.4)',
+            flex: 1, fontSize: 13, fontWeight: 600, color: o.estado ? '#0F172A' : '#94A3B8',
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             textDecoration: o.estado ? 'none' : 'line-through',
           }}>
@@ -239,7 +239,7 @@ function ObligacionRow({
 
           {/* Periodicidad */}
           {o.catalogo.periodicidad && (
-            <span style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.3)', flexShrink: 0 }}>
+            <span style={{ fontSize: 11, color: '#94A3B8', flexShrink: 0 }}>
               {o.catalogo.periodicidad}
             </span>
           )}
@@ -256,8 +256,8 @@ function ObligacionRow({
               cursor: puedeEditar ? 'pointer' : 'not-allowed',
               display: 'flex', alignItems: 'center',
               color: !puedeEditar
-                ? 'rgb(255 255 255 / 0.15)'
-                : o.estado ? 'var(--em)' : 'rgb(255 255 255 / 0.25)',
+                ? '#CBD5E1'
+                : o.estado ? 'var(--em)' : '#CBD5E1',
               padding: 6, borderRadius: 'var(--r-md)',
               transition: 'color var(--dur-fast)',
               minWidth: 44, minHeight: 44, justifyContent: 'center',
@@ -271,22 +271,22 @@ function ObligacionRow({
           </button>
 
           {/* Chevron expand */}
-          <div style={{ color: 'rgb(255 255 255 / 0.25)', flexShrink: 0 }}>
+          <div style={{ color: '#CBD5E1', flexShrink: 0 }}>
             {expanded ? <ChevronUp size={16} aria-hidden="true" /> : <ChevronDown size={16} aria-hidden="true" />}
           </div>
         </div>
 
         {/* Contenido expandido */}
         {expanded && (
-          <div style={{ borderTop: '1px solid var(--ink-3)', padding: '20px 18px' }}>
+          <div style={{ borderTop: '1px solid #E2E8F0', padding: '20px 18px' }}>
 
             {/* Descripción */}
             {o.catalogo.descripcion && (
               <div style={{ marginBottom: 20 }}>
-                <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgb(255 255 255 / 0.3)', marginBottom: 8 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#94A3B8', marginBottom: 8 }}>
                   Descripción
                 </p>
-                <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.6)', lineHeight: 1.7 }}>
+                <p style={{ fontSize: 13, color: '#334155', lineHeight: 1.7 }}>
                   {o.catalogo.descripcion}
                 </p>
               </div>
@@ -309,11 +309,11 @@ function ObligacionRow({
 
             {/* Historial de vencimientos */}
             <div>
-              <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgb(255 255 255 / 0.3)', marginBottom: 10 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#94A3B8', marginBottom: 10 }}>
                 Historial de vencimientos
               </p>
               {o.vencimientos.length === 0 ? (
-                <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.25)', fontStyle: 'italic' }}>
+                <p style={{ fontSize: 12, color: '#CBD5E1', fontStyle: 'italic' }}>
                   Sin vencimientos generados todavía.
                 </p>
               ) : (
@@ -345,23 +345,23 @@ function ObligacionRow({
           onClick={() => setShowMotivoModal(false)}
         >
           <div style={{
-            background: 'var(--ink-2)', border: '1px solid var(--ink-4)',
+            background: '#FFFFFF', border: '1px solid #E2E8F0',
             borderRadius: 'var(--r-2xl)', padding: '28px 28px',
             width: '100%', maxWidth: 420,
-            boxShadow: '0 20px 60px rgb(0 0 0 / 0.5)',
+            boxShadow: 'var(--sh-xl)',
           }}
             onClick={e => e.stopPropagation()}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 700, color: 'var(--snow)' }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 700, color: '#0F172A' }}>
                 Desactivar obligación
               </h3>
               <button onClick={() => setShowMotivoModal(false)} aria-label="Cerrar"
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgb(255 255 255 / 0.4)', padding: 4, minWidth: 32, minHeight: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 'var(--r-md)' }}>
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', padding: 4, minWidth: 32, minHeight: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 'var(--r-md)' }}>
                 <X size={16} aria-hidden="true" />
               </button>
             </div>
-            <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.5)', marginBottom: 16, lineHeight: 1.6 }}>
+            <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16, lineHeight: 1.6 }}>
               ¿Por qué se desactiva esta obligación? (opcional)
             </p>
             <textarea
@@ -371,14 +371,14 @@ function ObligacionRow({
               rows={3}
               style={{
                 width: '100%', padding: '10px 12px',
-                background: 'var(--ink)', border: '1px solid var(--ink-4)',
-                borderRadius: 'var(--r-md)', color: 'var(--snow)',
+                background: '#F8FAFC', border: '1px solid #E2E8F0',
+                borderRadius: 'var(--r-md)', color: '#0F172A',
                 fontSize: 13, fontFamily: 'var(--font-body)',
                 resize: 'vertical', outline: 'none', boxSizing: 'border-box',
                 transition: 'border-color var(--dur-fast)',
               }}
               onFocus={e => (e.target.style.borderColor = 'var(--em)')}
-              onBlur={e => (e.target.style.borderColor = 'var(--ink-4)')}
+              onBlur={e => (e.target.style.borderColor = '#E2E8F0')}
             />
             <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
               <button onClick={() => setShowMotivoModal(false)}
@@ -438,14 +438,14 @@ function VencimientoHistorialRow({ v, onEditarFecha, onAgregarNota, puedeEditar 
 
   return (
     <div style={{
-      background: 'var(--ink-3)', borderRadius: 'var(--r-lg)',
+      background: '#F1F5F9', borderRadius: 'var(--r-lg)',
       padding: '12px 14px',
     }}>
       {/* Fila principal */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
         <Icon size={13} color={cfg.color} aria-hidden="true" style={{ flexShrink: 0 }} />
 
-        <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--snow)', flex: 1, minWidth: 120 }}>
+        <p style={{ fontSize: 12, fontWeight: 600, color: '#0F172A', flex: 1, minWidth: 120 }}>
           {v.titulo_instancia}
         </p>
 
@@ -458,10 +458,10 @@ function VencimientoHistorialRow({ v, onEditarFecha, onAgregarNota, puedeEditar 
               onChange={e => setFechaLocal(e.target.value)}
               aria-label="Nueva fecha límite"
               style={{
-                background: 'var(--ink-2)', border: '1px solid var(--em)',
-                borderRadius: 'var(--r-md)', color: 'var(--snow)',
+                background: '#FFFFFF', border: '1px solid var(--em)',
+                borderRadius: 'var(--r-md)', color: '#0F172A',
                 fontSize: 12, padding: '4px 8px', fontFamily: 'var(--font-body)',
-                outline: 'none', colorScheme: 'dark',
+                outline: 'none', colorScheme: 'light',
               }}
             />
             <button onClick={guardarFecha} disabled={savingFecha}
@@ -469,7 +469,7 @@ function VencimientoHistorialRow({ v, onEditarFecha, onAgregarNota, puedeEditar 
               {savingFecha ? '...' : 'OK'}
             </button>
             <button onClick={() => { setEditandoFecha(false); setFechaLocal(v.fecha_limite) }}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgb(255 255 255 / 0.35)', padding: 4, minWidth: 28, minHeight: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94A3B8', padding: 4, minWidth: 28, minHeight: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <X size={13} aria-hidden="true" />
             </button>
           </div>
@@ -481,15 +481,15 @@ function VencimientoHistorialRow({ v, onEditarFecha, onAgregarNota, puedeEditar 
             title={!puedeEditar ? 'Solo los administradores pueden editar fechas' : 'Editar fecha límite'}
             style={{
               display: 'flex', alignItems: 'center', gap: 5,
-              background: 'none', border: '1px solid var(--ink-4)',
+              background: 'none', border: '1px solid #E2E8F0',
               borderRadius: 'var(--r-md)', padding: '4px 9px',
-              color: 'rgb(255 255 255 / 0.45)', fontSize: 11,
+              color: '#64748B', fontSize: 11,
               cursor: puedeEditar ? 'pointer' : 'default',
               transition: 'border-color var(--dur-fast), color var(--dur-fast)',
               minHeight: 28,
             }}
             onMouseEnter={e => { if (puedeEditar) { (e.currentTarget as HTMLElement).style.borderColor = 'var(--em)'; (e.currentTarget as HTMLElement).style.color = 'var(--em)' } }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--ink-4)'; (e.currentTarget as HTMLElement).style.color = 'rgb(255 255 255 / 0.45)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = '#E2E8F0'; (e.currentTarget as HTMLElement).style.color = '#64748B' }}
           >
             <Calendar size={11} aria-hidden="true" />
             {formatFecha(v.fecha_limite)}
@@ -520,8 +520,8 @@ function VencimientoHistorialRow({ v, onEditarFecha, onAgregarNota, puedeEditar 
               aria-label="Nota del vencimiento"
               style={{
                 flex: 1, padding: '7px 10px',
-                background: 'var(--ink-2)', border: '1px solid var(--em)',
-                borderRadius: 'var(--r-md)', color: 'var(--snow)',
+                background: '#FFFFFF', border: '1px solid var(--em)',
+                borderRadius: 'var(--r-md)', color: '#0F172A',
                 fontSize: 12, fontFamily: 'var(--font-body)',
                 resize: 'vertical', outline: 'none',
               }}
@@ -532,7 +532,7 @@ function VencimientoHistorialRow({ v, onEditarFecha, onAgregarNota, puedeEditar 
                 {savingNota ? '...' : 'Guardar'}
               </button>
               <button onClick={() => { setEditandoNota(false); setNotaLocal(v.notas ?? '') }}
-                style={{ fontSize: 11, padding: '5px 10px', borderRadius: 'var(--r-md)', background: 'var(--ink-4)', color: 'rgb(255 255 255 / 0.5)', border: 'none', cursor: 'pointer', minHeight: 32 }}>
+                style={{ fontSize: 11, padding: '5px 10px', borderRadius: 'var(--r-md)', background: '#E2E8F0', color: '#64748B', border: 'none', cursor: 'pointer', minHeight: 32 }}>
                 Cancelar
               </button>
             </div>
@@ -546,13 +546,13 @@ function VencimientoHistorialRow({ v, onEditarFecha, onAgregarNota, puedeEditar 
               display: 'flex', alignItems: 'center', gap: 6,
               background: 'none', border: 'none',
               cursor: puedeEditar ? 'pointer' : 'default',
-              color: v.notas ? 'rgb(255 255 255 / 0.5)' : 'rgb(255 255 255 / 0.2)',
+              color: v.notas ? '#64748B' : '#CBD5E1',
               fontSize: 11, padding: '2px 0',
               transition: 'color var(--dur-fast)',
               minHeight: 28,
             }}
             onMouseEnter={e => { if (puedeEditar) (e.currentTarget as HTMLElement).style.color = 'var(--em)' }}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = v.notas ? 'rgb(255 255 255 / 0.5)' : 'rgb(255 255 255 / 0.2)'}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = v.notas ? '#64748B' : '#CBD5E1'}
           >
             <StickyNote size={11} aria-hidden="true" />
             {v.notas ? v.notas : puedeEditar ? 'Agregar nota...' : '—'}
@@ -567,12 +567,12 @@ function VencimientoHistorialRow({ v, onEditarFecha, onAgregarNota, puedeEditar 
 
 function InfoCard({ icon, label, value, accent }: { icon: React.ReactNode; label: string; value: string; accent?: string }) {
   return (
-    <div style={{ background: 'var(--ink-3)', borderRadius: 'var(--r-lg)', padding: '12px 14px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgb(255 255 255 / 0.3)', marginBottom: 6 }}>
+    <div style={{ background: '#F1F5F9', borderRadius: 'var(--r-lg)', padding: '12px 14px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94A3B8', marginBottom: 6 }}>
         {icon}
         <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em' }}>{label}</p>
       </div>
-      <p style={{ fontSize: 12, color: accent ?? 'rgb(255 255 255 / 0.55)', lineHeight: 1.5 }}>{value}</p>
+      <p style={{ fontSize: 12, color: accent ?? '#64748B', lineHeight: 1.5 }}>{value}</p>
     </div>
   )
 }
@@ -581,10 +581,10 @@ function SkeletonLista() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       {[1,2,3,4,5].map(i => (
-        <div key={i} style={{ background: 'var(--ink-2)', border: '1px solid var(--ink-3)', borderRadius: 'var(--r-xl)', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 60, height: 22, background: 'var(--ink-3)', borderRadius: 'var(--r-full)' }} />
-          <div style={{ flex: 1, height: 14, background: 'var(--ink-3)', borderRadius: 4 }} />
-          <div style={{ width: 44, height: 22, background: 'var(--ink-4)', borderRadius: 4 }} />
+        <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 'var(--r-xl)', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 60, height: 22, background: '#F1F5F9', borderRadius: 'var(--r-full)' }} />
+          <div style={{ flex: 1, height: 14, background: '#F1F5F9', borderRadius: 4 }} />
+          <div style={{ width: 44, height: 22, background: '#E2E8F0', borderRadius: 4 }} />
         </div>
       ))}
     </div>
