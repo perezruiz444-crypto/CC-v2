@@ -24,7 +24,7 @@ export default function Hero() {
 
   return (
     <section style={{
-      background: `linear-gradient(135deg, var(--ink) 0%, var(--ink-light) 50%, var(--ink-2) 100%)`,
+      background: `linear-gradient(160deg, #F0F7FF 0%, #F8FAFC 50%, #EFF6FF 100%)`,
       paddingTop: 120,
       paddingBottom: 0,
       position: 'relative',
@@ -38,24 +38,24 @@ export default function Hero() {
       <div aria-hidden="true" style={{
         position: 'absolute', inset: 0, zIndex: 0,
         backgroundImage: `
-          linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px)
+          linear-gradient(rgb(3 105 161 / 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgb(3 105 161 / 0.04) 1px, transparent 1px)
         `,
         backgroundSize: '40px 40px',
         maskImage: 'radial-gradient(ellipse 80% 70% at 50% 0%, black 0%, transparent 100%)',
       }} />
 
-      {/* Emerald glow blobs */}
-      <div aria-hidden="true" style={{
+      {/* Ambient blobs */}
+      <div aria-hidden="true" className="blob-1" style={{
         position: 'absolute', top: '8%', left: '60%',
         width: 480, height: 480, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgb(16 185 129 / 0.12) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(3,105,161,0.08) 0%, transparent 70%)',
         filter: 'blur(40px)', pointerEvents: 'none',
       }} />
-      <div aria-hidden="true" style={{
+      <div aria-hidden="true" className="blob-2" style={{
         position: 'absolute', top: '40%', left: '-5%',
         width: 320, height: 320, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgb(59 130 246 / 0.08) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(14,165,233,0.06) 0%, transparent 70%)',
         filter: 'blur(40px)', pointerEvents: 'none',
       }} />
 
@@ -63,7 +63,7 @@ export default function Hero() {
 
         {/* Badge */}
         <div style={{ marginBottom: 28 }}>
-          <span className="badge reveal" style={{ background: 'rgb(16 185 129 / 0.12)', borderColor: 'rgb(16 185 129 / 0.25)', color: '#34d399' }}>
+          <span className="badge reveal" style={{ background: 'rgba(3,105,161,0.08)', borderColor: 'rgba(3,105,161,0.2)', color: '#0369A1' }}>
             <Zap size={11} aria-hidden="true" />
             Catálogo actualizado · Abril 2026
           </span>
@@ -83,7 +83,7 @@ export default function Hero() {
         {/* Subheadline */}
         <p className="reveal delay-2" style={{
           fontSize: 'clamp(16px, 2vw, 19px)',
-          color: 'rgb(255 255 255 / 0.55)',
+          color: '#64748B',
           lineHeight: 1.7,
           maxWidth: 580,
           marginBottom: 40,
@@ -98,7 +98,7 @@ export default function Hero() {
             Empieza gratis — sin tarjeta
             <ArrowRight size={17} aria-hidden="true" />
           </a>
-          <a href="#demo" className="btn btn-ghost-dark" style={{ fontSize: 15, padding: '14px 26px', minHeight: 50 }}>
+          <a href="#demo" className="btn btn-outline" style={{ fontSize: 15, padding: '14px 26px', minHeight: 50 }}>
             Ver demo de 3 minutos
           </a>
         </div>
@@ -109,7 +109,7 @@ export default function Hero() {
         }}>
           {STATS.map(({ value, label }) => (
             <div key={label}>
-              <div className="stat-val" style={{
+              <div className="stat-val stat-glow-anim" style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(26px, 3.5vw, 36px)',
                 fontWeight: 800,
@@ -118,7 +118,7 @@ export default function Hero() {
               }}>
                 {value}
               </div>
-              <div style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.45)', marginTop: 4 }}>{label}</div>
+              <div style={{ fontSize: 13, color: '#94A3B8', marginTop: 4 }}>{label}</div>
             </div>
           ))}
         </div>
@@ -148,7 +148,7 @@ export default function Hero() {
           <div style={{
             flex: 1, background: 'var(--ink-3)', borderRadius: 'var(--r-sm)',
             height: 22, display: 'flex', alignItems: 'center', paddingInline: 10,
-            fontSize: 11, color: 'rgb(255 255 255 / 0.3)',
+            fontSize: 11, color: '#94A3B8',
             maxWidth: 280, marginInline: 'auto',
           }}>
             app.calendariocompliance.mx
@@ -175,14 +175,14 @@ export default function Hero() {
                 padding: '14px 16px', border: '1px solid var(--ink-4)',
               }}>
                 <div style={{ fontSize: 22, fontWeight: 800, fontFamily: 'var(--font-display)', color: accent, lineHeight: 1 }}>{val}</div>
-                <div style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.4)', marginTop: 4 }}>{label}</div>
+                <div style={{ fontSize: 11, color: '#94A3B8', marginTop: 4 }}>{label}</div>
               </div>
             ))}
           </div>
 
           {/* Calendar rows */}
           <div style={{ background: 'var(--ink-3)', borderRadius: 'var(--r-md) var(--r-md) 0 0', padding: '14px 16px', border: '1px solid var(--ink-4)', borderBottom: 'none' }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: 'rgb(255 255 255 / 0.4)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: '#94A3B8', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               Próximos vencimientos
             </div>
             {[
@@ -200,7 +200,7 @@ export default function Hero() {
                   background: status === 'ok' ? 'var(--em)' : 'var(--warn)',
                   boxShadow: `0 0 6px ${status === 'ok' ? 'var(--em)' : 'var(--warn)'}`,
                 }} aria-hidden="true" />
-                <span style={{ flex: 1, fontSize: 12, color: 'rgb(255 255 255 / 0.7)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
+                <span style={{ flex: 1, fontSize: 12, color: '#334155', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
                 <span style={{ fontSize: 11, fontWeight: 600, color: status === 'ok' ? 'var(--em)' : 'var(--warn)', flexShrink: 0 }}>{date}</span>
               </div>
             ))}
@@ -221,7 +221,7 @@ export default function Hero() {
           {[...PROGRAMS, ...PROGRAMS].map((p, i) => (
             <span key={i} style={{
               fontSize: 12, fontWeight: 600,
-              color: 'rgb(255 255 255 / 0.35)',
+              color: '#94A3B8',
               paddingInline: 32,
               letterSpacing: '0.08em', textTransform: 'uppercase',
               display: 'flex', alignItems: 'center', gap: 12,

@@ -34,7 +34,7 @@ export default function HowItWorks() {
           <div aria-hidden="true" className="step-line" style={{
             position: 'absolute', top: '50%', left: '15%', right: '15%',
             height: 2, transform: 'translateY(-50%)',
-            background: 'linear-gradient(90deg, var(--em), rgb(16 185 129 / 0.1))',
+            background: 'linear-gradient(90deg, var(--em), rgba(3,105,161,0.1))',
             zIndex: 0, display: 'none',
           }} />
 

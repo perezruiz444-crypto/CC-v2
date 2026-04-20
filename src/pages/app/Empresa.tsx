@@ -76,12 +76,12 @@ export default function Empresa() {
   if (!empresa) {
     return (
       <div style={{
-        background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+        background: '#FFFFFF', border: '1px solid #E2E8F0',
         borderRadius: 'var(--r-xl)', padding: '64px 24px', textAlign: 'center',
       }}>
         <div style={{ fontSize: 36, marginBottom: 12 }} aria-hidden="true">🏢</div>
-        <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--snow)', marginBottom: 8 }}>Sin empresa registrada</p>
-        <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.35)' }}>Completa el onboarding para configurar tu primera empresa.</p>
+        <p style={{ fontSize: 15, fontWeight: 600, color: '#0F172A', marginBottom: 8 }}>Sin empresa registrada</p>
+        <p style={{ fontSize: 13, color: '#94A3B8' }}>Completa el onboarding para configurar tu primera empresa.</p>
       </div>
     )
   }
@@ -154,17 +154,17 @@ export default function Empresa() {
     <div>
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(18px, 3vw, 24px)', fontWeight: 700, color: 'var(--snow)', marginBottom: 4 }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(18px, 3vw, 24px)', fontWeight: 700, color: '#0F172A', marginBottom: 4 }}>
           Mi Empresa
         </h1>
-        <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.4)' }}>
+        <p style={{ fontSize: 13, color: '#64748B' }}>
           {organizacion?.nombre_cuenta}
         </p>
       </div>
 
       {/* Card principal */}
       <div style={{
-        background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+        background: '#FFFFFF', border: '1px solid #E2E8F0',
         borderRadius: 'var(--r-xl)', padding: '24px',
         marginBottom: 20,
       }}>
@@ -177,10 +177,10 @@ export default function Empresa() {
             <Building2 size={20} color="var(--em)" aria-hidden="true" />
           </div>
           <div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 700, color: 'var(--snow)', marginBottom: 4 }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 700, color: '#0F172A', marginBottom: 4 }}>
               {empresa.razon_social}
             </h2>
-            <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.4)', fontFamily: 'monospace', letterSpacing: '0.05em' }}>
+            <p style={{ fontSize: 13, color: '#64748B', fontFamily: 'monospace', letterSpacing: '0.05em' }}>
               RFC: {empresa.rfc}
             </p>
           </div>
@@ -193,16 +193,16 @@ export default function Empresa() {
 
       {/* Programas — toggles */}
       <div style={{
-        background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+        background: '#FFFFFF', border: '1px solid #E2E8F0',
         borderRadius: 'var(--r-xl)', overflow: 'hidden',
         marginBottom: 20,
       }}>
-        <div style={{ padding: '18px 24px', borderBottom: '1px solid var(--ink-3)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+        <div style={{ padding: '18px 24px', borderBottom: '1px solid #E2E8F0', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
           <div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--snow)', marginBottom: 3 }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: '#0F172A', marginBottom: 3 }}>
               Programas activos
             </h2>
-            <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.35)' }}>
+            <p style={{ fontSize: 12, color: '#94A3B8' }}>
               Al activar un programa, el sistema proyecta automáticamente sus vencimientos en el calendario.
             </p>
           </div>
@@ -210,10 +210,10 @@ export default function Empresa() {
             <div style={{
               display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0,
               padding: '4px 10px', borderRadius: 'var(--r-full)',
-              background: 'rgb(255 255 255 / 0.05)', border: '1px solid var(--ink-4)',
+              background: '#F8FAFC', border: '1px solid #E2E8F0',
             }}>
-              <EyeOff size={11} color="rgb(255 255 255 / 0.3)" />
-              <span style={{ fontSize: 10, fontWeight: 600, color: 'rgb(255 255 255 / 0.3)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+              <EyeOff size={11} color="#CBD5E1" />
+              <span style={{ fontSize: 10, fontWeight: 600, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
                 Solo lectura
               </span>
             </div>
@@ -248,15 +248,15 @@ export default function Empresa() {
               <div key={prog.id} style={{
                 display: 'flex', alignItems: 'flex-start', gap: 16,
                 padding: '18px 24px',
-                borderBottom: i < PROGRAMAS.length - 1 ? '1px solid var(--ink-3)' : 'none',
+                borderBottom: i < PROGRAMAS.length - 1 ? '1px solid #E2E8F0' : 'none',
                 background: activo ? `color-mix(in srgb, ${prog.color} 4%, transparent)` : 'transparent',
                 transition: 'background var(--dur-base)',
               }}>
                 {/* Icono */}
                 <div style={{
                   width: 42, height: 42, flexShrink: 0, borderRadius: 'var(--r-lg)',
-                  background: activo ? `color-mix(in srgb, ${prog.color} 14%, transparent)` : 'var(--ink-3)',
-                  border: `1px solid ${activo ? `color-mix(in srgb, ${prog.color} 30%, transparent)` : 'var(--ink-4)'}`,
+                  background: activo ? `color-mix(in srgb, ${prog.color} 14%, transparent)` : '#F1F5F9',
+                  border: `1px solid ${activo ? `color-mix(in srgb, ${prog.color} 30%, transparent)` : '#E2E8F0'}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 18, transition: 'all var(--dur-base)',
                 }} aria-hidden="true">
@@ -285,15 +285,15 @@ export default function Empresa() {
                     )}
                     {prog.necesitaAncla && !activo && (
                       <span style={{
-                        fontSize: 10, color: 'rgb(255 255 255 / 0.3)',
-                        background: 'var(--ink-3)',
+                        fontSize: 10, color: '#94A3B8',
+                        background: '#F1F5F9',
                         padding: '2px 7px', borderRadius: 'var(--r-full)',
                       }}>
                         Requiere fecha de autorización
                       </span>
                     )}
                   </div>
-                  <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.4)', lineHeight: 1.6, marginBottom: meta ? 6 : 0 }}>
+                  <p style={{ fontSize: 12, color: '#64748B', lineHeight: 1.6, marginBottom: meta ? 6 : 0 }}>
                     {prog.desc}
                   </p>
                   {/* Fecha ancla guardada */}
@@ -315,7 +315,7 @@ export default function Empresa() {
                     flexShrink: 0,
                     width: 48, height: 28,
                     borderRadius: 'var(--r-full)',
-                    background: activo ? prog.color : 'var(--ink-4)',
+                    background: activo ? prog.color : '#E2E8F0',
                     border: 'none',
                     cursor: bloqueado ? 'not-allowed' : enProceso ? 'not-allowed' : 'pointer',
                     position: 'relative',
@@ -351,7 +351,7 @@ export default function Empresa() {
         display: 'flex', alignItems: 'flex-start', gap: 12,
       }}>
         <div style={{ fontSize: 15, flexShrink: 0, marginTop: 1 }} aria-hidden="true">💡</div>
-        <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.55)', lineHeight: 1.65 }}>
+        <p style={{ fontSize: 13, color: '#64748B', lineHeight: 1.65 }}>
           La fecha de autorización es la fecha oficial en que la autoridad emitió tu programa. Se usa para calcular renovaciones dinámicas como la Certificación IVA/IEPS. Si la desconoces, búscala en el oficio de resolución original.
         </p>
       </div>
@@ -412,7 +412,7 @@ function ModalFechaAncla({
         }}
       >
         <div style={{
-          background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+          background: '#FFFFFF', border: '1px solid #E2E8F0',
           borderRadius: 'var(--r-2xl)', padding: '32px 28px',
           width: '100%', maxWidth: 440,
           pointerEvents: 'all',
@@ -430,7 +430,7 @@ function ModalFechaAncla({
                 {programa.icon}
               </div>
               <div>
-                <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.4)', marginBottom: 2, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+                <p style={{ fontSize: 11, color: '#64748B', marginBottom: 2, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
                   Activar programa
                 </p>
                 <h2 id="ancla-title" style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 700, color: programa.color }}>
@@ -443,7 +443,7 @@ function ModalFechaAncla({
               aria-label="Cerrar"
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
-                color: 'rgb(255 255 255 / 0.35)', padding: 8, borderRadius: 'var(--r-md)',
+                color: '#94A3B8', padding: 8, borderRadius: 'var(--r-md)',
                 minWidth: 44, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}
             >
@@ -453,13 +453,13 @@ function ModalFechaAncla({
 
           {/* Descripción */}
           <div style={{
-            background: 'var(--ink-3)', borderRadius: 'var(--r-lg)',
+            background: '#F1F5F9', borderRadius: 'var(--r-lg)',
             padding: '14px 16px', marginBottom: 24,
             display: 'flex', gap: 10, alignItems: 'flex-start',
           }}>
             <AlertCircle size={15} color={programa.color} style={{ flexShrink: 0, marginTop: 1 }} />
-            <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.55)', lineHeight: 1.65 }}>
-              Para automatizar los vencimientos, ingresa la <strong style={{ color: 'var(--snow)', fontWeight: 600 }}>Fecha de Autorización original</strong> del programa <strong style={{ color: programa.color }}>{programa.label}</strong>. Es la fecha del oficio emitido por la autoridad.
+            <p style={{ fontSize: 13, color: '#64748B', lineHeight: 1.65 }}>
+              Para automatizar los vencimientos, ingresa la <strong style={{ color: '#0F172A', fontWeight: 600 }}>Fecha de Autorización original</strong> del programa <strong style={{ color: programa.color }}>{programa.label}</strong>. Es la fecha del oficio emitido por la autoridad.
             </p>
           </div>
 
@@ -467,7 +467,7 @@ function ModalFechaAncla({
           <div style={{ marginBottom: 24 }}>
             <label
               htmlFor="fecha-autorizacion"
-              style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'rgb(255 255 255 / 0.6)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}
+              style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#64748B', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}
             >
               Fecha de Autorización
             </label>
@@ -479,17 +479,17 @@ function ModalFechaAncla({
               max={new Date().toISOString().split('T')[0]}
               style={{
                 width: '100%', padding: '12px 14px',
-                background: 'var(--ink-3)',
-                border: `1.5px solid ${fechaValida ? programa.color : 'var(--ink-4)'}`,
+                background: '#F1F5F9',
+                border: `1.5px solid ${fechaValida ? programa.color : '#E2E8F0'}`,
                 borderRadius: 'var(--r-lg)',
-                fontSize: 15, color: 'var(--snow)',
+                fontSize: 15, color: '#0F172A',
                 fontFamily: 'var(--font-body)',
                 outline: 'none',
                 transition: 'border-color var(--dur-fast)',
-                colorScheme: 'dark',
+                colorScheme: 'light',
               }}
-              onFocus={e => !fechaValida && (e.target.style.borderColor = 'rgb(255 255 255 / 0.4)')}
-              onBlur={e => !fechaValida && (e.target.style.borderColor = 'var(--ink-4)')}
+              onFocus={e => !fechaValida && (e.target.style.borderColor = 'var(--em)')}
+              onBlur={e => !fechaValida && (e.target.style.borderColor = '#E2E8F0')}
             />
             {fechaValida && (
               <p style={{ fontSize: 12, color: programa.color, marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -523,8 +523,8 @@ function ModalFechaAncla({
               disabled={guardando}
               style={{
                 flex: 1, padding: '12px 16px', borderRadius: 'var(--r-full)',
-                background: 'none', border: '1px solid var(--ink-4)',
-                color: 'rgb(255 255 255 / 0.45)', fontSize: 13, fontWeight: 600,
+                background: 'none', border: '1px solid #E2E8F0',
+                color: '#64748B', fontSize: 13, fontWeight: 600,
                 cursor: 'pointer', minHeight: 44,
               }}
             >
@@ -535,9 +535,9 @@ function ModalFechaAncla({
               disabled={!fechaValida || guardando}
               style={{
                 flex: 2, padding: '12px 16px', borderRadius: 'var(--r-full)',
-                background: fechaValida && !guardando ? programa.color : 'var(--ink-4)',
+                background: fechaValida && !guardando ? programa.color : '#E2E8F0',
                 border: 'none',
-                color: fechaValida && !guardando ? '#fff' : 'rgb(255 255 255 / 0.25)',
+                color: fechaValida && !guardando ? '#fff' : '#94A3B8',
                 fontSize: 13, fontWeight: 700,
                 cursor: fechaValida && !guardando ? 'pointer' : 'not-allowed',
                 transition: 'all var(--dur-fast)',
@@ -547,7 +547,7 @@ function ModalFechaAncla({
             >
               {guardando ? (
                 <>
-                  <span style={{ width: 14, height: 14, border: '2px solid rgb(255 255 255 / 0.4)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 600ms linear infinite', display: 'inline-block' }} />
+                  <span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 600ms linear infinite', display: 'inline-block' }} />
                   Guardando...
                 </>
               ) : 'Guardar y Activar'}
@@ -565,13 +565,13 @@ function ModalFechaAncla({
 
 function DatoCard({ icon, label, value, mono }: { icon: React.ReactNode; label: string; value: string; mono?: boolean }) {
   return (
-    <div style={{ background: 'var(--ink-3)', borderRadius: 'var(--r-lg)', padding: '13px 15px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6, color: 'rgb(255 255 255 / 0.3)' }}>
+    <div style={{ background: '#F1F5F9', borderRadius: 'var(--r-lg)', padding: '13px 15px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6, color: '#94A3B8' }}>
         {icon}
         <p style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.07em' }}>{label}</p>
       </div>
       <p style={{
-        fontSize: 13, fontWeight: 600, color: 'var(--snow)',
+        fontSize: 13, fontWeight: 600, color: '#0F172A',
         fontFamily: mono ? 'monospace' : 'var(--font-body)',
         letterSpacing: mono ? '0.05em' : 'normal',
       }}>
@@ -583,16 +583,16 @@ function DatoCard({ icon, label, value, mono }: { icon: React.ReactNode; label: 
 
 function SkeletonEmpresa() {
   return (
-    <div style={{ background: 'var(--ink-2)', border: '1px solid var(--ink-3)', borderRadius: 'var(--r-xl)', padding: 24 }}>
+    <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 'var(--r-xl)', padding: 24 }}>
       <div style={{ display: 'flex', gap: 16, marginBottom: 22 }}>
-        <div style={{ width: 50, height: 50, borderRadius: 'var(--r-lg)', background: 'var(--ink-3)', flexShrink: 0 }} />
+        <div style={{ width: 50, height: 50, borderRadius: 'var(--r-lg)', background: '#F1F5F9', flexShrink: 0 }} />
         <div style={{ flex: 1 }}>
-          <div style={{ height: 16, width: '50%', background: 'var(--ink-3)', borderRadius: 4, marginBottom: 10 }} />
-          <div style={{ height: 12, width: '28%', background: 'var(--ink-4)', borderRadius: 4 }} />
+          <div style={{ height: 16, width: '50%', background: '#F1F5F9', borderRadius: 4, marginBottom: 10 }} />
+          <div style={{ height: 12, width: '28%', background: '#E2E8F0', borderRadius: 4 }} />
         </div>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-        {[1,2].map(i => <div key={i} style={{ height: 62, background: 'var(--ink-3)', borderRadius: 'var(--r-lg)' }} />)}
+        {[1,2].map(i => <div key={i} style={{ height: 62, background: '#F1F5F9', borderRadius: 'var(--r-lg)' }} />)}
       </div>
     </div>
   )

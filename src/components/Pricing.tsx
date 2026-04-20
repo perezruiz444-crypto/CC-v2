@@ -1,55 +1,26 @@
 import { Check, ArrowRight, Sparkles, Lock } from 'lucide-react'
 import { useReveal } from '../hooks/useReveal'
 import { useState } from 'react'
+import { PLAN_META, PLAN_FEATURES_LANDING, PLAN_ORDER } from '../lib/plans'
 
-const PLANS = [
-  {
-    name: 'Básico',
-    price: 'Gratis',
-    period: '',
-    desc: 'Explora sin compromisos.',
-    cta: 'Crear cuenta gratis',
-    href: '/register',
-    featured: false,
-    features: ['1 empresa (RFC)', '1 usuario', 'Catálogo completo de obligaciones', 'Calendario de vencimientos', 'Recordatorios por correo'],
-    disabled: ['Sin invitar equipo', 'Sin asignación de tareas'],
-  },
-  {
-    name: 'Equipo',
-    price: '$990',
-    period: 'MXN/mes',
-    desc: 'Para departamentos de Comex.',
-    cta: 'Empezar prueba gratis',
-    href: '/register?plan=equipo',
-    featured: true,
-    badge: 'Más popular',
-    features: ['1 empresa (RFC)', 'Hasta 5 usuarios', 'Todo lo del plan Básico', 'Asignación de obligaciones', 'Evidencia documental', 'Reportes PDF', 'Soporte por correo'],
-    disabled: [],
-  },
-  {
-    name: 'Agencia',
-    price: '$2,490',
-    period: 'MXN/mes',
-    desc: 'Múltiples razones sociales.',
-    cta: 'Empezar prueba gratis',
-    href: '/register?plan=agencia',
-    featured: false,
-    badge: 'Recomendado',
-    features: ['Hasta 5 empresas (RFCs)', 'Hasta 20 usuarios', 'Todo lo del plan Equipo', 'Dashboard global', 'Aislamiento por cliente', 'Soporte prioritario'],
-    disabled: [],
-  },
-  {
-    name: 'Enterprise',
-    price: 'A consultar',
-    period: '',
-    desc: 'Corporativos con docenas de RFCs.',
-    cta: 'Agendar demo',
-    href: '/demo',
-    featured: false,
-    features: ['Empresas ilimitadas', 'Usuarios ilimitados', 'White-labeling', 'SLA garantizado', 'Onboarding dedicado'],
-    disabled: [],
-  },
-]
+// Construir la lista de planes desde lib/plans.ts (fuente única de verdad)
+const PLANS = PLAN_ORDER.map(planKey => {
+  const meta = PLAN_META[planKey]
+  const features = PLAN_FEATURES_LANDING[planKey]
+  return {
+    key: planKey,
+    name: meta.label,
+    price: meta.precio,
+    period: meta.periodo,
+    desc: meta.desc,
+    cta: meta.cta,
+    href: meta.href,
+    featured: meta.featured,
+    badge: meta.badge,
+    features: features.included,
+    disabled: features.disabled,
+  }
+})
 
 export default function Pricing() {
   const ref = useReveal()
@@ -86,13 +57,13 @@ export default function Pricing() {
           gap: 16,
           alignItems: 'start',
         }}>
-          {PLANS.map(({ name, price, period, desc, cta, href, featured, badge, features, disabled }) => {
+          {PLANS.map(({ key, name, price, period, desc, cta, href, featured, badge, features, disabled }) => {
             const isExpanded = expandedPlans[name]
             const visibleFeatures = isExpanded ? features : features.slice(0, 3)
             const hasMore = features.length > 3
 
             return (
-            <div key={name}
+            <div key={key}
               className={featured ? 'reveal-scale glow-pulse' : 'reveal-scale'}
               style={{
                 background: featured ? 'linear-gradient(135deg, var(--ink-2) 0%, var(--ink-3) 100%)' : 'var(--ink-2)',

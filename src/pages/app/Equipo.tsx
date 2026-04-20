@@ -28,10 +28,10 @@ export default function Equipo() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 28, gap: 16, flexWrap: 'wrap' }}>
         <div>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(18px, 3vw, 24px)', fontWeight: 700, color: 'var(--snow)', marginBottom: 4 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(18px, 3vw, 24px)', fontWeight: 700, color: '#0F172A', marginBottom: 4 }}>
             Mi Equipo
           </h1>
-          <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.4)' }}>
+          <p style={{ fontSize: 13, color: '#64748B' }}>
             {organizacion?.nombre_cuenta ?? 'Mi organización'}
           </p>
         </div>
@@ -40,9 +40,9 @@ export default function Equipo() {
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
             padding: '10px 18px', borderRadius: 'var(--r-full)',
-            background: esPlanGratis ? 'var(--ink-3)' : 'var(--em)',
-            border: `1px solid ${esPlanGratis ? 'var(--ink-4)' : 'transparent'}`,
-            color: esPlanGratis ? 'rgb(255 255 255 / 0.5)' : '#fff',
+            background: esPlanGratis ? '#F1F5F9' : 'var(--em)',
+            border: `1px solid ${esPlanGratis ? '#E2E8F0' : 'transparent'}`,
+            color: esPlanGratis ? '#64748B' : '#fff',
             fontSize: 13, fontWeight: 600, cursor: 'pointer',
             transition: 'all var(--dur-fast)',
             minHeight: 44,
@@ -72,10 +72,10 @@ export default function Equipo() {
         }}>
           <Crown size={20} color="var(--warn)" aria-hidden="true" />
           <div style={{ flex: 1 }}>
-            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--snow)', marginBottom: 3 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: '#0F172A', marginBottom: 3 }}>
               Plan Gratis: 1 usuario incluido
             </p>
-            <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.45)', lineHeight: 1.5 }}>
+            <p style={{ fontSize: 12, color: '#64748B', lineHeight: 1.5 }}>
               Actualiza al Plan Equipo para invitar colaboradores, asignar responsables y gestionar vencimientos entre varios usuarios.
             </p>
           </div>
@@ -96,14 +96,14 @@ export default function Equipo() {
 
       {/* Tabla de miembros */}
       <div style={{
-        background: 'var(--ink-2)', border: '1px solid var(--ink-3)',
+        background: '#FFFFFF', border: '1px solid #E2E8F0',
         borderRadius: 'var(--r-xl)', overflow: 'hidden',
       }}>
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '16px 22px', borderBottom: '1px solid var(--ink-3)',
+          padding: '16px 22px', borderBottom: '1px solid #E2E8F0',
         }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--snow)' }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: '#0F172A' }}>
             Miembros activos
           </h2>
           <span style={{
@@ -120,10 +120,10 @@ export default function Equipo() {
           <div style={{ padding: '20px 22px' }}>
             {[1].map(i => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--ink-3)' }} />
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#F1F5F9' }} />
                 <div style={{ flex: 1 }}>
-                  <div style={{ height: 12, width: '40%', background: 'var(--ink-3)', borderRadius: 4, marginBottom: 7 }} />
-                  <div style={{ height: 10, width: '25%', background: 'var(--ink-4)', borderRadius: 4 }} />
+                  <div style={{ height: 12, width: '40%', background: '#F1F5F9', borderRadius: 4, marginBottom: 7 }} />
+                  <div style={{ height: 10, width: '25%', background: '#E2E8F0', borderRadius: 4 }} />
                 </div>
               </div>
             ))}
@@ -134,7 +134,7 @@ export default function Equipo() {
               <div key={m.id} style={{
                 display: 'flex', alignItems: 'center', gap: 14,
                 padding: '14px 22px',
-                borderBottom: i < miembros.length - 1 ? '1px solid var(--ink-3)' : 'none',
+                borderBottom: i < miembros.length - 1 ? '1px solid #E2E8F0' : 'none',
               }}>
                 {/* Avatar */}
                 <div style={{
@@ -149,7 +149,7 @@ export default function Equipo() {
                 {/* Info */}
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
-                    <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--snow)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <p style={{ fontSize: 13, fontWeight: 600, color: '#0F172A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {m.email}
                     </p>
                     {m.esYo && (
@@ -160,7 +160,7 @@ export default function Equipo() {
                       }}>Tú</span>
                     )}
                   </div>
-                  <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.35)' }}>{m.rol}</p>
+                  <p style={{ fontSize: 11, color: '#94A3B8' }}>{m.rol}</p>
                 </div>
                 {/* Estado */}
                 <span className="chip chip-success" style={{ fontSize: 10, flexShrink: 0 }}>
@@ -179,21 +179,21 @@ export default function Equipo() {
               width: '100%', display: 'flex', alignItems: 'center', gap: 14,
               padding: '14px 22px',
               background: 'none', border: 'none',
-              borderTop: '1px dashed var(--ink-4)',
+              borderTop: '1px dashed #E2E8F0',
               cursor: 'pointer',
               transition: 'background var(--dur-fast)',
             }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgb(255 255 255 / 0.03)'}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#F8FAFC'}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'none'}
           >
             <div style={{
               width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
-              background: 'var(--ink-3)', border: '1.5px dashed var(--ink-4)',
+              background: '#F1F5F9', border: '1.5px dashed #E2E8F0',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <UserPlus size={14} color="rgb(255 255 255 / 0.25)" />
+              <UserPlus size={14} color="#CBD5E1" />
             </div>
-            <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.3)', fontStyle: 'italic' }}>
+            <p style={{ fontSize: 13, color: '#94A3B8', fontStyle: 'italic' }}>
               Invitar a otro miembro — requiere Plan Equipo
             </p>
             <Lock size={13} color="var(--warn)" style={{ marginLeft: 'auto' }} />
@@ -234,8 +234,8 @@ function PaywallModal({ onClose }: { onClose: () => void }) {
         }}
       >
         <div style={{
-          background: 'var(--ink-2)',
-          border: '1px solid var(--ink-3)',
+          background: '#FFFFFF',
+          border: '1px solid #E2E8F0',
           borderRadius: 'var(--r-2xl)',
           padding: '36px 32px',
           width: '100%', maxWidth: 460,
@@ -249,7 +249,7 @@ function PaywallModal({ onClose }: { onClose: () => void }) {
               aria-label="Cerrar"
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
-                color: 'rgb(255 255 255 / 0.35)', padding: 8, borderRadius: 'var(--r-md)',
+                color: '#94A3B8', padding: 8, borderRadius: 'var(--r-md)',
                 minWidth: 44, minHeight: 44,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}
@@ -270,18 +270,18 @@ function PaywallModal({ onClose }: { onClose: () => void }) {
             </div>
             <h2 id="paywall-title" style={{
               fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700,
-              color: 'var(--snow)', marginBottom: 10,
+              color: '#0F172A', marginBottom: 10,
             }}>
               Actualiza al Plan Equipo
             </h2>
-            <p style={{ fontSize: 14, color: 'rgb(255 255 255 / 0.5)', lineHeight: 1.65, maxWidth: 340, margin: '0 auto' }}>
+            <p style={{ fontSize: 14, color: '#64748B', lineHeight: 1.65, maxWidth: 340, margin: '0 auto' }}>
               Colabora con tu equipo, asigna responsables a cada obligación y recibe notificaciones compartidas.
             </p>
           </div>
 
           {/* Beneficios */}
           <div style={{
-            background: 'var(--ink-3)', borderRadius: 'var(--r-lg)',
+            background: '#F1F5F9', borderRadius: 'var(--r-lg)',
             padding: '16px 18px', marginBottom: 24,
           }}>
             {[
@@ -292,7 +292,7 @@ function PaywallModal({ onClose }: { onClose: () => void }) {
               <div key={i} style={{
                 display: 'flex', alignItems: 'center', gap: 12,
                 paddingBlock: i > 0 ? 10 : 0,
-                borderTop: i > 0 ? '1px solid var(--ink-4)' : 'none',
+                borderTop: i > 0 ? '1px solid #E2E8F0' : 'none',
               }}>
                 <div style={{
                   width: 28, height: 28, borderRadius: 'var(--r-md)', flexShrink: 0,
@@ -301,18 +301,18 @@ function PaywallModal({ onClose }: { onClose: () => void }) {
                 }}>
                   <Icon size={13} color="var(--em)" />
                 </div>
-                <p style={{ fontSize: 13, color: 'rgb(255 255 255 / 0.65)' }}>{text}</p>
+                <p style={{ fontSize: 13, color: '#64748B' }}>{text}</p>
               </div>
             ))}
           </div>
 
           {/* Precio */}
           <div style={{ textAlign: 'center', marginBottom: 20 }}>
-            <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.35)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+            <p style={{ fontSize: 12, color: '#94A3B8', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
               Plan Equipo
             </p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: 32, fontWeight: 800, color: 'var(--snow)' }}>
-              $1,490<span style={{ fontSize: 14, fontWeight: 500, color: 'rgb(255 255 255 / 0.4)' }}>/mes</span>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: 32, fontWeight: 800, color: '#0F172A' }}>
+              $1,490<span style={{ fontSize: 14, fontWeight: 500, color: '#64748B' }}>/mes</span>
             </p>
           </div>
 
@@ -334,7 +334,7 @@ function PaywallModal({ onClose }: { onClose: () => void }) {
           >
             Actualizar ahora
           </button>
-          <p style={{ fontSize: 11, color: 'rgb(255 255 255 / 0.3)', textAlign: 'center', marginTop: 12 }}>
+          <p style={{ fontSize: 11, color: '#94A3B8', textAlign: 'center', marginTop: 12 }}>
             Sin permanencia. Cancela cuando quieras.
           </p>
         </div>
