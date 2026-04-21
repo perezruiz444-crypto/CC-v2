@@ -28,7 +28,7 @@ export default function Pricing() {
 
   return (
     <section ref={ref as React.RefObject<HTMLElement>} className="section" id="pricing"
-      style={{ background: 'var(--ink)', position: 'relative', overflow: 'hidden' }}>
+      style={{ background: 'linear-gradient(135deg, var(--ink) 0%, var(--ink-light) 100%)', position: 'relative', overflow: 'hidden' }}>
 
       {/* Background glow */}
       <div aria-hidden="true" style={{
@@ -46,7 +46,7 @@ export default function Pricing() {
           <h2 className="reveal delay-1" style={{ fontSize: 'clamp(26px, 4vw, 42px)', color: 'var(--snow)', marginBottom: 14 }}>
             Empieza gratis, escala cuando lo necesites
           </h2>
-          <p className="reveal delay-2" style={{ fontSize: 16, color: '#64748B', lineHeight: 1.7 }}>
+          <p className="reveal delay-2" style={{ fontSize: 16, color: 'rgb(255 255 255 / 0.45)', lineHeight: 1.7 }}>
             Todos los planes incluyen el catálogo completo actualizado. Sin costos ocultos.
           </p>
         </div>
@@ -66,8 +66,8 @@ export default function Pricing() {
             <div key={key}
               className={featured ? 'reveal-scale glow-pulse' : 'reveal-scale'}
               style={{
-                background: featured ? 'linear-gradient(135deg, var(--ink-2) 0%, var(--ink-3) 100%)' : 'var(--ink-3)',
-                border: featured ? '2px solid var(--em-light)' : '1px solid var(--ink-4)',
+                background: featured ? 'linear-gradient(135deg, var(--ink-2) 0%, var(--ink-3) 100%)' : 'var(--ink-2)',
+                border: featured ? '2px solid var(--em-light)' : '1px solid rgb(255 255 255 / 0.08)',
                 borderRadius: 'var(--r-2xl)',
                 padding: featured ? '40px 32px' : '32px 28px',
                 position: 'relative',
@@ -77,14 +77,14 @@ export default function Pricing() {
               onMouseEnter={e => {
                 if (!featured) {
                   (e.currentTarget as HTMLElement).style.boxShadow = 'var(--sh-md)'
-                  ;(e.currentTarget as HTMLElement).style.borderColor = 'var(--em-light)'
+                  ;(e.currentTarget as HTMLElement).style.borderColor = 'rgb(13 148 136 / 0.3)'
                   ;(e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'
                 }
               }}
               onMouseLeave={e => {
                 if (!featured) {
                   (e.currentTarget as HTMLElement).style.boxShadow = 'var(--sh-card)'
-                  ;(e.currentTarget as HTMLElement).style.borderColor = 'var(--ink-4)'
+                  ;(e.currentTarget as HTMLElement).style.borderColor = 'rgb(255 255 255 / 0.08)'
                   ;(e.currentTarget as HTMLElement).style.transform = ''
                 }
               }}
@@ -106,7 +106,7 @@ export default function Pricing() {
               <p style={{
                 fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
                 letterSpacing: '0.08em', marginBottom: 10,
-                color: featured ? 'var(--em-dark)' : '#64748B',
+                color: featured ? 'var(--em-dark)' : 'rgb(255 255 255 / 0.35)',
               }}>{name}</p>
 
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, marginBottom: 6 }}>
@@ -114,14 +114,15 @@ export default function Pricing() {
                   fontFamily: 'var(--font-display)',
                   fontSize: price === 'Gratis' || price === 'A consultar' ? 26 : 32,
                   fontWeight: 800, lineHeight: 1,
-                  color: 'var(--text-primary)',
+                  color: featured ? 'var(--text-primary)' : 'var(--snow)',
                 }}>{price}</span>
-                {period && <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{period}</span>}
+                {period && <span style={{ fontSize: 12, color: featured ? 'var(--text-muted)' : 'rgb(255 255 255 / 0.4)' }}>{period}</span>}
               </div>
-              <p style={{ fontSize: 13, marginBottom: 22, color: 'var(--text-muted)', lineHeight: 1.5 }}>{desc}</p>
+              <p style={{ fontSize: 13, marginBottom: 22, color: featured ? 'var(--text-muted)' : 'rgb(255 255 255 / 0.4)', lineHeight: 1.5 }}>{desc}</p>
 
-              <a href={href} className={featured ? 'btn btn-primary' : 'btn btn-outline'}
-                style={{ width: '100%', justifyContent: 'center', marginBottom: 24, fontSize: 14 }}>
+              <a href={href} className={featured ? 'btn btn-primary' : 'btn btn-ghost-dark'}
+                style={{ width: '100%', justifyContent: 'center', marginBottom: 24, fontSize: 14,
+                  ...(featured ? {} : { borderColor: 'var(--ink-4)' }) }}>
                 {cta}
                 {featured && <ArrowRight size={15} aria-hidden="true" />}
               </a>
@@ -130,13 +131,13 @@ export default function Pricing() {
                 {visibleFeatures.map(f => (
                   <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 9 }}>
                     <Check size={14} strokeWidth={2.5} style={{ color: 'var(--em)', flexShrink: 0, marginTop: 2 }} aria-hidden="true" />
-                    <span style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{f}</span>
+                    <span style={{ fontSize: 13, color: featured ? 'var(--text-muted)' : 'rgb(255 255 255 / 0.6)', lineHeight: 1.5 }}>{f}</span>
                   </li>
                 ))}
                 {disabled.map(d => (
                   <li key={d} style={{ display: 'flex', alignItems: 'flex-start', gap: 9, opacity: 0.35 }}>
                     <span style={{ width: 14, flexShrink: 0 }} />
-                    <span style={{ fontSize: 13, color: 'var(--text-faint)', lineHeight: 1.5 }}>{d}</span>
+                    <span style={{ fontSize: 13, color: featured ? 'var(--text-faint)' : 'rgb(255 255 255 / 0.3)', lineHeight: 1.5 }}>{d}</span>
                   </li>
                 ))}
               </ul>
@@ -161,7 +162,7 @@ export default function Pricing() {
         {/* Trust signals */}
         <div className="reveal" style={{
           textAlign: 'center', marginTop: 48, fontSize: 13,
-          color: '#64748B', display: 'flex',
+          color: 'rgb(255 255 255 / 0.35)', display: 'flex',
           alignItems: 'center', justifyContent: 'center', gap: 16,
           flexWrap: 'wrap',
         }}>
@@ -169,7 +170,7 @@ export default function Pricing() {
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <Lock size={12} style={{ color: 'rgb(16 185 129)', flexShrink: 0 }} aria-hidden="true" />
               <span>{signal}</span>
-              {i < 3 && <span style={{ color: '#CBD5E1', margin: '0 2px' }}>·</span>}
+              {i < 3 && <span style={{ color: 'rgb(255 255 255 / 0.15)', margin: '0 2px' }}>·</span>}
             </div>
           ))}
         </div>
