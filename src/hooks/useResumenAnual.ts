@@ -37,9 +37,20 @@ export function useResumenAnual(empresaId: string | null): ResumenAnual {
       if (error || !data) { setLoading(false); return }
 
       const total = data.length
-      const completados = data.filter(v => v.estado_cumplimiento === 'completado').length
-      const pendientes  = data.filter(v => v.estado_cumplimiento === 'pendiente').length
-      const vencidos    = data.filter(v => v.estado_cumplimiento === 'vencido').length
+
+      // ⚡ Bolt: Single-pass iteration to avoid multiple array allocations and O(3N) CPU cycles
+      // Reduces memory overhead significantly on large datasets (annual API queries can have thousands of items)
+      let completados = 0
+      let pendientes = 0
+      let vencidos = 0
+
+      for (let i = 0; i < total; i++) {
+        const estado = data[i].estado_cumplimiento
+        if (estado === 'completado') completados++
+        else if (estado === 'pendiente') pendientes++
+        else if (estado === 'vencido') vencidos++
+      }
+
       const porcentaje  = total > 0 ? Math.round((completados / total) * 100) : 0
 
       setStats({ totalAnual: total, completadosAnual: completados, pendientesAnual: pendientes, vencidosAnual: vencidos, porcentaje })
