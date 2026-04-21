@@ -14,7 +14,7 @@ function formatFecha(fecha: string): string {
 
 export default function Ajustes() {
   const { organizacion, loading: loadingEmpresa } = useEmpresa()
-  const { esOwner } = useRol()
+  const { esOwner, puedeEditar } = useRol()
 
   const tieneDiasInhabiles = tieneFeature(organizacion?.plan_actual, 'diasInhabilesOrg')
 
@@ -82,9 +82,26 @@ function DiasInhabilesSection({
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
   const handleAgregar = async () => {
-    if (!fecha) { setFormError('Selecciona una fecha'); return }
-    setSaving(true)
     setFormError(null)
+
+    // Validaciones
+    if (!fecha) { setFormError('Selecciona una fecha'); return }
+
+    const selectedDate = new Date(fecha + 'T00:00:00')
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    if (selectedDate < today) {
+      setFormError('No puedes agregar fechas pasadas')
+      return
+    }
+
+    if (dias.some(d => d.fecha === fecha)) {
+      setFormError('Este día ya existe en tu lista')
+      return
+    }
+
+    setSaving(true)
     try {
       await agregar(fecha, descripcion.trim() || undefined)
       setFecha('')
@@ -283,6 +300,7 @@ function DiasInhabilesSection({
                 <button
                   onClick={() => handleEliminar(dia.id)}
                   disabled={deletingId === dia.id}
+                  aria-label={`Eliminar día inhábil ${dia.fecha}${dia.descripcion ? ': ' + dia.descripcion : ''}`}
                   title="Eliminar día inhábil"
                   style={{
                     flexShrink: 0,
@@ -307,7 +325,7 @@ function DiasInhabilesSection({
                     ;(e.currentTarget as HTMLElement).style.borderColor = 'transparent'
                   }}
                 >
-                  <Trash2 size={14} />
+                  <Trash2 size={14} aria-hidden="true" />
                 </button>
               )}
             </div>
