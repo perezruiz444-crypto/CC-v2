@@ -63,21 +63,18 @@ export default function Resumen() {
   const resumenAnual = useResumenAnual(empresa?.id ?? null)
 
   const stats = useMemo(() => {
-    return vencimientos.reduce(
-      (acc, v) => {
-        if (v.estado_cumplimiento === 'pendiente') {
-          acc.pendientes++
-          const dias = diasRestantes(v.fecha_limite)
-          if (dias >= 0 && dias <= 15) acc.proximos15++
-        } else if (v.estado_cumplimiento === 'completado') {
-          acc.completados++
-        } else if (v.estado_cumplimiento === 'vencido') {
-          acc.vencidos++
-        }
-        return acc
-      },
-      { pendientes: 0, completados: 0, vencidos: 0, total: vencimientos.length, proximos15: 0 }
-    )
+    const proximos15 = vencimientos.filter(v => {
+      if (v.estado_cumplimiento !== 'pendiente') return false
+      const dias = diasRestantes(v.fecha_limite)
+      return dias >= 0 && dias <= 15
+    }).length
+    return {
+      pendientes:  vencimientos.filter(v => v.estado_cumplimiento === 'pendiente').length,
+      completados: vencimientos.filter(v => v.estado_cumplimiento === 'completado').length,
+      vencidos:    vencimientos.filter(v => v.estado_cumplimiento === 'vencido').length,
+      total:       vencimientos.length,
+      proximos15,
+    }
   }, [vencimientos])
 
   const semaforoEstado = calcularSemaforo(stats.vencidos, stats.proximos15)

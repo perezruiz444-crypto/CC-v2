@@ -35,7 +35,7 @@ export default function Demo() {
               El compliance que siempre quisiste tener
             </h2>
             <p className="reveal delay-2" style={{
-              fontSize: 16, color: '#64748B',
+              fontSize: 16, color: 'rgb(255 255 255 / 0.45)',
               lineHeight: 1.7, maxWidth: 500, marginInline: 'auto'
             }}>
               Toda tu operación de ComEx en un solo lugar.
@@ -145,6 +145,7 @@ export default function Demo() {
             <button
               onClick={() => setShowModal(true)}
               className="reveal"
+              aria-label="Ver video de demostración de 3 minutos"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
                 background: 'var(--em)', color: 'white',
@@ -161,7 +162,7 @@ export default function Demo() {
                 ;(e.currentTarget as HTMLElement).style.transform = 'translateY(0)'
               }}
             >
-              <PlayCircle size={18} />
+              <PlayCircle size={18} aria-hidden="true" />
               Ver demo de 3 minutos
             </button>
           </div>
@@ -170,22 +171,31 @@ export default function Demo() {
 
       {/* Modal Demo */}
       {showModal && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgb(0 0 0 / 0.8)', display: 'flex',
-          alignItems: 'center', justifyContent: 'center',
-          zIndex: 1000, padding: 20,
-        }} onClick={() => setShowModal(false)}>
-          <div style={{
-            background: '#0f172a', borderRadius: 'var(--r-xl)',
-            overflow: 'hidden', maxWidth: 900, width: '100%',
-            aspectRatio: '16 / 9',
-          }} onClick={e => e.stopPropagation()}>
+        <div
+          role="dialog"
+          aria-labelledby="demo-modal-title"
+          aria-modal="true"
+          style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            background: 'rgb(0 0 0 / 0.8)', display: 'flex',
+            alignItems: 'center', justifyContent: 'center',
+            zIndex: 1000, padding: 20,
+          }}
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            style={{
+              background: '#0f172a', borderRadius: 'var(--r-xl)',
+              overflow: 'hidden', maxWidth: 900, width: '100%',
+              aspectRatio: '16 / 9',
+            }}
+            onClick={e => e.stopPropagation()}
+          >
             <iframe
               width="100%"
               height="100%"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              title="Demo Calendario Compliance"
+              src="https://www.youtube.com/embed/placeholder"
+              title="Demo Calendario Compliance - Video en construcción"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

@@ -8,7 +8,7 @@ interface PlanPaywallProps {
   planActual?: string | null
 }
 
-export function PlanPaywall({ feature, titulo, descripcion }: PlanPaywallProps) {
+export function PlanPaywall({ feature, titulo, descripcion, planActual: _planActual }: PlanPaywallProps) {
   const planMinimo = planMinimoParaFeature(feature)
   const meta = PLAN_META[planMinimo]
 

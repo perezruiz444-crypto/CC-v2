@@ -77,7 +77,7 @@ export default function HowItWorks() {
                 }}>{title}</h3>
                 <p style={{ fontSize: 13, color: '#525252', lineHeight: 1.5 }}>{desc}</p>
               </div>
-              {STEPS.findIndex(s => s.num === num) < STEPS.length - 1 && (
+              {STEPS.indexOf({ num, icon, title, desc } as any) < STEPS.length - 1 && (
                 <div style={{
                   fontSize: 20, color: 'rgb(13 148 136 / 0.3)',
                   display: 'none',
