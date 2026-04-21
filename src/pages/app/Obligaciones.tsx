@@ -35,7 +35,7 @@ function formatFecha(f: string) {
 export default function Obligaciones() {
   const { empresa, loading: loadingEmp } = useEmpresa()
   const { puedeEditar } = useRol()
-  const { obligaciones, loading, toggleEstado, editarFechaVencimiento, agregarNota, crearObligacionPersonalizada, refetch } = useObligaciones(empresa?.id ?? null)
+  const { obligaciones, loading, toggleEstado, editarFechaVencimiento, agregarNota, refetch } = useObligaciones(empresa?.id ?? null)
 
   const [filtro, setFiltro] = useState<Filtro>('todas')
   const [busqueda, setBusqueda] = useState('')

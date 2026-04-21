@@ -67,7 +67,7 @@ export default function Ajustes() {
 function DiasInhabilesSection({
   organizacionId,
   esOwner,
-  puedeEditar,
+  puedeEditar: _puedeEditar,
 }: {
   organizacionId: string | null
   esOwner: boolean
