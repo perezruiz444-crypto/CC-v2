@@ -198,7 +198,7 @@ export function CrearObligacionDialog({
           {/* Error */}
           {error && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', background: 'rgb(239 68 68 / 0.08)', border: '1px solid rgb(239 68 68 / 0.2)', borderRadius: 'var(--r-md)' }}>
-              <AlertCircle size={13} color="var(--danger)" flexShrink={0} />
+              <span style={{ flexShrink: 0, display: 'flex' }}><AlertCircle size={13} color="var(--danger)" /></span>
               <p style={{ fontSize: 12, color: 'var(--danger)' }}>{error}</p>
             </div>
           )}
