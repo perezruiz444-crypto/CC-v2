@@ -1,10 +1,18 @@
 import { PlayCircle } from 'lucide-react'
 import { useReveal } from '../hooks/useReveal'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 export default function Demo() {
   const ref = useReveal()
   const [showModal, setShowModal] = useState(false)
+
+  const dummyDays = useMemo(() => {
+    const days = []
+    for (let i = 0; i < 35; i++) {
+      days.push(i)
+    }
+    return days
+  }, [])
 
   return (
     <>
@@ -113,7 +121,7 @@ export default function Demo() {
                   <div style={{
                     display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4,
                   }}>
-                    {Array.from({ length: 35 }).map((_, i) => {
+                    {dummyDays.map((i: number) => {
                       const day = i % 35
                       const statuses = ['#ef4444', '#eab308', '#22c55e', 'rgb(255 255 255 / 0.08)']
                       const color = statuses[day % 4]

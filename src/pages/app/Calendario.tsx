@@ -74,6 +74,23 @@ export default function Calendario() {
     return new Date(mesObj.getFullYear(), mesObj.getMonth() + 1, 0).getDate()
   }, [mesObj])
 
+  // Pre-calculate arrays for rendering grid efficiently
+  const emptyCells = useMemo(() => {
+    const cells = []
+    for (let i = 0; i < firstDay; i++) {
+      cells.push(i)
+    }
+    return cells
+  }, [firstDay])
+
+  const daysArray = useMemo(() => {
+    const days = []
+    for (let i = 0; i < daysInMonth; i++) {
+      days.push(i)
+    }
+    return days
+  }, [daysInMonth])
+
   // Determine dot status for a day
   const getDotStatus = (day: number): 'vencido' | 'proximo' | 'completado' | null => {
     const items = vencimientosByDay.get(day) ?? []
@@ -198,12 +215,12 @@ export default function Calendario() {
             {/* Day cells */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 8 }}>
               {/* Empty cells before first day */}
-              {Array.from({ length: firstDay }).map((_, i) => (
+              {emptyCells.map((i: number) => (
                 <div key={`empty-${i}`} style={{ minHeight: 36 }} />
               ))}
 
               {/* Day cells */}
-              {Array.from({ length: daysInMonth }).map((_, i) => {
+              {daysArray.map((i: number) => {
                 const day = i + 1
                 const isToday = today.getFullYear() === mesObj.getFullYear() &&
                                today.getMonth() === mesObj.getMonth() &&
