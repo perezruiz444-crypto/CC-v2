@@ -43,18 +43,42 @@ export default function Obligaciones() {
   const [showCreateDialog, setShowCreateDialog] = useState(false)
 
   const lista = useMemo(() => {
-    return obligaciones
-      .filter(o => filtro === 'todas' ? true : filtro === 'activas' ? o.estado : !o.estado)
-      .filter(o => busqueda === '' ||
-        o.catalogo.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-        o.catalogo.categoria.toLowerCase().includes(busqueda.toLowerCase())
-      )
+    // ⚡ Bolt: Use a single-pass loop instead of chained .filter() to prevent unnecessary
+    // array allocations and redundant iterations. Pre-calculate lowercase search term.
+    const term = busqueda ? busqueda.toLowerCase() : ''
+    const results = []
+
+    for (let i = 0; i < obligaciones.length; i++) {
+      const o = obligaciones[i]
+
+      // Filter 1: State
+      if (filtro === 'activas' && !o.estado) continue
+      if (filtro === 'inactivas' && o.estado) continue
+
+      // Filter 2: Search term
+      if (term) {
+        const matchesNombre = o.catalogo.nombre.toLowerCase().includes(term)
+        const matchesCategoria = o.catalogo.categoria.toLowerCase().includes(term)
+        if (!matchesNombre && !matchesCategoria) continue
+      }
+
+      results.push(o)
+    }
+
+    return results
   }, [obligaciones, filtro, busqueda])
 
-  const counts = useMemo(() => ({
-    activas:   obligaciones.filter(o => o.estado).length,
-    inactivas: obligaciones.filter(o => !o.estado).length,
-  }), [obligaciones])
+  const counts = useMemo(() => {
+    // ⚡ Bolt: Single-pass iteration to calculate counts instead of double .filter().length
+    // This avoids O(2N) loops and O(N) memory allocation overhead for new arrays.
+    let activas = 0
+    let inactivas = 0
+    for (let i = 0; i < obligaciones.length; i++) {
+      if (obligaciones[i].estado) activas++
+      else inactivas++
+    }
+    return { activas, inactivas }
+  }, [obligaciones])
 
   return (
     <div>
