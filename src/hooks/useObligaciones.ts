@@ -105,6 +105,12 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
     load()
   }, [empresaId, tick])
 
+  useEffect(() => {
+    const handler = () => setTick(t => t + 1)
+    window.addEventListener('programas-updated', handler)
+    return () => window.removeEventListener('programas-updated', handler)
+  }, [])
+
   const toggleEstado = useCallback(async (id: string, nuevoEstado: boolean, motivo?: string) => {
     setObligaciones(prev => prev.map(o =>
       o.id === id ? { ...o, estado: nuevoEstado, motivo_inactiva: motivo ?? o.motivo_inactiva } : o
