@@ -241,3 +241,16 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   CARD INTERACTIVE STYLES
+   ───────────────────────────────────────────────────────────── */
+
+.card-interactive {
+  cursor: default;
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
