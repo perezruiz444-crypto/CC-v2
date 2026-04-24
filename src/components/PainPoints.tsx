@@ -29,7 +29,7 @@ export default function PainPoints() {
                 className="reveal-left"
                 style={{
                   display: 'flex', alignItems: 'flex-start', gap: 14,
-                  background: 'var(--snow)',
+                  background: 'var(--surface)',
                   borderRadius: 'var(--r-lg)',
                   padding: '16px 22px',
                   border: '1px solid var(--border)',
@@ -53,7 +53,7 @@ export default function PainPoints() {
                 }}>
                   <X size={13} color="var(--danger)" strokeWidth={2.5} aria-hidden="true" />
                 </div>
-                <p style={{ fontSize: 15, color: '#3f3f3f', lineHeight: 1.6 }}>{pain}</p>
+                <p style={{ fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{pain}</p>
               </div>
             ))}
           </div>
