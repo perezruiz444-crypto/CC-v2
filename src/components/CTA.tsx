@@ -6,7 +6,7 @@ export default function CTA() {
 
   return (
     <section ref={ref as React.RefObject<HTMLElement>} className="section-sm"
-      style={{ background: 'var(--snow)', borderTop: '1px solid var(--surface-2)', overflow: 'hidden', position: 'relative' }}>
+      style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)', overflow: 'hidden', position: 'relative' }}>
 
       {/* Emerald glow */}
       <div aria-hidden="true" style={{

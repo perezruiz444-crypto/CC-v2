@@ -45,7 +45,7 @@ export default function Features() {
 
   return (
     <section ref={ref as React.RefObject<HTMLElement>} className="section" id="features"
-      style={{ background: 'var(--snow)' }}>
+      style={{ background: 'var(--ink-3)' }}>
       <div className="container">
 
         <div style={{ textAlign: 'center', maxWidth: 600, marginInline: 'auto', marginBottom: 60 }}>
