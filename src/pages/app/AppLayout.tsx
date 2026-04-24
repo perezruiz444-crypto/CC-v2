@@ -22,9 +22,15 @@ const PLAN_LABELS: Record<string, { label: string; color: string }> = {
 
 export default function AppLayout() {
   const { user, signOut } = useAuth()
-  const { organizacion } = useEmpresa()
+  const { empresa, organizacion, loading: loadingEmpresa } = useEmpresa()
   const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  // Redirigir al onboarding si el usuario no tiene empresa configurada
+  if (!loadingEmpresa && !empresa) {
+    navigate('/app/onboarding', { replace: true })
+    return null
+  }
 
   const plan = PLAN_LABELS[organizacion?.plan_actual ?? 'gratis'] ?? PLAN_LABELS.gratis
 
