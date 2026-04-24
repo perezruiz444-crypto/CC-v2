@@ -55,13 +55,11 @@ export default function Calendario() {
   }, [vencimientos, mesObj])
 
   // Filtered vencimientos based on selected day
+  // ⚡ Bolt: Use O(1) Map lookup instead of O(N) array filtering + date parsing overhead on every render/day click
   const filteredVencimientos = useMemo(() => {
     if (selectedDay === null) return vencimientos
-    return vencimientos.filter(v => {
-      const d = new Date(v.fecha_limite + 'T00:00:00')
-      return d.getDate() === selectedDay
-    })
-  }, [vencimientos, selectedDay])
+    return vencimientosByDay.get(selectedDay) ?? []
+  }, [vencimientos, vencimientosByDay, selectedDay])
 
   // Calendar grid: get first day of month and total days
   const firstDay = useMemo(() => {
