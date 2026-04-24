@@ -43,7 +43,7 @@ export default function HowItWorks() {
               <div
                 className="reveal-scale"
                 style={{
-                  background: 'var(--snow)',
+                  background: 'var(--surface)',
                   borderRadius: 'var(--r-lg)',
                   padding: '24px 20px',
                   border: '1px solid var(--border)',
