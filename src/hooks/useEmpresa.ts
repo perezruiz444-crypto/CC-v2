@@ -110,10 +110,12 @@ export function useEmpresa(): UseEmpresaResult {
       return null
     }
 
-    return {
+    const result = {
       proyectados: (data as any)?.proyectados ?? 0,
       limpiados:   (data as any)?.limpiados   ?? 0,
     }
+    window.dispatchEvent(new CustomEvent('programas-updated'))
+    return result
   }, [empresa])
 
   // Desactiva un programa — limpia vencimientos futuros pendientes

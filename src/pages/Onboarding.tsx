@@ -11,7 +11,20 @@ const PROGRAMAS = [
   { id: 'padron',   label: 'Padrón de Importadores',    desc: 'Padrón general y sectorial de importadores' },
 ]
 
-type Step = 1 | 2 | 3
+type TipoEmpresa = 'maquiladora' | 'importadora' | 'agencia' | null
+type Step = 0 | 1 | 2 | 3
+
+const PROGRAMAS_POR_TIPO: Record<string, string[]> = {
+  maquiladora: ['immex', 'prosec', 'iva_ieps', 'padron'],
+  importadora: ['padron', 'iva_ieps'],
+  agencia:     ['immex', 'prosec', 'iva_ieps', 'padron'],
+}
+
+const TIPO_LABELS: Array<{ id: TipoEmpresa; icon: string; label: string; desc: string }> = [
+  { id: 'maquiladora', icon: '🏭', label: 'Maquiladora / Manufactura', desc: 'Fabricamos productos para exportar bajo programas IMMEX o PROSEC' },
+  { id: 'importadora', icon: '📦', label: 'Importadora / Comercializadora', desc: 'Importamos mercancía para distribución o consumo nacional' },
+  { id: 'agencia', icon: '🏢', label: 'Agencia Aduanal / Despacho', desc: 'Gestionamos el cumplimiento de comercio exterior de otras empresas' },
+]
 
 export default function Onboarding() {
   const { user } = useAuth()
@@ -29,10 +42,12 @@ export default function Onboarding() {
       .then(({ data }) => { if (data) navigate('/app', { replace: true }) })
   }, [user, navigate])
 
-  const [step, setStep] = useState<Step>(1)
+  const [step, setStep] = useState<Step>(0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Paso 0
+  const [tipoEmpresa, setTipoEmpresa] = useState<TipoEmpresa>(null)
   // Paso 1
   const [nombreOrg, setNombreOrg] = useState('')
   // Paso 2
@@ -89,7 +104,7 @@ export default function Onboarding() {
 
         {/* Steps indicator */}
         <div style={{ display: 'flex', gap: 6, marginBottom: 36 }}>
-          {([1, 2, 3] as Step[]).map(n => (
+          {([0, 1, 2, 3] as Step[]).map(n => (
             <div key={n} style={{
               flex: 1, height: 4, borderRadius: 9999,
               background: n <= step ? 'var(--em)' : 'var(--ink-4)',
@@ -97,6 +112,54 @@ export default function Onboarding() {
             }} />
           ))}
         </div>
+
+        {/* ── Paso 0: Tipo de empresa ── */}
+        {step === 0 && (
+          <div>
+            <div style={stepIconWrap}>
+              <Building2 size={22} color="var(--em)" />
+            </div>
+            <h2 style={stepHeading}>¿Cómo describes tu empresa?</h2>
+            <p style={{ ...mutedStyle, marginBottom: 24 }}>
+              Esto nos ayuda a recomendarte los programas correctos.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 28 }}>
+              {TIPO_LABELS.map(({ id, icon, label, desc }) => (
+                <button
+                  key={String(id)}
+                  type="button"
+                  onClick={() => { setTipoEmpresa(id); setStep(1) }}
+                  style={{
+                    display: 'flex', alignItems: 'flex-start', gap: 14,
+                    padding: '16px 18px',
+                    background: 'var(--ink)',
+                    border: '1.5px solid var(--ink-4)',
+                    borderRadius: 'var(--r-lg)',
+                    cursor: 'pointer', textAlign: 'left',
+                    transition: 'border-color 150ms, background 150ms',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = 'var(--em)'
+                    e.currentTarget.style.background = 'rgb(16 185 129 / 0.05)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = 'var(--ink-4)'
+                    e.currentTarget.style.background = 'var(--ink)'
+                  }}
+                >
+                  <span style={{ fontSize: 24, flexShrink: 0, marginTop: 2 }}>{icon}</span>
+                  <div>
+                    <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--snow)', marginBottom: 4 }}>{label}</p>
+                    <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.4)', lineHeight: 1.5 }}>{desc}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+            <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.3)', textAlign: 'center' }}>
+              No te preocupes — podrás cambiar esto después
+            </p>
+          </div>
+        )}
 
         {/* ── Paso 1: Nombre de organización ── */}
         {step === 1 && (
@@ -116,14 +179,23 @@ export default function Onboarding() {
               style={inputStyle}
               placeholder="Ej: Importaciones del Norte SA de CV"
             />
-            <button
-              className="btn btn-primary"
-              disabled={!nombreOrg.trim()}
-              onClick={() => setStep(2)}
-              style={{ width: '100%', justifyContent: 'center', marginTop: 24 }}
-            >
-              Continuar <ChevronRight size={16} />
-            </button>
+            <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
+              <button
+                className="btn btn-ghost-dark"
+                onClick={() => setStep(0)}
+                style={{ flex: 1, justifyContent: 'center' }}
+              >
+                Atrás
+              </button>
+              <button
+                className="btn btn-primary"
+                disabled={!nombreOrg.trim()}
+                onClick={() => setStep(2)}
+                style={{ flex: 2, justifyContent: 'center' }}
+              >
+                Continuar <ChevronRight size={16} />
+              </button>
+            </div>
           </div>
         )}
 
@@ -194,6 +266,7 @@ export default function Onboarding() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
               {PROGRAMAS.map(({ id, label, desc }) => {
                 const selected = programasSeleccionados.includes(id)
+                const esRecomendado = tipoEmpresa && (PROGRAMAS_POR_TIPO[tipoEmpresa] ?? []).includes(id)
                 return (
                   <button
                     key={id}
@@ -224,8 +297,21 @@ export default function Onboarding() {
                         </svg>
                       )}
                     </div>
-                    <div>
-                      <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--snow)', marginBottom: 2 }}>{label}</p>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+                        <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--snow)' }}>{label}</p>
+                        {esRecomendado && (
+                          <span style={{
+                            fontSize: 9, fontWeight: 700, padding: '2px 6px',
+                            borderRadius: 'var(--r-full)',
+                            background: 'rgb(16 185 129 / 0.15)',
+                            color: 'var(--em)', letterSpacing: '0.05em',
+                            textTransform: 'uppercase',
+                          }}>
+                            Recomendado
+                          </span>
+                        )}
+                      </div>
                       <p style={{ fontSize: 12, color: 'rgb(255 255 255 / 0.4)', lineHeight: 1.5 }}>{desc}</p>
                     </div>
                   </button>

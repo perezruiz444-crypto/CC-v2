@@ -9,6 +9,9 @@ export interface ObligacionEmpresa {
   activa_hasta: string | null
   motivo_inactiva: string | null
   created_at: string
+  ultima_revision: string | null
+  estado_revision: 'vigente' | 'en_riesgo' | 'incumplimiento' | 'sin_revisar' | null
+  notas_revision: string | null
   catalogo: {
     id: string
     nombre: string
@@ -40,6 +43,7 @@ interface UseObligacionesResult {
   toggleEstado: (id: string, nuevoEstado: boolean, motivo?: string) => Promise<void>
   editarFechaVencimiento: (vencimientoId: string, nuevaFecha: string) => Promise<void>
   agregarNota: (vencimientoId: string, nota: string) => Promise<void>
+  registrarRevision: (id: string, estado: 'vigente' | 'en_riesgo' | 'incumplimiento', notas?: string) => Promise<void>
   crearObligacionPersonalizada: (nombre: string, periodicidad: string, descripcion?: string) => Promise<void>
   refetch: () => void
 }
@@ -63,6 +67,7 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
         .from('obligaciones_empresa')
         .select(`
           id, empresa_id, estado, activa_desde, activa_hasta, motivo_inactiva, created_at,
+          ultima_revision, estado_revision, notas_revision,
           catalogo_id (
             id, nombre, descripcion, categoria, periodicidad,
             fundamento_legal, notas_importantes,
@@ -112,6 +117,12 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
     load()
   }, [empresaId, tick])
 
+  useEffect(() => {
+    const handler = () => setTick(t => t + 1)
+    window.addEventListener('programas-updated', handler)
+    return () => window.removeEventListener('programas-updated', handler)
+  }, [])
+
   const toggleEstado = useCallback(async (id: string, nuevoEstado: boolean, motivo?: string) => {
     setObligaciones(prev => prev.map(o =>
       o.id === id ? { ...o, estado: nuevoEstado, motivo_inactiva: motivo ?? o.motivo_inactiva } : o
@@ -152,6 +163,31 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
       .from('vencimientos_calendario')
       .update({ notas: nota })
       .eq('id', vencimientoId)
+    if (err) { console.error(err.message); refetch() }
+  }, [refetch])
+
+  const registrarRevision = useCallback(async (
+    obligacionId: string,
+    estadoRevision: 'vigente' | 'en_riesgo' | 'incumplimiento',
+    notasRevision?: string
+  ) => {
+    const hoy = new Date().toISOString().split('T')[0]
+
+    setObligaciones(prev => prev.map(o =>
+      o.id === obligacionId
+        ? { ...o, ultima_revision: hoy, estado_revision: estadoRevision, notas_revision: notasRevision ?? o.notas_revision }
+        : o
+    ))
+
+    const { error: err } = await supabase
+      .from('obligaciones_empresa')
+      .update({
+        ultima_revision: hoy,
+        estado_revision: estadoRevision,
+        notas_revision: notasRevision ?? null,
+      })
+      .eq('id', obligacionId)
+
     if (err) { console.error(err.message); refetch() }
   }, [refetch])
 
@@ -257,6 +293,7 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
     toggleEstado,
     editarFechaVencimiento,
     agregarNota,
+    registrarRevision,
     crearObligacionPersonalizada,
     refetch
   }
