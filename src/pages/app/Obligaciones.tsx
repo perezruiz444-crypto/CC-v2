@@ -261,11 +261,22 @@ function ObligacionRow({
           </p>
 
           {/* Periodicidad */}
-          {o.catalogo.periodicidad && (
+          {(o.catalogo.periodicidad === 'continua' || o.catalogo.periodicidad === 'unica') ? (
+            <span style={{
+              fontSize: 10, fontWeight: 700, padding: '3px 9px',
+              borderRadius: 'var(--r-full)', flexShrink: 0,
+              background: 'rgb(99 102 241 / 0.1)',
+              border: '1px solid rgb(99 102 241 / 0.25)',
+              color: '#6366f1',
+              letterSpacing: '0.06em', textTransform: 'uppercase',
+            }}>
+              Permanente
+            </span>
+          ) : o.catalogo.periodicidad ? (
             <span style={{ fontSize: 11, color: '#94A3B8', flexShrink: 0 }}>
               {o.catalogo.periodicidad}
             </span>
-          )}
+          ) : null}
 
           {/* Toggle activo/inactivo — solo owner/manager */}
           <button
@@ -330,29 +341,54 @@ function ObligacionRow({
               )}
             </div>
 
-            {/* Historial de vencimientos */}
-            <div>
-              <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#94A3B8', marginBottom: 10 }}>
-                Historial de vencimientos
-              </p>
-              {o.vencimientos.length === 0 ? (
-                <p style={{ fontSize: 12, color: '#CBD5E1', fontStyle: 'italic' }}>
-                  Sin vencimientos generados todavía.
+            {/* Historial de vencimientos — solo para obligaciones con calendario */}
+            {o.catalogo.periodicidad !== 'continua' && o.catalogo.periodicidad !== 'unica' ? (
+              <div>
+                <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#94A3B8', marginBottom: 10 }}>
+                  Historial de vencimientos
                 </p>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {o.vencimientos.map(v => (
-                    <VencimientoHistorialRow
-                      key={v.id}
-                      v={v}
-                      onEditarFecha={onEditarFecha}
-                      onAgregarNota={onAgregarNota}
-                      puedeEditar={puedeEditar}
-                    />
-                  ))}
+                {o.vencimientos.length === 0 ? (
+                  <p style={{ fontSize: 12, color: '#CBD5E1', fontStyle: 'italic' }}>
+                    Sin vencimientos generados todavía.
+                  </p>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {o.vencimientos.map(v => (
+                      <VencimientoHistorialRow
+                        key={v.id}
+                        v={v}
+                        onEditarFecha={onEditarFecha}
+                        onAgregarNota={onAgregarNota}
+                        puedeEditar={puedeEditar}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div style={{
+                background: 'rgb(99 102 241 / 0.05)',
+                border: '1px solid rgb(99 102 241 / 0.15)',
+                borderRadius: 'var(--r-lg)',
+                padding: '14px 16px',
+                display: 'flex', gap: 10, alignItems: 'flex-start',
+              }}>
+                <span style={{ fontSize: 16 }} aria-hidden="true">🔄</span>
+                <div>
+                  <p style={{ fontSize: 12, fontWeight: 600, color: '#6366f1', marginBottom: 4 }}>
+                    Obligación de cumplimiento permanente
+                  </p>
+                  <p style={{ fontSize: 12, color: '#64748B', lineHeight: 1.6 }}>
+                    Esta obligación no tiene fechas de vencimiento periódicas — debe cumplirse en todo momento. Se verifica durante auditorías del SAT o la SE.
+                  </p>
+                  {o.catalogo.notas_importantes && (
+                    <p style={{ fontSize: 11, color: '#94A3B8', marginTop: 8, fontStyle: 'italic' }}>
+                      {o.catalogo.notas_importantes}
+                    </p>
+                  )}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         )}
       </div>
