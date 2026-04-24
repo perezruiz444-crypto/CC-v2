@@ -97,11 +97,18 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
         })
       }
 
-      const normalized = (data ?? []).map((o: any) => ({
-        ...o,
-        catalogo: o.catalogo_id,
-        vencimientos: vencMap[o.id] ?? [],
-      }))
+      const huerfanas = (data ?? []).filter((o: any) => o.catalogo_id == null)
+      if (huerfanas.length > 0) {
+        console.warn(`[useObligaciones] ${huerfanas.length} fila(s) sin catálogo ignoradas:`, huerfanas.map((o: any) => o.id))
+      }
+
+      const normalized = (data ?? [])
+        .filter((o: any) => o.catalogo_id != null)
+        .map((o: any) => ({
+          ...o,
+          catalogo: o.catalogo_id,
+          vencimientos: vencMap[o.id] ?? [],
+        }))
 
       setObligaciones(normalized)
       setLoading(false)
