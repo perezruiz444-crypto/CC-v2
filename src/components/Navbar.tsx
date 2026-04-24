@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, forwardRef, useRef } from 'react'
 import { Menu, X } from 'lucide-react'
+import Button from './ui/Button'
+import Card from './ui/Card'
 
 const NAV_LINKS = [
   { label: 'Funciones', href: '#features' },
@@ -8,9 +10,14 @@ const NAV_LINKS = [
   { label: 'FAQ', href: '#faq' },
 ]
 
-export default function Navbar() {
+interface NavbarProps {
+  onNavigate?: (href: string) => void
+}
+
+const Navbar = forwardRef<HTMLElement, NavbarProps>(({ onNavigate }, ref) => {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const firstMobileLink = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -18,113 +25,191 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // C1: Escape key handler - document listener para navegación real
+  useEffect(() => {
+    const handleEscapeKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && open) {
+        setOpen(false)
+      }
+    }
+
+    if (open) {
+      document.addEventListener('keydown', handleEscapeKey)
+      return () => document.removeEventListener('keydown', handleEscapeKey)
+    }
+  }, [open])
+
+  // I2: Focus management - traslada focus al primer enlace cuando menú abre
+  useEffect(() => {
+    if (open && firstMobileLink.current) {
+      firstMobileLink.current.focus()
+    }
+  }, [open])
+
+  const handleNavClick = (href: string, e: React.MouseEvent<HTMLAnchorElement>) => {
+    // I4: preventDefault() para evitar navegación 2x
+    e.preventDefault()
+    setOpen(false)
+    onNavigate?.(href)
+  }
+
   return (
-    <header style={{
-      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-      transition: `background ${220}ms, box-shadow ${220}ms, backdrop-filter ${220}ms`,
-      background: scrolled ? 'rgba(248,250,252,0.95)' : 'transparent',
-      boxShadow: scrolled ? `0 1px 0 rgba(14,165,233,0.15)` : 'none',
-      backdropFilter: scrolled ? 'blur(12px)' : 'none',
-    }}>
-      <div className="container" style={{ display: 'flex', alignItems: 'center', height: 68 }}>
+    <header
+      ref={ref}
+      className={`
+        fixed top-0 left-0 right-0 z-50
+        transition-all duration-[var(--duration-base)] ease-[var(--easing-in-out)]
+        ${scrolled
+          ? 'bg-[rgba(248,250,252,0.95)] shadow-[0_1px_0_rgba(14,165,233,0.15)] backdrop-blur-[12px]'
+          : 'bg-transparent shadow-none backdrop-blur-none'
+        }
+      `}
+      role="navigation"
+      aria-label="Navegación principal"
+    >
+      <div className="container mx-auto px-6 flex items-center justify-between h-[68px]">
 
         {/* Logo */}
-        <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
-          <span style={{
-            fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 17,
-            color: 'var(--snow)',
-            letterSpacing: '-0.02em',
-            transition: 'opacity var(--dur-fast)',
-          }}>
-            Calendario<span style={{ color: 'var(--em)' }}>Compliance</span>
+        <a
+          href="/"
+          className="flex items-center flex-shrink-0 focus:outline-2 focus:outline-[var(--color-primary)] focus:outline-offset-2 rounded-md"
+          aria-label="CalendarioCompliance inicio"
+        >
+          <span className="font-bold text-lg tracking-tight text-[var(--color-text-primary)] transition-opacity duration-[var(--duration-fast)]">
+            Calendario<span className="text-[var(--color-primary)]">Compliance</span>
           </span>
         </a>
 
         {/* Nav links desktop */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: 2, marginLeft: 'auto', marginRight: 24 }}
-          aria-label="Navegación principal">
+        <nav
+          className="nav-link-item hidden md:flex items-center gap-2 ml-auto mr-6"
+          aria-label="Enlaces de navegación"
+        >
           {NAV_LINKS.map(({ label, href }) => (
-            <a key={href} href={href} className="nav-link-item" style={{
-              fontSize: 14, fontWeight: 500,
-              color: '#334155',
-              textDecoration: 'none',
-              padding: '6px 14px',
-              borderRadius: 'var(--r-full)',
-              transition: 'color var(--dur-fast), background var(--dur-fast)',
-            }}
-              onMouseEnter={e => {
-                (e.target as HTMLElement).style.color = '#0369A1'
-                ;(e.target as HTMLElement).style.background = 'rgba(3,105,161,0.06)'
-              }}
-              onMouseLeave={e => {
-                (e.target as HTMLElement).style.color = '#334155'
-                ;(e.target as HTMLElement).style.background = 'transparent'
-              }}
+            <a
+              key={href}
+              href={href}
+              onClick={(e) => handleNavClick(href, e)}
+              className="
+                px-4 py-1.5 text-sm font-medium
+                text-[var(--color-text-secondary)]
+                rounded-[var(--radius-full)]
+                transition-all duration-[var(--duration-fast)]
+                hover:text-[var(--color-primary)]
+                hover:bg-[rgba(37,99,235,0.06)]
+                focus:outline-2 focus:outline-[var(--color-primary)] focus:outline-offset-2
+              "
             >
               {label}
             </a>
           ))}
         </nav>
 
-        {/* CTAs desktop */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginLeft: 'auto' }}>
-          <a href="/login" className="btn btn-ghost-dark nav-cta" style={{ fontSize: 13, padding: '9px 18px', minHeight: 38 }}>
-            Iniciar sesión
+        {/* CTAs desktop + Hamburger mobile container */}
+        <div className="flex items-center gap-3 ml-auto">
+          {/* CTA buttons desktop */}
+          <a
+            href="/login"
+            className="nav-cta hidden md:inline-block"
+          >
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-sm"
+              aria-label="Iniciar sesión"
+            >
+              Iniciar sesión
+            </Button>
           </a>
-          <a href="/register" className="btn btn-primary nav-cta" style={{ fontSize: 13, padding: '9px 20px', minHeight: 38 }}>
-            Empieza gratis
+          <a
+            href="/register"
+            className="nav-cta hidden md:inline-block"
+          >
+            <Button
+              variant="primary"
+              size="sm"
+              className="text-sm"
+              aria-label="Empieza gratis"
+            >
+              Empieza gratis
+            </Button>
           </a>
 
           {/* Hamburger mobile */}
-          <button onClick={() => setOpen(!open)}
-            aria-label={open ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={open}
-            className="nav-hamburger"
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: 40, height: 40, background: 'none', border: 'none',
-              cursor: 'pointer', borderRadius: 'var(--r-md)', color: 'var(--snow)',
-            }}
+          <Button
+            onClick={() => setOpen(!open)}
+            aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={open}
+            variant="ghost"
+            isIconOnly
+            className="nav-hamburger md:hidden"
           >
             {open ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {open && (
-        <div style={{
-          background: 'var(--ink-2)',
-          borderTop: '1px solid var(--ink-4)',
-          padding: '16px 24px 24px',
-        }}>
-          {NAV_LINKS.map(({ label, href }) => (
-            <a key={href} href={href} onClick={() => setOpen(false)} style={{
-              display: 'block', padding: '13px 0',
-              fontSize: 15, fontWeight: 500,
-              color: '#334155',
-              textDecoration: 'none',
-              borderBottom: '1px solid var(--ink-4)',
-            }}>
-              {label}
+        <Card
+          className="
+            md:hidden
+            bg-[var(--color-background)]
+            border-t-2 border-[var(--color-border)]
+            rounded-none
+            p-0
+          "
+          interactive={false}
+        >
+          <nav className="flex flex-col">
+            {NAV_LINKS.map(({ label, href }, index) => (
+              <a
+                key={href}
+                ref={index === 0 ? firstMobileLink : null}
+                href={href}
+                onClick={(e) => handleNavClick(href, e)}
+                data-testid={`nav-link-mobile-${href}`}
+                className="
+                  block px-6 py-3
+                  text-base font-medium
+                  text-[var(--color-text-secondary)]
+                  border-b border-[var(--color-border)]
+                  transition-all duration-[var(--duration-fast)]
+                  hover:text-[var(--color-primary)]
+                  hover:bg-[var(--color-primary-light)]
+                  focus:outline-2 focus:outline-[var(--color-primary)] focus:outline-offset-2
+                "
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+          <div className="flex flex-col gap-2 p-6 pt-4">
+            <a href="/login" className="w-full">
+              <Button
+                variant="ghost"
+                className="w-full justify-center"
+                aria-label="Iniciar sesión (mobile)"
+              >
+                Iniciar sesión
+              </Button>
             </a>
-          ))}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 20 }}>
-            <a href="/login" className="btn btn-ghost-dark" style={{ justifyContent: 'center' }}>Iniciar sesión</a>
-            <a href="/register" className="btn btn-primary" style={{ justifyContent: 'center' }}>Empieza gratis — sin tarjeta</a>
+            <a href="/register" className="w-full">
+              <Button
+                variant="primary"
+                className="w-full justify-center"
+                aria-label="Empieza gratis sin tarjeta (mobile)"
+              >
+                Empieza gratis — sin tarjeta
+              </Button>
+            </a>
           </div>
-        </div>
+        </Card>
       )}
-
-      <style>{`
-        @media (min-width: 768px) {
-          .nav-link-item { display: block !important; }
-          .nav-hamburger { display: none !important; }
-        }
-        @media (max-width: 767px) {
-          .nav-link-item { display: none !important; }
-          .nav-cta { display: none !important; }
-        }
-      `}</style>
     </header>
   )
-}
+})
+
+Navbar.displayName = 'Navbar'
+
+export default Navbar
