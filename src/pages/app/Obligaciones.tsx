@@ -35,7 +35,7 @@ function formatFecha(f: string) {
 export default function Obligaciones() {
   const { empresa, loading: loadingEmp } = useEmpresa()
   const { puedeEditar } = useRol()
-  const { obligaciones, loading, toggleEstado, editarFechaVencimiento, agregarNota, refetch } = useObligaciones(empresa?.id ?? null)
+  const { obligaciones, loading, toggleEstado, editarFechaVencimiento, agregarNota, registrarRevision, refetch } = useObligaciones(empresa?.id ?? null)
 
   const [filtro, setFiltro] = useState<Filtro>('todas')
   const [busqueda, setBusqueda] = useState('')
@@ -168,6 +168,7 @@ export default function Obligaciones() {
                 onToggleEstado={toggleEstado}
                 onEditarFecha={editarFechaVencimiento}
                 onAgregarNota={agregarNota}
+                onRegistrarRevision={registrarRevision}
                 puedeEditar={puedeEditar}
               />
             </div>
@@ -194,7 +195,7 @@ export default function Obligaciones() {
 
 function ObligacionRow({
   obligacion: o, expanded, onToggleExpand,
-  onToggleEstado, onEditarFecha, onAgregarNota, puedeEditar,
+  onToggleEstado, onEditarFecha, onAgregarNota, onRegistrarRevision, puedeEditar,
 }: {
   obligacion: ObligacionEmpresa
   expanded: boolean
@@ -202,6 +203,7 @@ function ObligacionRow({
   onToggleEstado: (id: string, estado: boolean, motivo?: string) => Promise<void>
   onEditarFecha: (vencimientoId: string, fecha: string) => Promise<void>
   onAgregarNota: (vencimientoId: string, nota: string) => Promise<void>
+  onRegistrarRevision: (id: string, estado: 'vigente' | 'en_riesgo' | 'incumplimiento', notas?: string) => Promise<void>
   puedeEditar: boolean
 }) {
   const cat = CAT_LABELS[o.catalogo.categoria] ?? CAT_LABELS.general
@@ -386,6 +388,55 @@ function ObligacionRow({
                       {o.catalogo.notas_importantes}
                     </p>
                   )}
+                  {/* Controles de revisión */}
+                  <div style={{ marginTop: 14 }}>
+                    <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#94A3B8', marginBottom: 8 }}>
+                      Estado de cumplimiento
+                    </p>
+                    {o.ultima_revision && (
+                      <p style={{ fontSize: 11, color: '#64748B', marginBottom: 10 }}>
+                        Última revisión: {formatFecha(o.ultima_revision)} —{' '}
+                        <span style={{
+                          fontWeight: 600,
+                          color: o.estado_revision === 'vigente' ? 'var(--em)'
+                               : o.estado_revision === 'en_riesgo' ? 'var(--warn)'
+                               : o.estado_revision === 'incumplimiento' ? 'var(--danger)'
+                               : '#94A3B8'
+                        }}>
+                          {o.estado_revision === 'vigente' ? 'Vigente'
+                           : o.estado_revision === 'en_riesgo' ? 'En riesgo'
+                           : o.estado_revision === 'incumplimiento' ? 'Incumplimiento'
+                           : 'Sin revisar'}
+                        </span>
+                      </p>
+                    )}
+                    {puedeEditar && (
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                        {([
+                          { id: 'vigente',        label: '✅ Vigente',        color: 'var(--em)' },
+                          { id: 'en_riesgo',      label: '⚠️ En riesgo',      color: 'var(--warn)' },
+                          { id: 'incumplimiento', label: '🔴 Incumplimiento',  color: 'var(--danger)' },
+                        ] as const).map(opt => (
+                          <button
+                            key={opt.id}
+                            onClick={() => onRegistrarRevision(o.id, opt.id)}
+                            style={{
+                              fontSize: 11, fontWeight: 600,
+                              padding: '5px 12px', borderRadius: 'var(--r-full)',
+                              border: `1px solid ${o.estado_revision === opt.id ? '#CBD5E1' : '#E2E8F0'}`,
+                              background: o.estado_revision === opt.id ? '#F1F5F9' : '#F8FAFC',
+                              color: o.estado_revision === opt.id ? opt.color : '#64748B',
+                              cursor: 'pointer',
+                              transition: 'all var(--dur-fast)',
+                              minHeight: 32,
+                            }}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
