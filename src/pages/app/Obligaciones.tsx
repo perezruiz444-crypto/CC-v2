@@ -45,7 +45,7 @@ export default function Obligaciones() {
   const lista = useMemo(() => {
     return obligaciones
       .filter(o => filtro === 'todas' ? true : filtro === 'activas' ? o.estado : !o.estado)
-      .filter(o => busqueda === '' ||
+      .filter(o => !o.catalogo ? false : busqueda === '' ||
         o.catalogo.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
         o.catalogo.categoria.toLowerCase().includes(busqueda.toLowerCase())
       )
