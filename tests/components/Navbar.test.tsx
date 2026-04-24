@@ -85,12 +85,9 @@ describe('Navbar Component', () => {
     const handleNavigate = vi.fn()
     render(<Navbar onNavigate={handleNavigate} />)
 
-    const navLinks = screen.getAllByText('Funciones')
-    // Encuentra el primer enlace de navegación en desktop
-    const firstNavLink = Array.from(navLinks).find(link => {
-      const parent = link.closest('nav[aria-label="Enlaces de navegación"]')
-      return parent !== null
-    })?.closest('a')
+    // I3: Selector robusto - find primera ocurrencia de 'Funciones' que sea enlace
+    const allFuncionesLinks = screen.getAllByText('Funciones')
+    const firstNavLink = allFuncionesLinks[0].closest('a')
 
     if (firstNavLink) {
       await user.click(firstNavLink)

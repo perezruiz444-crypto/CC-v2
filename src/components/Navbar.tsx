@@ -1,4 +1,4 @@
-import { useState, useEffect, forwardRef } from 'react'
+import { useState, useEffect, forwardRef, useRef } from 'react'
 import { Menu, X } from 'lucide-react'
 import Button from './ui/Button'
 import Card from './ui/Card'
@@ -17,6 +17,7 @@ interface NavbarProps {
 const Navbar = forwardRef<HTMLElement, NavbarProps>(({ onNavigate }, ref) => {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const firstMobileLink = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -24,15 +25,32 @@ const Navbar = forwardRef<HTMLElement, NavbarProps>(({ onNavigate }, ref) => {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const handleNavClick = (href: string) => {
+  // C1: Escape key handler - document listener para navegación real
+  useEffect(() => {
+    const handleEscapeKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && open) {
+        setOpen(false)
+      }
+    }
+
+    if (open) {
+      document.addEventListener('keydown', handleEscapeKey)
+      return () => document.removeEventListener('keydown', handleEscapeKey)
+    }
+  }, [open])
+
+  // I2: Focus management - traslada focus al primer enlace cuando menú abre
+  useEffect(() => {
+    if (open && firstMobileLink.current) {
+      firstMobileLink.current.focus()
+    }
+  }, [open])
+
+  const handleNavClick = (href: string, e: React.MouseEvent<HTMLAnchorElement>) => {
+    // I4: preventDefault() para evitar navegación 2x
+    e.preventDefault()
     setOpen(false)
     onNavigate?.(href)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (e.key === 'Escape') {
-      setOpen(false)
-    }
   }
 
   return (
@@ -71,7 +89,7 @@ const Navbar = forwardRef<HTMLElement, NavbarProps>(({ onNavigate }, ref) => {
             <a
               key={href}
               href={href}
-              onClick={() => handleNavClick(href)}
+              onClick={(e) => handleNavClick(href, e)}
               className="
                 px-4 py-1.5 text-sm font-medium
                 text-[var(--color-text-secondary)]
@@ -120,7 +138,6 @@ const Navbar = forwardRef<HTMLElement, NavbarProps>(({ onNavigate }, ref) => {
           {/* Hamburger mobile */}
           <Button
             onClick={() => setOpen(!open)}
-            onKeyDown={handleKeyDown}
             aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={open}
             variant="ghost"
@@ -145,11 +162,13 @@ const Navbar = forwardRef<HTMLElement, NavbarProps>(({ onNavigate }, ref) => {
           interactive={false}
         >
           <nav className="flex flex-col">
-            {NAV_LINKS.map(({ label, href }) => (
+            {NAV_LINKS.map(({ label, href }, index) => (
               <a
                 key={href}
+                ref={index === 0 ? firstMobileLink : null}
                 href={href}
-                onClick={() => handleNavClick(href)}
+                onClick={(e) => handleNavClick(href, e)}
+                data-testid={`nav-link-mobile-${href}`}
                 className="
                   block px-6 py-3
                   text-base font-medium
