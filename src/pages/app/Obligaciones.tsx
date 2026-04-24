@@ -43,18 +43,41 @@ export default function Obligaciones() {
   const [showCreateDialog, setShowCreateDialog] = useState(false)
 
   const lista = useMemo(() => {
-    return obligaciones
-      .filter(o => filtro === 'todas' ? true : filtro === 'activas' ? o.estado : !o.estado)
-      .filter(o => busqueda === '' ||
-        o.catalogo.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-        o.catalogo.categoria.toLowerCase().includes(busqueda.toLowerCase())
-      )
+    const arr = []
+    const lowerBusqueda = busqueda.toLowerCase()
+
+    for (let i = 0; i < obligaciones.length; i++) {
+      const o = obligaciones[i]
+
+      const matchFiltro = filtro === 'todas' ? true : filtro === 'activas' ? o.estado : !o.estado
+      if (!matchFiltro) continue
+
+      const matchBusqueda = busqueda === '' ||
+        o.catalogo.nombre.toLowerCase().includes(lowerBusqueda) ||
+        o.catalogo.categoria.toLowerCase().includes(lowerBusqueda)
+
+      if (matchBusqueda) {
+        arr.push(o)
+      }
+    }
+
+    return arr
   }, [obligaciones, filtro, busqueda])
 
-  const counts = useMemo(() => ({
-    activas:   obligaciones.filter(o => o.estado).length,
-    inactivas: obligaciones.filter(o => !o.estado).length,
-  }), [obligaciones])
+  const counts = useMemo(() => {
+    let activas = 0
+    let inactivas = 0
+
+    for (let i = 0; i < obligaciones.length; i++) {
+      if (obligaciones[i].estado) {
+        activas++
+      } else {
+        inactivas++
+      }
+    }
+
+    return { activas, inactivas }
+  }, [obligaciones])
 
   return (
     <div>

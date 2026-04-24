@@ -84,23 +84,35 @@ export default function Resumen() {
   const semaforo = SEMAFORO_CONFIG[semaforoEstado]
 
   // Panel de acción requerida: vencidos + próximos ≤15 días, max 5
-  const accionRequerida = useMemo(() =>
-    vencimientos
-      .filter(v => {
-        if (v.estado_cumplimiento === 'vencido') return true
-        if (v.estado_cumplimiento === 'pendiente') {
-          return diasRestantes(v.fecha_limite) <= 15
-        }
-        return false
-      })
-      .slice(0, 5),
-  [vencimientos])
+  const accionRequerida = useMemo(() => {
+    const arr = []
+    for (let i = 0; i < vencimientos.length; i++) {
+      if (arr.length >= 5) break
 
-  const proximos = useMemo(() =>
-    vencimientos
-      .filter(v => v.estado_cumplimiento === 'pendiente' || v.estado_cumplimiento === 'vencido')
-      .slice(0, 5),
-  [vencimientos])
+      const v = vencimientos[i]
+      if (v.estado_cumplimiento === 'vencido') {
+        arr.push(v)
+      } else if (v.estado_cumplimiento === 'pendiente') {
+        if (diasRestantes(v.fecha_limite) <= 15) {
+          arr.push(v)
+        }
+      }
+    }
+    return arr
+  }, [vencimientos])
+
+  const proximos = useMemo(() => {
+    const arr = []
+    for (let i = 0; i < vencimientos.length; i++) {
+      if (arr.length >= 5) break
+
+      const v = vencimientos[i]
+      if (v.estado_cumplimiento === 'pendiente' || v.estado_cumplimiento === 'vencido') {
+        arr.push(v)
+      }
+    }
+    return arr
+  }, [vencimientos])
 
   const loading = loadingEmpresa || loadingVenc
   const mesLabel = mesActual.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' })
