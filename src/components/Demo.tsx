@@ -6,6 +6,8 @@ const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
                'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
 const WEEKDAYS = ['Lu','Ma','Mi','Ju','Vi','Sa','Do']
 
+// Obligaciones relativas a hoy (diaOffset = días desde hoy)
+// Mismos estados y colores que usa Calendario.tsx en la app autenticada
 const DEMO_ITEMS = [
   { id: 1, titulo: 'Reporte mensual IMMEX',   programa: 'IMMEX',             diaOffset: -2,  status: 'vencido'   },
   { id: 2, titulo: 'Pago derechos aduanales', programa: 'Padrón Importador', diaOffset: 4,   status: 'proximo'   },
@@ -16,11 +18,19 @@ const DEMO_ITEMS = [
 
 type StatusKey = 'vencido' | 'proximo' | 'pendiente' | 'completado'
 
+// Mismos colores semánticos que Calendario.tsx usa con --danger, --warn, --em
 const STATUS_COLOR: Record<StatusKey, string> = {
-  vencido:    '#ef4444',
-  proximo:    '#eab308',
-  pendiente:  '#0369A1',
-  completado: '#22c55e',
+  vencido:    '#DC2626',   // var(--danger)
+  proximo:    '#D97706',   // var(--warn)
+  pendiente:  '#0369A1',   // var(--em)
+  completado: '#16A34A',   // var(--success)
+}
+
+const STATUS_LABEL: Record<StatusKey, string> = {
+  vencido:    'Vencida',
+  proximo:    'Por vencer',
+  pendiente:  'Pendiente',
+  completado: 'Completada',
 }
 
 export default function Demo() {
@@ -30,8 +40,8 @@ export default function Demo() {
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
 
   const obligsByDay = useMemo(() => {
-    const hoy  = new Date()
-    const map  = new Map<number, typeof DEMO_ITEMS[number][]>()
+    const hoy = new Date()
+    const map = new Map<number, typeof DEMO_ITEMS[number][]>()
     DEMO_ITEMS.forEach(item => {
       const fecha = new Date(hoy)
       fecha.setDate(hoy.getDate() + item.diaOffset)
@@ -70,53 +80,59 @@ export default function Demo() {
         ref={ref as React.RefObject<HTMLElement>}
         className="section"
         id="demo"
-        style={{ background: 'var(--ink)', position: 'relative', overflow: 'hidden', paddingTop: 80, paddingBottom: 80 }}
+        style={{
+          background: 'var(--ink)',
+          position: 'relative', overflow: 'hidden',
+          paddingTop: 80, paddingBottom: 80,
+        }}
       >
-        {/* Background glow */}
+        {/* Glow decorativo sutil */}
         <div aria-hidden="true" style={{
-          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+          position: 'absolute', top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
           width: 800, height: 500, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgb(16 185 129 / 0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(3,105,161,0.06) 0%, transparent 70%)',
           filter: 'blur(80px)', pointerEvents: 'none',
         }} />
 
         <div className="container" style={{ position: 'relative', maxWidth: '72rem' }}>
+
           {/* Header */}
           <div style={{ textAlign: 'center', marginBottom: 60 }}>
-            <span className="badge reveal" style={{
-              marginBottom: 16, background: 'rgb(16 185 129 / 0.12)',
-              borderColor: 'rgb(16 185 129 / 0.25)', color: '#34d399',
-            }}>
+            <span className="badge reveal" style={{ marginBottom: 16 }}>
               VER EN ACCIÓN
             </span>
             <h2 className="reveal delay-1" style={{
-              fontSize: 'clamp(28px, 4vw, 44px)', color: 'var(--snow)',
+              fontSize: 'clamp(28px, 4vw, 44px)',
+              color: 'var(--snow)',
               marginBottom: 16, fontWeight: 600,
             }}>
               El compliance que siempre quisiste tener
             </h2>
             <p className="reveal delay-2" style={{
-              fontSize: 16, color: 'rgb(255 255 255 / 0.45)',
+              fontSize: 16,
+              color: 'var(--text-muted)',
               lineHeight: 1.7, maxWidth: 500, marginInline: 'auto',
             }}>
-              Toda tu operación de ComEx en un solo lugar.
+              Así se ve tu operación de ComEx cuando todo está organizado.
             </p>
           </div>
 
-          {/* Browser Mockup */}
+          {/* Browser Mockup — light mode */}
           <div className="reveal-scale float-anim" style={{
-            background: 'linear-gradient(135deg, #1a2a3a 0%, #0f1a28 100%)',
-            border: '1px solid rgb(255 255 255 / 0.1)',
+            background: '#FFFFFF',
+            border: '1px solid var(--border)',
             borderRadius: 'var(--r-2xl)',
             overflow: 'hidden',
-            boxShadow: '0 0 60px rgb(16 185 129 / 0.1), inset 0 1px 0 rgb(255 255 255 / 0.05)',
+            boxShadow: 'var(--sh-xl)',
             marginBottom: 40,
           }}>
-            {/* Browser chrome */}
+
+            {/* Browser chrome — light */}
             <div style={{
-              background: 'rgb(15 23 42 / 0.8)',
-              padding: '12px 16px',
-              borderBottom: '1px solid rgb(255 255 255 / 0.05)',
+              background: '#F8FAFC',
+              padding: '10px 16px',
+              borderBottom: '1px solid var(--border)',
               display: 'flex', alignItems: 'center', gap: 8,
             }}>
               <div style={{ display: 'flex', gap: 6 }}>
@@ -124,76 +140,137 @@ export default function Demo() {
                 <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#eab308' }} />
                 <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#22c55e' }} />
               </div>
-              <div style={{ marginLeft: 'auto', fontSize: 12, color: 'rgb(255 255 255 / 0.35)' }}>
+              <div style={{
+                flex: 1, marginInline: 12,
+                background: '#FFFFFF', border: '1px solid var(--border)',
+                borderRadius: 'var(--r-full)', padding: '4px 12px',
+                fontSize: 11, color: 'var(--text-muted)', textAlign: 'center',
+              }}>
                 app.calendariocompliance.mx/calendario
               </div>
             </div>
 
-            {/* ── Calendario interactivo ── */}
-            <div style={{ padding: '20px 24px 24px', minHeight: 340 }}>
+            {/* Calendario interactivo — light mode */}
+            <div style={{ padding: '24px 28px 28px' }}>
 
               {/* Nav de mes */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-                <button
-                  onClick={() => navMes(-1)}
-                  aria-label="Mes anterior"
-                  style={{ background: 'none', border: 'none', color: 'rgb(255 255 255 / 0.5)', cursor: 'pointer', padding: 4, borderRadius: 4 }}
-                >
-                  <ChevronLeft size={16} />
-                </button>
-                <span style={{ fontSize: 13, fontWeight: 600, color: 'rgb(255 255 255 / 0.8)', letterSpacing: '0.05em' }}>
-                  {MESES[visMes.getMonth()]} {visMes.getFullYear()}
-                </span>
-                <button
-                  onClick={() => navMes(1)}
-                  aria-label="Mes siguiente"
-                  style={{ background: 'none', border: 'none', color: 'rgb(255 255 255 / 0.5)', cursor: 'pointer', padding: 4, borderRadius: 4 }}
-                >
-                  <ChevronRight size={16} />
-                </button>
+              <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                marginBottom: 20,
+              }}>
+                <div>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--snow)' }}>
+                    {MESES[visMes.getMonth()]} {visMes.getFullYear()}
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>
+                    {obligsByDay.size} obligación{obligsByDay.size !== 1 ? 'es' : ''} este mes
+                  </div>
+                </div>
+                <div style={{
+                  display: 'flex', gap: 4,
+                  background: '#FFFFFF', border: '1px solid var(--border)',
+                  borderRadius: 'var(--r-full)', padding: '4px 6px',
+                }}>
+                  <button
+                    onClick={() => navMes(-1)}
+                    aria-label="Mes anterior"
+                    style={{
+                      width: 32, height: 32, borderRadius: '50%',
+                      background: 'none', border: 'none',
+                      color: 'var(--text-muted)', cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'background var(--dur-fast)',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F1F5F9'; (e.currentTarget as HTMLElement).style.color = '#0F172A' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none'; (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' }}
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    onClick={() => navMes(1)}
+                    aria-label="Mes siguiente"
+                    style={{
+                      width: 32, height: 32, borderRadius: '50%',
+                      background: 'none', border: 'none',
+                      color: 'var(--text-muted)', cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'background var(--dur-fast)',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F1F5F9'; (e.currentTarget as HTMLElement).style.color = '#0F172A' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none'; (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' }}
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
               </div>
 
               {/* Cabecera días semana */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2, marginBottom: 6 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 4 }}>
                 {WEEKDAYS.map(d => (
-                  <div key={d} style={{ textAlign: 'center', fontSize: 10, color: 'rgb(255 255 255 / 0.35)', fontWeight: 600, padding: '2px 0' }}>
+                  <div key={d} style={{
+                    textAlign: 'center',
+                    fontSize: 11, fontWeight: 700,
+                    color: 'var(--text-muted)',
+                    textTransform: 'uppercase', letterSpacing: '0.08em',
+                    padding: '6px 0',
+                  }}>
                     {d}
                   </div>
                 ))}
               </div>
 
               {/* Grid de días */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2 }}>
-                {Array.from({ length: firstDay }).map((_, i) => <div key={`e-${i}`} />)}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4 }}>
+                {Array.from({ length: firstDay }).map((_, i) => (
+                  <div key={`empty-${i}`} />
+                ))}
                 {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(dia => {
-                  const items = obligsByDay.get(dia)
-                  const isHoy = esHoy(dia)
-                  const isSel = selectedDay === dia
+                  const items  = obligsByDay.get(dia)
+                  const isHoy  = esHoy(dia)
+                  const isSel  = selectedDay === dia
                   return (
                     <div
                       key={dia}
-                      onClick={() => setSelectedDay(isSel ? null : (items ? dia : null))}
+                      onClick={() => items && setSelectedDay(isSel ? null : dia)}
                       style={{
-                        aspectRatio: '1/1',
-                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                        borderRadius: 4, fontSize: 11, fontWeight: isHoy ? 700 : 400,
-                        color: isHoy ? '#ffffff' : 'rgb(255 255 255 / 0.65)',
+                        minHeight: 40,
+                        display: 'flex', flexDirection: 'column',
+                        alignItems: 'center', justifyContent: 'center',
+                        borderRadius: 'var(--r-md)',
+                        fontSize: 13, fontWeight: isHoy ? 700 : 600,
+                        color: 'var(--snow)',
                         background: isSel
-                          ? 'rgba(3,105,161,0.35)'
+                          ? 'rgba(3,105,161,0.08)'
                           : isHoy
-                            ? 'rgba(3,105,161,0.5)'
-                            : 'rgb(255 255 255 / 0.03)',
-                        border: isHoy ? '1px solid rgba(3,105,161,0.6)' : '1px solid transparent',
+                            ? '#F1F5F9'
+                            : 'transparent',
+                        border: isSel
+                          ? '1px solid rgba(3,105,161,0.3)'
+                          : isHoy
+                            ? '1px solid var(--border)'
+                            : '1px solid transparent',
                         cursor: items ? 'pointer' : 'default',
-                        transition: 'background 150ms',
+                        transition: 'background var(--dur-fast)',
+                      }}
+                      onMouseEnter={e => {
+                        if (!isSel && items) {
+                          (e.currentTarget as HTMLElement).style.background = '#F8FAFC'
+                        }
+                      }}
+                      onMouseLeave={e => {
+                        if (!isSel) {
+                          (e.currentTarget as HTMLElement).style.background = isSel
+                            ? 'rgba(3,105,161,0.08)'
+                            : isHoy ? '#F1F5F9' : 'transparent'
+                        }
                       }}
                     >
-                      {dia}
+                      <span>{dia}</span>
                       {items && (
-                        <div style={{ display: 'flex', gap: 2, marginTop: 2 }}>
-                          {items.slice(0, 2).map(it => (
+                        <div style={{ display: 'flex', gap: 3, marginTop: 3 }}>
+                          {items.slice(0, 3).map(it => (
                             <div key={it.id} style={{
-                              width: 5, height: 5, borderRadius: '50%',
+                              width: 6, height: 6, borderRadius: '50%',
                               background: STATUS_COLOR[it.status as StatusKey],
                             }} />
                           ))}
@@ -204,28 +281,63 @@ export default function Demo() {
                 })}
               </div>
 
-              {/* Panel día seleccionado */}
+              {/* Panel detalle */}
               {selectedDay !== null && obligsByDay.get(selectedDay) && (
-                <div style={{ marginTop: 12, borderTop: '1px solid rgb(255 255 255 / 0.08)', paddingTop: 12 }}>
-                  {obligsByDay.get(selectedDay)!.map(it => (
+                <div style={{
+                  marginTop: 16,
+                  background: '#F8FAFC',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--r-lg)',
+                  overflow: 'hidden',
+                }}>
+                  <div style={{
+                    padding: '10px 16px',
+                    borderBottom: '1px solid var(--border)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  }}>
+                    <span style={{
+                      fontSize: 11, fontWeight: 700, color: 'var(--text-muted)',
+                      textTransform: 'uppercase', letterSpacing: '0.08em',
+                    }}>
+                      {MESES[visMes.getMonth()]} {selectedDay}
+                    </span>
+                    <button
+                      onClick={() => setSelectedDay(null)}
+                      style={{
+                        background: '#FFFFFF', border: '1px solid var(--border)',
+                        borderRadius: 'var(--r-full)', padding: '4px 10px',
+                        fontSize: 11, fontWeight: 600, color: 'var(--text-muted)',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Cerrar
+                    </button>
+                  </div>
+                  {obligsByDay.get(selectedDay)!.map((it, idx, arr) => (
                     <div key={it.id} style={{
-                      display: 'flex', alignItems: 'center', gap: 8,
-                      padding: '6px 0', borderBottom: '1px solid rgb(255 255 255 / 0.05)',
+                      display: 'flex', alignItems: 'center', gap: 12,
+                      padding: '12px 16px',
+                      borderBottom: idx < arr.length - 1 ? '1px solid var(--border)' : 'none',
                     }}>
                       <div style={{
                         width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
                         background: STATUS_COLOR[it.status as StatusKey],
                       }} />
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{
-                          fontSize: 11, color: 'rgb(255 255 255 / 0.85)', fontWeight: 500,
-                          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                        }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--snow)' }}>
                           {it.titulo}
                         </div>
-                        <div style={{ fontSize: 10, color: 'rgb(255 255 255 / 0.4)', marginTop: 1 }}>
+                        <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
                           {it.programa}
                         </div>
+                      </div>
+                      <div style={{
+                        fontSize: 11, fontWeight: 600,
+                        color: STATUS_COLOR[it.status as StatusKey],
+                        background: `${STATUS_COLOR[it.status as StatusKey]}14`,
+                        padding: '3px 8px', borderRadius: 'var(--r-full)',
+                      }}>
+                        {STATUS_LABEL[it.status as StatusKey]}
                       </div>
                     </div>
                   ))}
@@ -233,9 +345,16 @@ export default function Demo() {
               )}
 
               {/* Leyenda */}
-              <div style={{ display: 'flex', gap: 12, marginTop: 12, flexWrap: 'wrap' }}>
-                {([['#ef4444','Vencida'],['#eab308','Por vencer'],['#0369A1','Pendiente']] as [string,string][]).map(([c, l]) => (
-                  <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'rgb(255 255 255 / 0.4)' }}>
+              <div style={{ display: 'flex', gap: 16, marginTop: 16, flexWrap: 'wrap' }}>
+                {([
+                  ['#DC2626', 'Vencida'],
+                  ['#D97706', 'Por vencer'],
+                  ['#0369A1', 'Pendiente'],
+                ] as [string, string][]).map(([c, l]) => (
+                  <div key={l} style={{
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    fontSize: 11, color: 'var(--text-muted)',
+                  }}>
                     <div style={{ width: 6, height: 6, borderRadius: '50%', background: c }} />
                     {l}
                   </div>
@@ -248,22 +367,8 @@ export default function Demo() {
           <div style={{ textAlign: 'center' }}>
             <button
               onClick={() => setShowModal(true)}
-              className="reveal"
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                background: 'var(--em)', color: 'white',
-                padding: '14px 32px', borderRadius: 'var(--r-lg)',
-                fontSize: 15, fontWeight: 600, border: 'none',
-                cursor: 'pointer', transition: 'all var(--dur-base) var(--ease-out)',
-              }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(3,105,161,0.4)'
-                ;(e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLElement).style.boxShadow = 'none'
-                ;(e.currentTarget as HTMLElement).style.transform = 'translateY(0)'
-              }}
+              className="reveal btn btn-primary"
+              style={{ fontSize: 15, padding: '14px 32px' }}
             >
               <PlayCircle size={18} />
               Ver demo de 3 minutos
