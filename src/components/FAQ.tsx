@@ -19,7 +19,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
       style={{
         border: `1px solid ${open ? 'var(--em-light)' : 'var(--border)'}`,
         borderRadius: 'var(--r-lg)',
-        background: 'var(--snow)',
+        background: 'var(--surface)',
         overflow: 'hidden',
         transition: 'border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out)',
         boxShadow: open ? 'var(--sh-accent)' : 'var(--sh-sm)',
