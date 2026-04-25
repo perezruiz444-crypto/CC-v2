@@ -68,7 +68,7 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
         .select(`
           id, empresa_id, estado, activa_desde, activa_hasta, motivo_inactiva, created_at,
           ultima_revision, estado_revision, notas_revision,
-          catalogo_id (
+          catalogo:catalogo_id (
             id, nombre, descripcion, categoria, periodicidad,
             fundamento_legal, notas_importantes,
             multa_minima_mxn, multa_maxima_mxn
@@ -97,16 +97,15 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
         })
       }
 
-      const huerfanas = (data ?? []).filter((o: any) => o.catalogo_id == null)
+      const huerfanas = (data ?? []).filter((o: any) => o.catalogo == null)
       if (huerfanas.length > 0) {
         console.warn(`[useObligaciones] ${huerfanas.length} fila(s) sin catálogo ignoradas:`, huerfanas.map((o: any) => o.id))
       }
 
       const normalized = (data ?? [])
-        .filter((o: any) => o.catalogo_id != null)
+        .filter((o: any) => o.catalogo != null)
         .map((o: any) => ({
           ...o,
-          catalogo: o.catalogo_id,
           vencimientos: vencMap[o.id] ?? [],
         }))
 
