@@ -48,7 +48,6 @@ export default function Obligaciones() {
 
     for (let i = 0; i < obligaciones.length; i++) {
       const o = obligaciones[i]
-      if (!o.catalogo) continue
 
       const matchFiltro = filtro === 'todas' ? true : filtro === 'activas' ? o.estado : !o.estado
       if (!matchFiltro) continue
