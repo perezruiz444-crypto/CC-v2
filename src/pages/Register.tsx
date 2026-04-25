@@ -28,7 +28,12 @@ export default function Register() {
     setLoading(false)
 
     if (signUpError) {
-      setError(signUpError.message)
+      const msg = signUpError.message.toLowerCase()
+      if (msg.includes('rate limit') || msg.includes('too many') || msg.includes('over_email_send_rate_limit')) {
+        setError('Demasiados intentos desde esta red. Espera unos minutos e intenta de nuevo, o usa una red diferente (datos móviles).')
+      } else {
+        setError(signUpError.message)
+      }
       return
     }
 
