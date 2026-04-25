@@ -75,13 +75,27 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
           )
         `)
         .eq('empresa_id', empresaId)
-        console.log("DEBUG OBLIGACIONES:", { data, error });
         .order('estado', { ascending: false })
 
       if (err) { setError(err.message); setLoading(false); return }
 
-      // Para cada obligacion cargar sus últimos 12 vencimientos
-      const ids = (data ?? []).map((o: any) => o.id)
+      // ⚡ Bolt: Use a single-pass `for` loop to extract IDs and filter out orphans.
+      // This prevents allocating multiple intermediate arrays from chained `.map()` and `.filter()`.
+      const ids: string[] = []
+      const validData: any[] = []
+      const huerfanasIds: string[] = []
+
+      const rawData = data ?? []
+      for (let i = 0; i < rawData.length; i++) {
+        const o = rawData[i]
+        if (o.catalogo == null) {
+          huerfanasIds.push(o.id)
+        } else {
+          ids.push(o.id)
+          validData.push(o)
+        }
+      }
+
       let vencMap: Record<string, VencimientoResumen[]> = {}
 
       if (ids.length > 0) {
@@ -92,23 +106,27 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
           .order('fecha_limite', { ascending: false })
           .limit(200)
 
-        ;(venc ?? []).forEach((v: any) => {
+        const rawVenc = venc ?? []
+        for (let i = 0; i < rawVenc.length; i++) {
+          const v = rawVenc[i]
           if (!vencMap[v.obligacion_origen_id]) vencMap[v.obligacion_origen_id] = []
           vencMap[v.obligacion_origen_id].push(v)
-        })
+        }
       }
 
-      const huerfanas = (data ?? []).filter((o: any) => o.catalogo == null)
-      if (huerfanas.length > 0) {
-        console.warn(`[useObligaciones] ${huerfanas.length} fila(s) sin catálogo ignoradas:`, huerfanas.map((o: any) => o.id))
+      if (huerfanasIds.length > 0) {
+        console.warn(`[useObligaciones] ${huerfanasIds.length} fila(s) sin catálogo ignoradas:`, huerfanasIds)
       }
 
-      const normalized = (data ?? [])
-        .filter((o: any) => o.catalogo != null)
-        .map((o: any) => ({
+      // ⚡ Bolt: Single-pass mapping of vencimientos to avoid hidden allocation overhead.
+      const normalized = []
+      for (let i = 0; i < validData.length; i++) {
+        const o = validData[i]
+        normalized.push({
           ...o,
           vencimientos: vencMap[o.id] ?? [],
-        }))
+        })
+      }
 
       setObligaciones(normalized)
       setLoading(false)
