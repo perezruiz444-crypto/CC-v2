@@ -75,7 +75,6 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
           )
         `)
         .eq('empresa_id', empresaId)
-        console.log("DEBUG OBLIGACIONES:", { data, error });
         .order('estado', { ascending: false })
 
       if (err) { setError(err.message); setLoading(false); return }
