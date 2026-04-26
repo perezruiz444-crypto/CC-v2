@@ -11,3 +11,8 @@
 ## 2026-04-24 - O(1) Map Lookups for Derived Render State
 **Learning:** Relying on `Array.prototype.filter()` inside `useMemo` hooks combined with date parsing (`new Date()` allocations) creates unnecessary CPU overhead on every interaction (e.g. changing `selectedDay`). Since `vencimientosByDay` is already computed as an O(1) Map during initialization, leveraging it instead avoids repetitive O(N) array traversals.
 **Action:** Whenever data is already grouped in a Map or Dictionary, use a direct lookup (`map.get(key) ?? []`) instead of filtering the original raw array, to preserve O(1) retrieval time and eliminate garbage collection overhead during rapid UI interactions.
+## 2025-02-23 - Micro-optimizing Small Loops
+
+**Learning:** Memoizing simple integer arrays (e.g. `emptyCells` or `daysArray`) inside a component using `useMemo` does not provide any meaningful performance improvement because allocating tiny arrays is an extremely cheap operation. Worse, if the array is still `map()`-ped inline in JSX, React will create a brand-new array of React elements on every render anyway, rendering the initial memoization useless. This violates the core rule against premature micro-optimization.
+
+**Action:** Focus performance efforts on areas that actually block the main thread, such as replacing multi-pass $O(N)$ data transformations on large API datasets (like chaining `.filter().map()`) with single-pass standard `for` loops.

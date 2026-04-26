@@ -75,7 +75,7 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
           )
         `)
         .eq('empresa_id', empresaId)
-        console.log("DEBUG OBLIGACIONES:", { data, error });
+
         .order('estado', { ascending: false })
 
       if (err) { setError(err.message); setLoading(false); return }
@@ -98,17 +98,27 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
         })
       }
 
-      const huerfanas = (data ?? []).filter((o: any) => o.catalogo == null)
-      if (huerfanas.length > 0) {
-        console.warn(`[useObligaciones] ${huerfanas.length} fila(s) sin catálogo ignoradas:`, huerfanas.map((o: any) => o.id))
+      let huerfanasCount = 0
+      const huerfanasIds: string[] = []
+      const normalized: any[] = []
+
+      const dataArr = data ?? []
+      for (let i = 0; i < dataArr.length; i++) {
+        const o = dataArr[i]
+        if (o.catalogo == null) {
+          huerfanasCount++
+          huerfanasIds.push(o.id)
+        } else {
+          normalized.push({
+            ...o,
+            vencimientos: vencMap[o.id] ?? [],
+          })
+        }
       }
 
-      const normalized = (data ?? [])
-        .filter((o: any) => o.catalogo != null)
-        .map((o: any) => ({
-          ...o,
-          vencimientos: vencMap[o.id] ?? [],
-        }))
+      if (huerfanasCount > 0) {
+        console.warn(`[useObligaciones] ${huerfanasCount} fila(s) sin catálogo ignoradas:`, huerfanasIds)
+      }
 
       setObligaciones(normalized)
       setLoading(false)
