@@ -38,6 +38,17 @@ export function useEmpresa(): UseEmpresaResult {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const recargarEmpresa = useCallback(async (orgId: string) => {
+    const { data } = await supabase
+      .from('empresas')
+      .select('*')
+      .eq('organizacion_id', orgId)
+      .order('created_at', { ascending: true })
+      .limit(1)
+      .single()
+    if (data) setEmpresa(data as Empresa)
+  }, [])
+
   useEffect(() => {
     if (!user) return
 
@@ -104,8 +115,8 @@ export function useEmpresa(): UseEmpresaResult {
     })
 
     if (err) {
-      // Revert optimistic
-      setEmpresa(prev => prev ? { ...prev, programas_activos: prev.programas_activos.filter(p => p !== programa) } : prev)
+      // Revert: recargar desde DB para garantizar consistencia
+      if (organizacion?.id) recargarEmpresa(organizacion.id)
       console.error(err.message)
       return null
     }
@@ -116,7 +127,7 @@ export function useEmpresa(): UseEmpresaResult {
     }
     window.dispatchEvent(new CustomEvent('programas-updated'))
     return result
-  }, [empresa])
+  }, [empresa, organizacion, recargarEmpresa])
 
   // Desactiva un programa — limpia vencimientos futuros pendientes
   const desactivarPrograma = useCallback(async (
@@ -137,8 +148,8 @@ export function useEmpresa(): UseEmpresaResult {
     })
 
     if (err) {
-      // Revert
-      setEmpresa(prev => prev ? { ...prev, programas_activos: [...(prev.programas_activos ?? []), programa] } : prev)
+      // Revert: recargar desde DB para garantizar consistencia
+      if (organizacion?.id) recargarEmpresa(organizacion.id)
       console.error(err.message)
       return null
     }
@@ -147,7 +158,7 @@ export function useEmpresa(): UseEmpresaResult {
       proyectados: (data as any)?.proyectados ?? 0,
       limpiados:   (data as any)?.limpiados   ?? 0,
     }
-  }, [empresa])
+  }, [empresa, organizacion, recargarEmpresa])
 
   return { empresa, organizacion, loading, error, activarPrograma, desactivarPrograma }
 }
