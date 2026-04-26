@@ -209,6 +209,7 @@ function ObligacionRow({
   const cat = CAT_LABELS[o.catalogo.categoria] ?? CAT_LABELS.general
   const [showMotivoModal, setShowMotivoModal] = useState(false)
   const [motivo, setMotivo] = useState('')
+  const [savingRevision, setSavingRevision] = useState<string | null>(null)
 
   const handleToggle = () => {
     if (o.estado) {
@@ -419,19 +420,25 @@ function ObligacionRow({
                         ] as const).map(opt => (
                           <button
                             key={opt.id}
-                            onClick={() => onRegistrarRevision(o.id, opt.id)}
+                            disabled={savingRevision !== null}
+                            onClick={async () => {
+                              setSavingRevision(opt.id)
+                              await onRegistrarRevision(o.id, opt.id)
+                              setSavingRevision(null)
+                            }}
                             style={{
                               fontSize: 11, fontWeight: 600,
                               padding: '5px 12px', borderRadius: 'var(--r-full)',
                               border: `1px solid ${o.estado_revision === opt.id ? '#CBD5E1' : '#E2E8F0'}`,
                               background: o.estado_revision === opt.id ? '#F1F5F9' : '#F8FAFC',
                               color: o.estado_revision === opt.id ? opt.color : '#64748B',
-                              cursor: 'pointer',
+                              cursor: savingRevision !== null ? 'not-allowed' : 'pointer',
+                              opacity: savingRevision !== null && savingRevision !== opt.id ? 0.5 : 1,
                               transition: 'all var(--dur-fast)',
                               minHeight: 32,
                             }}
                           >
-                            {opt.label}
+                            {savingRevision === opt.id ? '...' : opt.label}
                           </button>
                         ))}
                       </div>

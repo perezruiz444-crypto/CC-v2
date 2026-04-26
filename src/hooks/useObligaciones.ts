@@ -267,7 +267,11 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
         activa_desde: new Date().toISOString().split('T')[0],
       })
 
-    if (oemErr) throw new Error(`Error al vincular obligación: ${oemErr.message}`)
+    if (oemErr) {
+      // Cleanup: eliminar el catálogo recién creado para no dejar huérfanos
+      await supabase.from('obligaciones_catalogo').delete().eq('id', catalogoId)
+      throw new Error(`Error al vincular obligación: ${oemErr.message}`)
+    }
 
     // 3. Llamar a la stored procedure para proyectar vencimientos del año actual
     const currentYear = new Date().getFullYear()
