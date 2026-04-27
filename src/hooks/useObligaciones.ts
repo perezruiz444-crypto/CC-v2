@@ -97,17 +97,25 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
         })
       }
 
-      const huerfanas = (data ?? []).filter((o: any) => o.catalogo == null)
-      if (huerfanas.length > 0) {
-        console.warn(`[useObligaciones] ${huerfanas.length} fila(s) sin catálogo ignoradas:`, huerfanas.map((o: any) => o.id))
+      // ⚡ Bolt: Use a single O(N) loop to process API response instead of chained .filter().map()
+      // This avoids redundant array traversals and garbage collection overhead
+      const huerfanas: any[] = []
+      const normalized: any[] = []
+
+      for (const o of (data ?? [])) {
+        if (o.catalogo == null) {
+          huerfanas.push(o.id)
+        } else {
+          normalized.push({
+            ...o,
+            vencimientos: vencMap[o.id] ?? [],
+          })
+        }
       }
 
-      const normalized = (data ?? [])
-        .filter((o: any) => o.catalogo != null)
-        .map((o: any) => ({
-          ...o,
-          vencimientos: vencMap[o.id] ?? [],
-        }))
+      if (huerfanas.length > 0) {
+        console.warn(`[useObligaciones] ${huerfanas.length} fila(s) sin catálogo ignoradas:`, huerfanas)
+      }
 
       setObligaciones(normalized)
       setLoading(false)
