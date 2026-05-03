@@ -98,9 +98,6 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
       }
 
       const huerfanas = (data ?? []).filter((o: any) => o.catalogo == null)
-      if (huerfanas.length > 0) {
-        console.warn(`[useObligaciones] ${huerfanas.length} fila(s) sin catálogo ignoradas:`, huerfanas.map((o: any) => o.id))
-      }
 
       const normalized = (data ?? [])
         .filter((o: any) => o.catalogo != null)

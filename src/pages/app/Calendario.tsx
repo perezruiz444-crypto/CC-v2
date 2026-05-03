@@ -4,21 +4,13 @@ import { useEmpresa } from '../../hooks/useEmpresa'
 import { useVencimientos } from '../../hooks/useVencimientos'
 import { useRol } from '../../hooks/useRol'
 import { ESTADO_CONFIG } from '../../lib/constants'
+import { formatFechaCorta, diasRestantes, getDotStatus, primerDiaSemana, diasEnMes } from '../../lib/calendario'
 
 // Icons per estado for the card
 const ESTADO_ICON = { pendiente: Clock, completado: CheckCircle2, vencido: AlertCircle, omitido: Clock, prorrogado: Clock }
 
 const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
 const WEEKDAYS = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do']
-
-function formatFechaCorta(fecha: string): string {
-  return new Date(fecha + 'T00:00:00').toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })
-}
-
-function diasRestantes(fecha: string): number {
-  const hoy = new Date(); hoy.setHours(0,0,0,0)
-  return Math.ceil((new Date(fecha + 'T00:00:00').getTime() - hoy.getTime()) / 86400000)
-}
 
 export default function Calendario() {
   const { empresa, loading: loadingEmpresa } = useEmpresa()
@@ -62,15 +54,8 @@ export default function Calendario() {
   }, [vencimientos, vencimientosByDay, selectedDay])
 
   // Calendar grid: get first day of month and total days
-  const firstDay = useMemo(() => {
-    const d = new Date(mesObj)
-    // JS: Sunday=0, so we adjust: Sunday=6, Monday=0
-    return (d.getDay() + 6) % 7
-  }, [mesObj])
-
-  const daysInMonth = useMemo(() => {
-    return new Date(mesObj.getFullYear(), mesObj.getMonth() + 1, 0).getDate()
-  }, [mesObj])
+  const firstDay = useMemo(() => primerDiaSemana(mesObj), [mesObj])
+  const daysInMonth = useMemo(() => diasEnMes(mesObj), [mesObj])
 
   // Pre-calculate arrays for rendering grid efficiently
   const emptyCells = useMemo(() => {
@@ -89,31 +74,7 @@ export default function Calendario() {
     return days
   }, [daysInMonth])
 
-  // Determine dot status for a day
-  const getDotStatus = (day: number): 'vencido' | 'proximo' | 'completado' | null => {
-    const items = vencimientosByDay.get(day) ?? []
-    if (items.length === 0) return null
-
-    let hasVencido = false
-    let hasProximo = false
-    let allCompletado = true
-
-    items.forEach(v => {
-      const dias = diasRestantes(v.fecha_limite)
-      if (v.estado_cumplimiento === 'completado') {
-        // allCompletado stays true
-      } else {
-        allCompletado = false
-        if (dias < 0) hasVencido = true
-        if (dias >= 0 && dias <= 7) hasProximo = true
-      }
-    })
-
-    if (allCompletado && items.length > 0) return 'completado'
-    if (hasVencido) return 'vencido'
-    if (hasProximo) return 'proximo'
-    return null
-  }
+  const getDotStatusForDay = (day: number) => getDotStatus(vencimientosByDay.get(day) ?? [])
 
   return (
     <div>
@@ -224,7 +185,7 @@ export default function Calendario() {
                                today.getMonth() === mesObj.getMonth() &&
                                today.getDate() === day
                 const isSelected = selectedDay === day
-                const dotStatus = getDotStatus(day)
+                const dotStatus = getDotStatusForDay(day)
 
                 return (
                   <button
