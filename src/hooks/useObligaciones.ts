@@ -65,7 +65,15 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
 
       const { data, error: err } = await supabase
         .from('obligaciones_empresa')
-        .select('id, empresa_id, estado, activa_desde, activa_hasta, motivo_inactiva, created_at, ultima_revision, estado_revision, notas_revision, catalogo_id')
+        .select(`
+          id, empresa_id, estado, activa_desde, activa_hasta, motivo_inactiva, created_at,
+          ultima_revision, estado_revision, notas_revision,
+          catalogo_id (
+            id, nombre, descripcion, categoria, periodicidad,
+            fundamento_legal, notas_importantes,
+            multa_minima_mxn, multa_maxima_mxn
+          )
+        `)
         .eq('empresa_id', empresaId)
         .order('estado', { ascending: false })
 
@@ -73,18 +81,6 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
 
       const rows = data ?? []
       const ids = rows.map((o: any) => o.id)
-      const catalogoIds = [...new Set(rows.map((o: any) => o.catalogo_id).filter(Boolean))]
-
-      // Cargar catálogos por separado para evitar problemas de RLS con join implícito
-      let catalogoMap: Record<string, any> = {}
-      if (catalogoIds.length > 0) {
-        const { data: cats } = await supabase
-          .from('obligaciones_catalogo')
-          .select('id, nombre, descripcion, categoria, periodicidad, fundamento_legal, notas_importantes, multa_minima_mxn, multa_maxima_mxn')
-          .in('id', catalogoIds)
-
-        ;(cats ?? []).forEach((c: any) => { catalogoMap[c.id] = c })
-      }
 
       // Cargar vencimientos recientes por obligación
       let vencMap: Record<string, VencimientoResumen[]> = {}
@@ -103,10 +99,10 @@ export function useObligaciones(empresaId: string | null): UseObligacionesResult
       }
 
       const normalized = rows
-        .filter((o: any) => catalogoMap[o.catalogo_id] != null)
+        .filter((o: any) => o.catalogo_id != null)
         .map((o: any) => ({
           ...o,
-          catalogo: catalogoMap[o.catalogo_id],
+          catalogo: o.catalogo_id,
           vencimientos: vencMap[o.id] ?? [],
         }))
 
